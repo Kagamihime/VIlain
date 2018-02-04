@@ -1,0 +1,33 @@
+[all]
+files = **
+ignore = .git/**, **.pdf, coala*/**, **.orig
+bears = SpaceConsistencyBear
+use_spaces = True
+indent_size = 4
+default_actions = **: ApplyPatchAction
+
+
+[commit]
+bears = GitCommitBear
+shortlog_trailing_period = False
+shortlog_regex = ([^:]*|[^:]+: [A-Z0-9*].*)
+body_close_issue = True
+body_close_issue_full_url = True
+body_close_issue_on_last_line = True
+body_enforce_issue_reference = False
+
+
+[C formatting]
+files = src/*.(c|h)
+ignore = **.orig
+
+bears = GNUIndentBear
+indent_cli_options = -nbad -bap -nbc -bbo -hnl -br -brs -c33 -cd33 -ncdb -ce -ci4 -cli0 -d0 -di1 -nfc1 -i4 -ip0 -l80 -lp -npcs -nprs -npsl -sai -saf -saw -ncs -nsc -sob -nfca -cp33 -ss -nut -il1
+default_actions = **: ApplyPatchAction
+
+
+[C static analysis]
+files = src/*.(c|h)
+ignore = **.orig
+
+bears = CPPCheckBear
