@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [[ "$1" = "install" ]]; then
     python3 -m venv coala-venv
