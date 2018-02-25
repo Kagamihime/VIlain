@@ -95,4 +95,11 @@ Note that the formatting can be automatically done when running coala locally.
 
 Please, run coala locally to check your code before submitting a PR.
 
+To run coala, you can easily use the script `coala.sh`:
+
+- `./coala.sh help` will print help for this script.
+- `./coala.sh install` will install coala in the project's root.
+- `./coala.sh run` will run coala's checks.
+- `./coala.sh clean` will remove the directory made by `./coala.sh install`.
+
 <!-- ### Check -->
