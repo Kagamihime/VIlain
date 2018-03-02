@@ -1,11 +1,15 @@
-[all]
-files = **
-ignore = .git/**, **.pdf, coala*/**, **.orig
+[Spaces]
+files = include/*.h, src/*.c, .coafile, coala.sh, CONTRIBUTING.md, README.md
 bears = SpaceConsistencyBear
 use_spaces = True
 indent_size = 4
 default_actions = **: ApplyPatchAction
 
+[Makefile]
+files = Makefile
+bears = SpaceConsistencyBear
+use_spaces = False
+default_actions = **: ApplyPatchAction
 
 [commit]
 bears = GitCommitBear
@@ -18,7 +22,7 @@ body_enforce_issue_reference = False
 
 
 [C formatting]
-files = src/*.(c|h)
+files = include/*.h, src/*.c
 ignore = **.orig
 
 bears = GNUIndentBear
@@ -27,7 +31,7 @@ default_actions = **: ApplyPatchAction
 
 
 [C static analysis]
-files = src/*.(c|h)
+files = include/*.h, src/*.c
 ignore = **.orig
 
 bears = CPPCheckBear
