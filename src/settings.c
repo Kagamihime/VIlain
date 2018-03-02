@@ -50,15 +50,15 @@ char *get_toogle_selection_shortcut(SETTINGS * sets)
     return NULL;
 }
 
-void set_line_wrapping(int val, SETTINGS * sets)
+void set_line_wrapping(SETTINGS * sets, int val)
 {
 }
 
-void set_save_shortcut(SETTINGS * sets, int val)
+void set_save_shortcut(SETTINGS * sets, char *val)
 {
 }
 
-void set_load_shortcut(SETTINGS * sets, int val)
+void set_load_shortcut(SETTINGS * sets, char *val)
 {
 }
 
@@ -78,6 +78,6 @@ void set_paste_shortcut(SETTINGS * sets, char *val)
 {
 }
 
-void set_toogle_selection_shortcut(SETTINGS * sets)
+void set_toogle_selection_shortcut(SETTINGS * sets, char *val)
 {
 }
