@@ -1,0 +1,22 @@
+language: C
+sudo: enabled
+
+before_install:
+    # Set up the additional repositories
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe"
+    - sudo apt-get update -qq
+    # Install coala
+    - sudo apt-get install -y python3-setuptools
+    - sudo easy_install3 pip
+    - sudo pip3 install coala
+    - sudo pip3 install coala-bears
+    # Install the project's dependencies
+    - sudo apt-get install -y gcc-4.9 indent cppcheck libncurses5-dev
+
+before_script:
+    - coala --non-interactive
+
+script:
+    - mkdir build
+    - make
