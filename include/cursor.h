@@ -5,7 +5,7 @@
 
 int get_pos_x();
 int get_pos_y();
-void set_pos_x();
-void set_pos_y();
+void set_pos_x(int pos_x);
+void set_pos_y(int pos_y);
 
 #endif
