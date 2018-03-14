@@ -2,8 +2,8 @@ CC = gcc
 CFLAGS = -Wall -std=c11
 COMPILE = $(CC) $(CFLAGS) -c
 
-vilian: ./build/main.o ./build/cursor.o ./build/buffer.o ./build/io_text.o ./build/ui.o ./build/settings.o
-	$(CC) $^ -o ./build/$@
+vilain: ./build/main.o ./build/cursor.o ./build/buffer.o ./build/io_text.o ./build/ui.o ./build/settings.o
+	$(CC) $^  -o ./build/$@ -lncurses
 
 build/buffer.o: ./src/buffer.c ./include/buffer.h
 	$(COMPILE)	$< -o $@
@@ -18,7 +18,7 @@ build/settings.o: ./src/settings.c ./include/settings.h
 	$(COMPILE)	$< -o $@
 
 build/ui.o: ./src/ui.c ./include/ui.h
-	$(COMPILE)	$< -o $@
+	$(COMPILE)	$<	-o $@
 
 build/main.o: ./src/main.c
 	$(COMPILE)	$< -o $@
