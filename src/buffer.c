@@ -402,6 +402,12 @@ int insert_text(BUFFER * buff, char *str, unsigned int from_line,
 
 int override_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
 {
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+
+    return line_override_char(buff->lines[line], c, col);
 }
 
 int override_line(BUFFER * buff, char *str, unsigned int line)
