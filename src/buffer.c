@@ -232,7 +232,30 @@ struct BUFFER {
 
 BUFFER *new_buffer()
 {
-    return NULL;
+    // Allocate the BUFFER struct
+    BUFFER *buff = NULL;
+    if ((buff = (BUFFER *) calloc(1, sizeof(BUFFER))) == NULL) {
+        return NULL;
+    }
+    // Allocate the lines
+    buff->lines = NULL;
+    if ((buff->lines =
+         (struct LINE **)calloc(MAX_LINE, sizeof(struct LINE *))) == NULL) {
+        free(buff);
+        return NULL;
+    }
+    for (unsigned int i = 0; i < MAX_LINE; i++) {
+        if ((buff->lines[i] = new_line()) == NULL) {
+            free(buff);
+            return NULL;
+        }
+    }
+
+    // Initialize the other fields
+    buff->capacity = MAX_LINE;
+    buff->line_count = 0;
+
+    return buff;
 }
 
 void free_buffer(BUFFER * buff)
