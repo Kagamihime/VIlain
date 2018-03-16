@@ -335,7 +335,7 @@ int delete_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
 
 unsigned int get_line_count(BUFFER * buff)
 {
-    return -1;
+    return buff->line_count;
 }
 
 unsigned int get_line_length(BUFFER * buff, unsigned int line)
