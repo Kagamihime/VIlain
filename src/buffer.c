@@ -430,6 +430,12 @@ int override_text(BUFFER * buff, char *str, unsigned int from_line,
 
 int delete_char(BUFFER * buff, unsigned int line, unsigned int col)
 {
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+
+    return line_delete_char(buff->lines[line], col);
 }
 
 int delete_line(BUFFER * buff, int unsigned line)
