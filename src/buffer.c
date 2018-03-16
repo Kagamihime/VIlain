@@ -275,7 +275,12 @@ void free_buffer(BUFFER * buff)
 
 char get_char(BUFFER * buff, unsigned int line, unsigned int col)
 {
-    return 'a';
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return '\0';
+    }
+
+    return line_get_char(buff->lines[line], col);
 }
 
 char *get_line(BUFFER * buff, unsigned int line)
