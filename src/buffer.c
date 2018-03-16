@@ -11,72 +11,77 @@ void free_buffer(BUFFER * buff)
 {
 }
 
-char get_char(BUFFER * buff, int line, int col)
+char get_char(BUFFER * buff, unsigned int line, unsigned int col)
 {
     return 'a';
 }
 
-char *get_line(BUFFER * buff, int line)
+char *get_line(BUFFER * buff, unsigned int line)
 {
     return NULL;
 }
 
-char *get_text(BUFFER * buff, int from_line, int from_col, int to_line,
-               int to_col)
+char *get_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
+               unsigned int to_line, unsigned int to_col)
 {
     return NULL;
 }
 
-void insert_char(BUFFER * buff, char c, int line, int col)
+int insert_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
 {
 }
 
-void insert_line(BUFFER * buff, char *str, int line)
+int insert_line(BUFFER * buff, char *str, unsigned int line)
 {
 }
 
-void insert_text(BUFFER * buff, char *str, int from_line, int from_col,
-                 int to_line, int to_col)
+int insert_text(BUFFER * buff, char *str, unsigned int from_line,
+                unsigned int from_col, unsigned int to_line,
+                unsigned int to_col)
+{
+    return 0;
+}
+
+int override_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
 {
 }
 
-void override_char(BUFFER * buff, char c, int line, int col)
+int override_line(BUFFER * buff, char *str, unsigned int line)
 {
 }
 
-void override_line(BUFFER * buff, char *str, int line)
+int override_text(BUFFER * buff, char *str, unsigned int from_line,
+                  unsigned int from_col, unsigned int to_line,
+                  unsigned int to_col)
+{
+    return 0;
+}
+
+int delete_char(BUFFER * buff, unsigned int line, unsigned int col)
 {
 }
 
-void override_text(BUFFER * buff, char *str, int from_line, int from_col,
-                   int to_line, int to_col)
+int delete_line(BUFFER * buff, int unsigned line)
 {
 }
 
-void delete_char(BUFFER * buff, int line, int col)
+int delete_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
+                unsigned int to_line, unsigned int to_col)
 {
+    return 0;
 }
 
-void delete_line(BUFFER * buff, int line)
-{
-}
-
-void delete_text(BUFFER * buff, int from_line, int from_col, int to_line,
-                 int to_col)
-{
-}
-
-int get_line_count(BUFFER * buff)
+unsigned int get_line_count(BUFFER * buff)
 {
     return -1;
 }
 
-int get_line_length(BUFFER * buff)
+unsigned int get_line_length(BUFFER * buff, unsigned int line)
 {
     return -1;
 }
 
-int get_buffer_length(BUFFER * buff)
+unsigned int get_buffer_length(BUFFER * buff)
 {
     return -1;
 }
