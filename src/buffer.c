@@ -285,7 +285,14 @@ char get_char(BUFFER * buff, unsigned int line, unsigned int col)
 
 char *get_line(BUFFER * buff, unsigned int line)
 {
-    return NULL;
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return NULL;
+    }
+
+    return
+        strcat(line_get_segment
+               (buff->lines[line], 0, buff->lines[line]->length), "\n");
 }
 
 char *get_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
