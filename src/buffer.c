@@ -340,7 +340,7 @@ unsigned int get_line_count(BUFFER * buff)
 
 unsigned int get_line_length(BUFFER * buff, unsigned int line)
 {
-    return -1;
+    return buff->lines[line]->length;
 }
 
 unsigned int get_buffer_length(BUFFER * buff)
