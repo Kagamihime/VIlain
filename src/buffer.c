@@ -367,6 +367,30 @@ int insert_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
 
 int insert_line(BUFFER * buff, char *str, unsigned int line)
 {
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+    // Check that the buffer capacity is enough
+    if (buff->line_count + 1 > buff->capacity) {
+        return -1;
+    }
+    // Shift all lines after `line` to the end of the buffer
+    for (unsigned int i = buff->line_count - 1; i >= line; i--) {
+        buff->lines[i + 1] = buff->lines[i];
+    }
+
+    // Insert the new line at `line`
+    if ((buff->lines[line] = new_line()) == NULL) {
+        return -1;
+    }
+    if (line_insert_segment(buff->lines[line], str, 0) == -1) {
+        return -1;
+    }
+    // Increment the line count
+    buff->line_count++;
+
+    return 0;
 }
 
 int insert_text(BUFFER * buff, char *str, unsigned int from_line,
