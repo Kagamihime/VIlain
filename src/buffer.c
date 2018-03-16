@@ -345,5 +345,11 @@ unsigned int get_line_length(BUFFER * buff, unsigned int line)
 
 unsigned int get_buffer_length(BUFFER * buff)
 {
-    return -1;
+    unsigned int buff_length = 0;
+
+    for (unsigned int i = 0; i < buff->line_count; i++) {
+        buff_length += buff->lines[i]->length + 1;  // Count the line returns
+    }
+
+    return buff_length;
 }
