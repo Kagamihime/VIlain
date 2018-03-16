@@ -357,6 +357,12 @@ char *get_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
 
 int insert_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
 {
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+
+    return line_insert_char(buff->lines[line], c, col);
 }
 
 int insert_line(BUFFER * buff, char *str, unsigned int line)
