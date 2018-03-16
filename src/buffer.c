@@ -223,6 +223,13 @@ static int line_override_segment(struct LINE *line, char *str,
         || line_insert_segment(line, str, from_col);
 }
 
+struct BUFFER {
+    struct LINE **lines;
+
+    unsigned int capacity;
+    unsigned int line_count;
+};
+
 BUFFER *new_buffer()
 {
     return NULL;
