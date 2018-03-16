@@ -440,6 +440,25 @@ int delete_char(BUFFER * buff, unsigned int line, unsigned int col)
 
 int delete_line(BUFFER * buff, int unsigned line)
 {
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+    // Free the line at `line`
+    free_line(buff->lines[line]);
+
+    // Shift all the lines after `line` to the beginning of the buffer
+    for (unsigned int i = line; i < buff->line_count - 1; i++) {
+        buff->lines[i] = buff->lines[i + 1];
+    }
+
+    // Erase the last pointer
+    buff->lines[buff->line_count - 1] = NULL;
+
+    // Decrement the line count
+    buff->line_count--;
+
+    return 0;
 }
 
 int delete_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
