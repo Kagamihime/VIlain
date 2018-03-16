@@ -412,6 +412,13 @@ int override_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
 
 int override_line(BUFFER * buff, char *str, unsigned int line)
 {
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+
+    return line_truncate(buff->lines[line])
+        || line_insert_segment(buff->lines[line], str, 0);
 }
 
 int override_text(BUFFER * buff, char *str, unsigned int from_line,
