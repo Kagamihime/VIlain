@@ -260,6 +260,17 @@ BUFFER *new_buffer()
 
 void free_buffer(BUFFER * buff)
 {
+    if (buff != NULL) {
+        for (unsigned int i = 0; i < buff->capacity; i++) {
+            if (buff->lines[i] != NULL) {
+                free_line(buff->lines[i]);
+                buff->lines[i] = NULL;
+            }
+        }
+
+        free(buff);
+        buff = NULL;
+    }
 }
 
 char get_char(BUFFER * buff, unsigned int line, unsigned int col)
