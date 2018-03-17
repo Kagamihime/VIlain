@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include "../include/cursor.h"
 
-int get_pos_x()
+struct CURSOR {
+    int x;                      //the horizontal position of the cursor
+    int y;                      //the vertical position of the cursor
+} int get_pos_x()
 {
     return -1;
 }
