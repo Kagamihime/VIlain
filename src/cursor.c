@@ -21,6 +21,7 @@ void set_pos_x(struct CURSOR *curs, int i)
     curs->x = i;
 }
 
-void set_pos_y()
+void set_pos_y(struct CURSOR *curs, int i)
 {
+    curs->y = i;
 }
