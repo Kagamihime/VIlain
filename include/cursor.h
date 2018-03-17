@@ -1,9 +1,11 @@
 #ifndef CURSOR_H
 #define CURSOR_H
 
-int get_pos_x();
-int get_pos_y();
-void set_pos_x();
-void set_pos_y();
+typedef struct CURSOR CURSOR;
+
+int get_pos_x(CURSOR * curs);
+int get_pos_y(CURSOR * curs);
+void set_pos_x(CURSOR * curs, int i);
+void set_pos_y(CURSOR * curs, int i);
 
 #endif
