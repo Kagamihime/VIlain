@@ -5,9 +5,10 @@
 struct CURSOR {
     int x;                      //the horizontal position of the cursor
     int y;                      //the vertical position of the cursor
-} int get_pos_x()
+};
+int get_pos_x(struct CURSOR *curs)
 {
-    return -1;
+    return curs->x;
 }
 
 int get_pos_y()
