@@ -11,9 +11,9 @@ int get_pos_x(struct CURSOR *curs)
     return curs->x;
 }
 
-int get_pos_y()
+int get_pos_y(struct CURSOR *curs)
 {
-    return -1;
+    return curs->y;
 }
 
 void set_pos_x()
