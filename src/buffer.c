@@ -221,7 +221,7 @@ static int line_delete_segment(struct LINE *line, unsigned int from_col,
     }
     // Shift all the characters after `to_col` (excluded) to the left, by an
     // offset of `segment_length`
-    for (int i = to_col + 1; i <= line->length - segment_length; i++) {
+    for (unsigned int i = to_col + 1; i <= line->length - segment_length; i++) {
         line->str[i] = line->str[i + segment_length];
     }
 
@@ -425,38 +425,21 @@ int insert_line(BUFFER * buff, char *str, unsigned int line)
     return 0;
 }
 
-int insert_text(BUFFER * buff, char *str, unsigned int from_line,
-                unsigned int from_col, unsigned int to_line,
-                unsigned int to_col)
-{
-    return 0;
-}
-
-int override_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
+int insert_text(BUFFER * buff, char *str, unsigned int line, unsigned int col)
 {
     // Check if `line` is out of bound
-    if (line >= buff->line_count) {
+    if (line >= buff->line_count + 1) {
+        return -1;
+    }
+    // Insert the string at `line` and `col`
+    if (line_insert_segment(buff->lines[line], str, col) == -1) {
+        return -1;
+    }
+    // Autosplit this line
+    if (autosplit_line(buff, line) == -1) {
         return -1;
     }
 
-    return line_override_char(buff->lines[line], c, col);
-}
-
-int override_line(BUFFER * buff, char *str, unsigned int line)
-{
-    // Check if `line` is out of bound
-    if (line >= buff->line_count) {
-        return -1;
-    }
-
-    return line_truncate(buff->lines[line])
-        || line_insert_segment(buff->lines[line], str, 0);
-}
-
-int override_text(BUFFER * buff, char *str, unsigned int from_line,
-                  unsigned int from_col, unsigned int to_line,
-                  unsigned int to_col)
-{
     return 0;
 }
 
@@ -495,6 +478,67 @@ int delete_line(BUFFER * buff, int unsigned line)
 
 int delete_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
                 unsigned int to_line, unsigned int to_col)
+{
+    // Check if the lines are incorrect
+    if (from_line > to_line || to_line >= buff->line_count) {
+        return -1;
+    }
+
+    for (unsigned int i = to_line; i >= from_line; i--) {
+        unsigned int line_from_col = (i == from_line) ? from_col : 0;
+        unsigned int line_to_col =
+            (i == to_line) ? to_col : buff->lines[i]->length - 1;
+
+        // Remove the line if it is a whole line
+        if (line_from_col == 0 && line_to_col == buff->lines[i]->length) {
+            if (delete_line(buff, i) == -1) {
+                return -1;
+            }
+        } else {
+            if (line_delete_segment(buff->lines[i], line_from_col, line_to_col)
+                == -1) {
+                return -1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+int override_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
+{
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+
+    return line_override_char(buff->lines[line], c, col);
+}
+
+int override_line(BUFFER * buff, char *str, unsigned int line)
+{
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+
+    line_truncate(buff->lines[line]);
+    return line_insert_segment(buff->lines[line], str, 0);
+}
+
+int override_text(BUFFER * buff, char *str, unsigned int from_line,
+                  unsigned int from_col, unsigned int to_line,
+                  unsigned int to_col)
+{
+    // Check if the lines are incorrect
+    if (from_line > to_line || to_line >= buff->line_count) {
+        return -1;
+    }
+
+    return delete_text(buff, from_line, from_col, to_line, to_col)
+        || insert_text(buff, str, from_line, from_col);
+}
+
 int autosplit_line(BUFFER * buff, unsigned int line)
 {
     char *line_to_split = NULL;
