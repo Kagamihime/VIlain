@@ -209,21 +209,6 @@ static int line_delete_char(struct LINE *line, unsigned int col)
     return 0;
 }
 
-static int line_truncate(struct LINE *line)
-{
-    // Check if the line is already empty
-    if (line->length == 0) {
-        return -1;
-    }
-    // Truncate the line
-    line->str[0] = '\0';
-
-    // Update the line length
-    line->length = 0;
-
-    return 0;
-}
-
 // FIXME: Duplicated code
 static int line_delete_segment(struct LINE *line, unsigned int from_col,
                                unsigned int to_col)
@@ -247,6 +232,19 @@ static int line_delete_segment(struct LINE *line, unsigned int from_col,
     line->length -= segment_length;
 
     return 0;
+}
+
+static void line_truncate(struct LINE *line)
+{
+    // Check if the line is already empty
+    if (line->str == NULL) {
+        return;
+    }
+    // Truncate the line
+    line->str[0] = '\0';
+
+    // Update the line length
+    line->length = 0;
 }
 
 static int line_override_char(struct LINE *line, char c, unsigned int col)
