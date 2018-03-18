@@ -142,10 +142,11 @@ static int line_insert_char(struct LINE *line, unsigned char c,
         return -1;
     }
     // Shift all characters after `col` to the right
-    for (unsigned int i = line->length - 1; i >= col; i--) {
-        line->str[i + 1] = line->str[i];
+    if (line->length > 0) {
+        for (unsigned int i = line->length - 1; i >= col; i--) {
+            line->str[i + 1] = line->str[i];
+        }
     }
-
     // Make sure that the string is null-terminated
     line->str[line->length + 1] = '\0';
 
@@ -172,10 +173,11 @@ static int line_insert_segment(struct LINE *line, char *str, unsigned int col)
         return -1;
     }
     // Shift all characters after `col` to the right
-    for (unsigned int i = line->length - 1; i >= col; i--) {
-        line->str[i + str_length] = line->str[i];
+    if (line->length > 0) {
+        for (unsigned int i = line->length - 1; i >= col; i--) {
+            line->str[i + str_length] = line->str[i];
+        }
     }
-
     // Make sure that the string is null-terminated
     line->str[line->length + str_length] = '\0';
 
@@ -408,10 +410,11 @@ int insert_line(BUFFER * buff, char *str, unsigned int line)
         return -1;
     }
     // Shift all lines after `line` to the end of the buffer
-    for (unsigned int i = buff->line_count - 1; i >= line; i--) {
-        buff->lines[i + 1] = buff->lines[i];
+    if (buff->line_count > 0) {
+        for (unsigned int i = buff->line_count - 1; i >= line; i--) {
+            buff->lines[i + 1] = buff->lines[i];
+        }
     }
-
     // Insert the new line at `line`
     if ((buff->lines[line] = new_line()) == NULL) {
         return -1;
