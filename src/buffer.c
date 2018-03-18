@@ -495,6 +495,52 @@ int delete_line(BUFFER * buff, int unsigned line)
 
 int delete_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
                 unsigned int to_line, unsigned int to_col)
+int autosplit_line(BUFFER * buff, unsigned int line)
+{
+    char *line_to_split = NULL;
+    char **splitted_line = NULL;
+    unsigned int splitted_line_count = 0;
+
+    // Check if the line is empty
+    if (buff->lines[line]->length == 0) {
+        return -1;
+    }
+    // Get and remove the content of the line
+    if ((line_to_split =
+         line_get_segment(buff->lines[line], 0,
+                          buff->lines[line]->length - 1)) == NULL) {
+        return -1;
+    }
+    line_truncate(buff->lines[line]);
+
+    // Split the retrieved line
+    if (split_lines(line_to_split, &splitted_line, &splitted_line_count) == -1) {
+        return -1;
+    }
+    // Insert the splitted line
+    if (line_insert_segment(buff->lines[line], splitted_line[0], 0) == -1) {
+        return -1;
+    }
+    for (unsigned int i = 1; i < splitted_line_count; i++) {
+        if (insert_line(buff, splitted_line[i], line + i) == -1) {
+            return -1;
+        }
+    }
+
+    // Free memory and exit normally
+    for (unsigned int i = 0; i < splitted_line_count; i++) {
+        if (splitted_line[i] != NULL) {
+            free(splitted_line[i]);
+            splitted_line[i] = NULL;
+        }
+    }
+    if (splitted_line != NULL) {
+        free(splitted_line);
+        splitted_line = NULL;
+    }
+    return 0;
+}
+
 {
     return 0;
 }
