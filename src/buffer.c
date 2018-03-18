@@ -51,7 +51,7 @@ static void free_line(struct LINE *line)
 static char line_get_char(struct LINE *line, unsigned int col)
 {
     // Check if `col` is out of bound
-    if (col > line->length) {
+    if (col >= line->length) {
         return '\0';
     }
     // Return the requested character
@@ -84,7 +84,7 @@ static int line_insert_char(struct LINE *line, unsigned char c,
                             unsigned int col)
 {
     // Check if `col` is out of bound
-    if (col >= line->length) {
+    if (col >= line->length + 1) {
         return -1;
     }
     // Check that the line's capacity is enough
@@ -114,7 +114,7 @@ static int line_insert_segment(struct LINE *line, char *str, unsigned int col)
     size_t str_length = strlen(str);
 
     // Check if `col` is out of bound
-    if (col >= line->length) {
+    if (col >= line->length + 1) {
         return -1;
     }
     // Check that the line's capacity is enough
@@ -162,7 +162,7 @@ static int line_delete_char(struct LINE *line, unsigned int col)
 static int line_truncate(struct LINE *line)
 {
     // Check if the line is already empty
-    if (line->str == NULL) {
+    if (line->length == 0) {
         return -1;
     }
     // Truncate the line
@@ -368,7 +368,7 @@ int insert_char(BUFFER * buff, char c, unsigned int line, unsigned int col)
 int insert_line(BUFFER * buff, char *str, unsigned int line)
 {
     // Check if `line` is out of bound
-    if (line >= buff->line_count) {
+    if (line >= buff->line_count + 1) {
         return -1;
     }
     // Check that the buffer capacity is enough
