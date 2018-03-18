@@ -346,60 +346,44 @@ char *get_line(BUFFER * buff, unsigned int line)
 char *get_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
                unsigned int to_line, unsigned int to_col)
 {
-    unsigned int text_length = 0;
     char *text = NULL;
-    unsigned int seg_count = 0;
-    unsigned int **seg_cols = NULL;
+    unsigned int text_length = 0;
 
     // Check if the lines are incorrect
-    if (from_line > to_line || to_line > buff->line_count) {
+    if (from_line > to_line || to_line >= buff->line_count) {
         return NULL;
     }
-    // Calculate the segments to get
-    if (from_col > 0) {
-        seg_count++;
-    }
-    if (to_col < buff->lines[to_line]->length - 1 && from_line < to_line) {
-        seg_count++;
-    }
-    seg_count += to_line - from_line - 1;
-    if ((seg_cols =
-         (unsigned int **)calloc(seg_count, 2 * sizeof(int))) == NULL) {
-        return NULL;
-    }
-    // Fill in the `from_col`s
-    seg_cols[0][0] = from_col;
-    // Fill in the `to_col`s
-    for (unsigned int i = 0; i < seg_count - 1; i++) {
-        seg_cols[i][1] = buff->lines[i]->length - 1;
-    }
-    seg_cols[seg_count - 1][1] = to_col;
-
     // Allocate the memory for the text
-    for (unsigned int i = 0; i < seg_count; i++) {
-        text_length += seg_cols[i][1] - seg_cols[i][0] + 1;
+    for (unsigned int i = from_line; i <= to_line; i++) {
+        text_length +=
+            ((i == to_line) ? to_col : buff->lines[i]->length - 1) - ((i ==
+                                                                       from_line)
+                                                                      ? from_col
+                                                                      : 0) + 1;
         text_length++;          // Line return
     }
     if ((text = (char *)calloc(text_length + 1, sizeof(char))) == NULL) {
-        free(seg_cols);
         return NULL;
     }
-    // Get the segments and concatenate them
-    for (int i = 0; i < seg_count; i++) {
+
+    for (unsigned int i = from_line; i <= to_line; i++) {
+        unsigned int line_from_col = (i == from_line) ? from_col : 0;
+        unsigned int line_to_col =
+            (i == to_line) ? to_col : buff->lines[i]->length - 1;
+
+        // Get segments and concatenate them with line returns
         strncat(text,
-                line_get_segment(buff->lines[from_line + i], seg_cols[i][0],
-                                 seg_cols[i][1]),
-                buff->lines[from_line + i]->length);
+                line_get_segment(buff->lines[i], line_from_col, line_to_col),
+                line_to_col - line_from_col + 1);
         strcat(text, "\n");
     }
 
-    // Trim the nast new line if needed
+    // Trim the last line return if needed
     if (to_col < buff->lines[to_line]->length - 1
         && text[strlen(text) - 1] == '\n') {
         text[strlen(text) - 1] = '\0';
     }
 
-    free(seg_cols);
     return text;
 }
 
