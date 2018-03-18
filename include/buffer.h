@@ -21,6 +21,11 @@ int delete_char(BUFFER * buff, unsigned int line, unsigned int col);
 int delete_line(BUFFER * buff, unsigned int line);
 int delete_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
                 unsigned int to_line, unsigned int to_col);
+// Split the line at every occurencies of a line return
+int autosplit_line(BUFFER * buff, unsigned int line);
+int split_line_at(BUFFER * buff, unsigned int line, unsigned int col);
+int join_lines(BUFFER * buff, unsigned int from_line, unsigned int to_line,
+               int with_spaces);
 unsigned int get_line_count(BUFFER * buff);
 unsigned int get_line_length(BUFFER * buff, unsigned int line);
 unsigned int get_buffer_length(BUFFER * buff);
