@@ -559,6 +559,9 @@ int split_line_at(BUFFER * buff, unsigned int line, unsigned int col)
     return 0;
 }
 
+// TODO: implement this function
+int join_lines(BUFFER * buff, unsigned int from_line, unsigned int to_line,
+               int with_spaces)
 {
     return 0;
 }
