@@ -5,6 +5,56 @@
 #define LINE_SIZE 1000
 #define MAX_LINE 10000
 
+static int split_lines(char *str, char ***lines, unsigned int *line_count)
+{
+    char *ptr = str;
+
+    // Check if the string is empty
+    if (str == NULL) {
+        return -1;
+    }
+    // Place the pointer at the beginning of the string
+    ptr = str;
+
+    // Count the number of lines
+    for (unsigned int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == '\n') {
+            (*line_count)++;
+        }
+    }
+
+    // Allocate the lines pointers
+    if ((*lines = (char **)calloc(*line_count, sizeof(char *))) == NULL) {
+        return -1;
+    }
+    // Allocate and copy the line in `lines` for each line
+    for (unsigned int i = 0; i < *line_count; i++) {
+        unsigned int line_length = 0;
+
+        // Count the lines length
+        for (char *tmp_ptr = ptr; *tmp_ptr != '\n'; tmp_ptr++, line_length++) {
+        }
+
+        // Allocate the lines
+        if (((*lines)[i] =
+             (char *)calloc(line_length + 1, sizeof(char))) == NULL) {
+            free(*lines);
+            *lines = NULL;
+            return -1;
+        }
+        // Copy the line
+        strncpy((*lines)[i], ptr, line_length);
+
+        // Place the pointer at the beginning of the next line
+        ptr += line_length;
+        if (*ptr == '\n') {
+            ptr++;
+        }
+    }
+
+    return 0;
+}
+
 struct LINE {
     // Contains the string matching the line without its line return character
     // Contains `NULL` if the line is empty
