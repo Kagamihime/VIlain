@@ -11,9 +11,7 @@ char *get_text(BUFFER * buff, unsigned int from_line, unsigned int from_col,
                unsigned int to_line, unsigned int to_col);
 int insert_char(BUFFER * buff, char c, unsigned int line, unsigned int col);
 int insert_line(BUFFER * buff, char *str, unsigned int line);
-int insert_text(BUFFER * buff, char *str, unsigned int from_line,
-                unsigned int from_col, unsigned int to_line,
-                unsigned int to_col);
+int insert_text(BUFFER * buff, char *str, unsigned int line, unsigned int col);
 int override_char(BUFFER * buff, char c, unsigned int line, unsigned int col);
 int override_line(BUFFER * buff, char *str, unsigned int line);
 int override_text(BUFFER * buff, char *str, unsigned int from_line,
