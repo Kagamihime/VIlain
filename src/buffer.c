@@ -541,6 +541,24 @@ int autosplit_line(BUFFER * buff, unsigned int line)
     return 0;
 }
 
+int split_line_at(BUFFER * buff, unsigned int line, unsigned int col)
+{
+    // Check if `line` is out of bound
+    if (line >= buff->line_count) {
+        return -1;
+    }
+    // Insert a line return at `line` and `col`
+    if (line_insert_char(buff->lines[line], '\n', col) == -1) {
+        return -1;
+    }
+    // Autosplit the line
+    if (autosplit_line(buff, line) == -1) {
+        return -1;
+    }
+
+    return 0;
+}
+
 {
     return 0;
 }
