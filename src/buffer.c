@@ -606,10 +606,60 @@ int split_line_at(BUFFER * buff, unsigned int line, unsigned int col)
     return 0;
 }
 
-// TODO: implement this function
 int join_lines(BUFFER * buff, unsigned int from_line, unsigned int to_line,
                int with_spaces)
 {
+    char *str = NULL;
+    unsigned int str_length = 0;
+
+    char *to_append = NULL;
+
+    // Check if the lines are incorrect
+    if (from_line > to_line || to_line >= buff->line_count) {
+        return -1;
+    }
+    // Allocate the temporary string that will hold the joined lines
+    for (unsigned int i = from_line; i <= to_line; i++) {
+        str_length += buff->lines[i]->length;
+
+        if (with_spaces && i < to_line) {
+            str_length++;
+        }
+    }
+    str_length++;               // For '\0'
+    if ((str = (char *)calloc(str_length, sizeof(char))) == NULL) {
+        return -1;
+    }
+    // Append to the string the lines and truncate/delete them
+    for (unsigned int i = from_line; i <= to_line; i++) {
+        if ((to_append =
+             line_get_segment(buff->lines[i], 0,
+                              buff->lines[i]->length - 1)) == NULL) {
+            free(str);
+            return -1;
+        }
+        strncat(str, to_append, str_length);
+        if (with_spaces && i < to_line) {
+            strcat(str, " ");
+        }
+
+        if (i == from_line) {
+            line_truncate(buff->lines[i]);
+        } else {
+            if (delete_line(buff, i) == -1) {
+                free(str);
+                return -1;
+            }
+        }
+    }
+
+    // Insert the string in the first line
+    if (line_insert_segment(buff->lines[from_line], str, 0) == -1) {
+        free(str);
+        return -1;
+    }
+    // Free the temporary string and exit normally
+    free(str);
     return 0;
 }
 
