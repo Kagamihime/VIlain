@@ -22,7 +22,10 @@ static int split_lines(char *str, char ***lines, int *line_count)
             (*line_count)++;
         }
     }
-
+    // Count when the last line doesn't end with a line return
+    if (str[strlen(str) - 1] != '\n') {
+        (*line_count)++;
+    }
     // Allocate the lines pointers
     if ((*lines = (char **)calloc(*line_count, sizeof(char *))) == NULL) {
         return -1;
@@ -32,7 +35,8 @@ static int split_lines(char *str, char ***lines, int *line_count)
         int line_length = 0;
 
         // Count the lines length
-        for (char *tmp_ptr = ptr; *tmp_ptr != '\n'; tmp_ptr++, line_length++) {
+        for (char *tmp_ptr = ptr; *tmp_ptr != '\n' && *tmp_ptr != '\0';
+             tmp_ptr++, line_length++) {
         }
 
         // Allocate the lines
