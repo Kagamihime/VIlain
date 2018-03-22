@@ -336,14 +336,31 @@ char get_char(BUFFER * buff, int line, int col)
 
 char *get_line(BUFFER * buff, int line)
 {
+    char *ret = NULL;
+
     // Check if `line` is out of bound
     if (line < 0 || line >= buff->line_count) {
         return NULL;
     }
 
-    return
-        strcat(line_get_segment
-               (buff->lines[line], 0, buff->lines[line]->length), "\n");
+    if (buff->lines[line]->length == 0) {
+        if ((ret = (char *)calloc(2, sizeof(char))) == NULL) {
+            return NULL;
+        }
+
+        strcpy(ret, "\n");
+        return ret;
+    }
+
+    if ((ret =
+         line_get_segment(buff->lines[line], 0,
+                          buff->lines[line]->length - 1)) == NULL) {
+        return NULL;
+    }
+
+    strcat(ret, "\n");
+
+    return ret;
 }
 
 char *get_text(BUFFER * buff, int from_line, int from_col,
