@@ -6,12 +6,115 @@
 #include "../include/settings.h"
 #include "../include/ui.h"
 
+BUFFER *buff = NULL;
+char *str = NULL;
+
+void buffer_setup(void)
+{
+    buff = new_buffer();
+}
+
+void buffer_teardown(void)
+{
+    if (str != NULL) {
+        free(str);
+    }
+
+    free_buffer(buff);
+}
+
+START_TEST(test_insert_empty_line)
+{
+    ck_assert_int_eq(insert_line(buff, "", 0), 0);
+
+    str = get_line(buff, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "\n");
+}
+
+END_TEST START_TEST(test_insert_character)
+{
+    ck_assert_int_eq(insert_line(buff, "", 0), 0);
+    ck_assert_int_eq(insert_char(buff, 'a', 0, 0), 0);
+    ck_assert_int_eq(insert_char(buff, 'b', 0, 1), 0);
+    ck_assert_int_eq(insert_char(buff, 'z', 0, 0), 0);
+
+    str = get_line(buff, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "zab\n");
+}
+
+END_TEST START_TEST(test_insert_line)
+{
+    ck_assert_int_eq(insert_line(buff, "hello", 0), 0);
+    ck_assert_int_eq(insert_line(buff, "world", 1), 0);
+    ck_assert_int_eq(insert_line(buff, "pre", 0), 0);
+
+    str = get_text(buff, 0, 0, 2, strlen("world") - 1);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "pre\nhello\nworld\n");
+}
+
+END_TEST START_TEST(test_insert_text)
+{
+    ck_assert_int_eq(insert_text(buff, "lo\nwor", 0, 0), 0);
+    ck_assert_int_eq(insert_text(buff, "ld", 1, strlen("wor")), 0);
+    ck_assert_int_eq(insert_text(buff, "hel", 0, 0), 0);
+
+    str = get_text(buff, 0, 0, 1, strlen("world") - 1);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "hello\nworld\n");
+}
+
+END_TEST START_TEST(test_delete_character)
+{
+    ck_assert_int_eq(insert_line(buff, "hello world", 0), 0);
+    ck_assert_int_eq(delete_char(buff, 0, 0), 0);
+    ck_assert_int_eq(delete_char(buff, 0, get_line_length(buff, 0) - 1), 0);
+    ck_assert_int_eq(delete_char(buff, 0, strlen("ello")), 0);
+
+    str = get_line(buff, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "elloworl\n");
+}
+
+END_TEST START_TEST(test_delete_line)
+{
+    ck_assert_int_eq(insert_text(buff, "hello\nworld\n!", 0, 0), 0);
+    ck_assert_int_eq(delete_line(buff, 1), 0);
+
+    str = get_text(buff, 0, 0, 1, strlen("!") - 1);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "hello\n!\n");
+}
+
+END_TEST Suite *buffer_suite(void)
+{
+    TCase *tc_buffer;
+    Suite *s;
+
+    tc_buffer = tcase_create("Core");
+    tcase_add_checked_fixture(tc_buffer, buffer_setup, buffer_teardown);
+    tcase_add_test(tc_buffer, test_insert_empty_line);
+    tcase_add_test(tc_buffer, test_insert_character);
+    tcase_add_test(tc_buffer, test_insert_line);
+    tcase_add_test(tc_buffer, test_insert_text);
+    tcase_add_test(tc_buffer, test_delete_character);
+    tcase_add_test(tc_buffer, test_delete_line);
+
+    s = suite_create("Buffer");
+    suite_add_tcase(s, tc_buffer);
+
+    return s;
+}
+
 int main(void)
 {
     int failures;
     Suite *s;
     SRunner *sr;
 
+    s = buffer_suite();
     sr = srunner_create(s);
 
     srunner_run_all(sr, CK_NORMAL);
