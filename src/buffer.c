@@ -392,10 +392,16 @@ char *get_text(BUFFER * buff, int from_line, int from_col,
         char *line_str = NULL;
 
         // Get segments and concatenate them with line returns
-        strncat(text,
-                line_get_segment(buff->lines[i], line_from_col, line_to_col),
-                line_to_col - line_from_col + 1);
+        if ((line_str =
+             line_get_segment(buff->lines[i], line_from_col,
+                              line_to_col)) == NULL) {
+            free(text);
+            return NULL;
+        }
+        strncat(text, line_str, line_to_col - line_from_col + 1);
         strcat(text, "\n");
+
+        free(line_str);
     }
 
     // Trim the last line return if needed
