@@ -590,7 +590,12 @@ int autosplit_line(BUFFER * buff, int line)
     if (line_insert_segment(buff->lines[line], splitted_line[0], 0) == -1) {
         return -1;
     }
-    for (unsigned int i = 1; i < splitted_line_count; i++) {
+    // Increment the line count if we are creating a new line at the end
+    if (line == buff->line_count) {
+        buff->line_count++;
+    }
+
+    for (int i = 1; i < splitted_line_count; i++) {
         if (insert_line(buff, splitted_line[i], line + i) == -1) {
             return -1;
         }
