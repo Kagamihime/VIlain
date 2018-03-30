@@ -39,7 +39,7 @@ char *get_load_shortcut(SETTINGS * sets)
 
 char *get_settings_shortcut(SETTINGS * sets)
 {
-    return NULL;
+    return sets->settings_shortcut;
 }
 
 char *get_copy_shortcut(SETTINGS * sets)
