@@ -69,6 +69,7 @@ void set_line_wrapping(SETTINGS * sets, int val)
 
 void set_save_shortcut(SETTINGS * sets, char *val)
 {
+	sets->save_shortcut = val;
 }
 
 void set_load_shortcut(SETTINGS * sets, char *val)
