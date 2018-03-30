@@ -94,6 +94,7 @@ void set_cut_shortcut(SETTINGS * sets, char *val)
 
 void set_paste_shortcut(SETTINGS * sets, char *val)
 {
+	sets->paste_shortcut = val;
 }
 
 void set_toogle_selection_shortcut(SETTINGS * sets, char *val)
