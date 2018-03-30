@@ -2,6 +2,18 @@
 #include <stdio.h>
 #include "../include/settings.h"
 
+struct SETTINGS
+{
+	int line_wrapping;
+	char *save_shortcut;
+	char *load_shortcut;
+	char *settings_shortcut;
+	char *copy_shortcut;
+	char *cut_shortcut;
+	char *paste_shortcut;
+	char *toggle_selection_shortcut;
+};
+
 void save(SETTINGS * sets, char *path)
 {
 }
