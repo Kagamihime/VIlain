@@ -99,4 +99,5 @@ void set_paste_shortcut(SETTINGS * sets, char *val)
 
 void set_toogle_selection_shortcut(SETTINGS * sets, char *val)
 {
+	sets->toggle_selection_shortcut = val;
 }
