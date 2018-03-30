@@ -29,7 +29,7 @@ int get_line_wrapping(SETTINGS * sets)
 
 char *get_save_shortcut(SETTINGS * sets)
 {
-    return NULL;
+    return sets->save_shortcut;
 }
 
 char *get_load_shortcut(SETTINGS * sets)
