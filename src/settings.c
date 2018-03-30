@@ -19,7 +19,7 @@ struct SETTINGS
 void save(SETTINGS * sets, char *path)
 {
 	FILE file;
-	file = fopen(path, 'w');
+	file = fopen(path, "w");
 	fprintf("line_wrapping: %d\n", get_line_wrapping());
 	fprintf("save_shortcut: %s\n", get_save_shortcut());
 	fprintf("load_shortcut: %s\n", get_load_shortcut());
