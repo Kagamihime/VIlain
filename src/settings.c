@@ -54,7 +54,7 @@ char *get_cut_shortcut(SETTINGS * sets)
 
 char *get_paste_shortcut(SETTINGS * sets)
 {
-    return NULL;
+    return sets->paste_shortcut;
 }
 
 char *get_toogle_selection_shortcut(SETTINGS * sets)
