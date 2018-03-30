@@ -44,7 +44,7 @@ char *get_settings_shortcut(SETTINGS * sets)
 
 char *get_copy_shortcut(SETTINGS * sets)
 {
-    return NULL;
+    return sets->copy_shortcut;
 }
 
 char *get_cut_shortcut(SETTINGS * sets)
