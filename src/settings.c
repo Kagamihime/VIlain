@@ -49,7 +49,7 @@ char *get_copy_shortcut(SETTINGS * sets)
 
 char *get_cut_shortcut(SETTINGS * sets)
 {
-    return NULL;
+    return sets->cut_shortcut;
 }
 
 char *get_paste_shortcut(SETTINGS * sets)
