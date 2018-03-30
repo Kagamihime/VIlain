@@ -84,6 +84,7 @@ void set_settings_shortcut(SETTINGS * sets, char *val)
 
 void set_copy_shortcut(SETTINGS * sets, char *val)
 {
+	sets->copy_shortcut = val;
 }
 
 void set_cut_shortcut(SETTINGS * sets, char *val)
