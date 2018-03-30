@@ -48,3 +48,6 @@ build/
 # coala
 coala*/
 *.orig
+
+# Test's binary
+tests/check_vilain
