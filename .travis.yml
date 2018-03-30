@@ -12,11 +12,11 @@ before_install:
     - sudo pip3 install coala
     - sudo pip3 install coala-bears
     # Install the project's dependencies
-    - sudo apt-get install -y gcc-4.9 indent cppcheck libncurses5-dev
+    - sudo apt-get install -y gcc-4.9 indent cppcheck check libncurses5-dev
 
 before_script:
     - coala --non-interactive
 
 script:
     - mkdir build
-    - make
+    - make && cd tests && make test
