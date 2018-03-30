@@ -64,6 +64,7 @@ char *get_toogle_selection_shortcut(SETTINGS * sets)
 
 void set_line_wrapping(SETTINGS * sets, int val)
 {
+	sets->line_wrapping = val;
 }
 
 void set_save_shortcut(SETTINGS * sets, char *val)
