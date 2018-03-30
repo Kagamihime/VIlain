@@ -59,7 +59,7 @@ char *get_paste_shortcut(SETTINGS * sets)
 
 char *get_toogle_selection_shortcut(SETTINGS * sets)
 {
-    return NULL;
+    return sets->toggle_selection_shortcut;
 }
 
 void set_line_wrapping(SETTINGS * sets, int val)
