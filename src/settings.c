@@ -24,7 +24,7 @@ void load(SETTINGS * sets, char *path)
 
 int get_line_wrapping(SETTINGS * sets)
 {
-    return -1;
+    return sets->line_wrapping;
 }
 
 char *get_save_shortcut(SETTINGS * sets)
