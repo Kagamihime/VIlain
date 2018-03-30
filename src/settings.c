@@ -74,6 +74,7 @@ void set_save_shortcut(SETTINGS * sets, char *val)
 
 void set_load_shortcut(SETTINGS * sets, char *val)
 {
+	sets->load_shortcut = val;
 }
 
 void set_settings_shortcut(SETTINGS * sets, char *val)
