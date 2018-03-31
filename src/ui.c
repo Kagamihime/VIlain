@@ -94,6 +94,13 @@ void exec_user_action(BUFFER * buff)
 
             insert_line(buff, tmp, get_pos_y(curs));
             break;
+        case KEY_BACKSPACE:    // BACKSPACE
+            if (get_pos_x(curs) > 0) {
+                set_pos_x(curs, get_pos_x(curs) - 1);
+                delete_char(buff, get_pos_y(curs), get_pos_x(curs));
+            }
+
+            break;
         default:
             insert_char(buff, ch, get_pos_y(curs), get_pos_x(curs));
             set_pos_x(curs, get_pos_x(curs) + 1);
