@@ -101,6 +101,13 @@ void exec_user_action(BUFFER * buff)
             }
 
             break;
+
+        case 16:               //Ctrl+P: display the options menu
+            clear();
+            refresh();
+            settings_menu(NULL);
+            break;
+            // TODO: SHORTCUTS
         case 27:               //ESCAPE : exit the program
             exit = 1;
             break;
