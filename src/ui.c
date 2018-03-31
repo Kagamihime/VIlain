@@ -144,16 +144,16 @@ void exec_user_action(BUFFER * buff)
             break;
 
         case 10:               //ENTER: create a new line containing the end of the current line
-            tmp =
-                get_text(buff, get_pos_y(curs), get_pos_x(curs),
-                         get_pos_y(curs), get_line_length(buff,
-                                                          get_pos_x(curs)));
-            delete_text(buff, get_pos_y(curs), get_pos_x(curs), get_pos_y(curs),
-                        get_line_length(buff, get_pos_x(curs)));
-            set_pos_x(curs, 0);
-            set_pos_y(curs, get_pos_y(curs) + 1);
-
-            insert_line(buff, tmp, get_pos_y(curs));
+            // tmp =
+            //     get_text(buff, get_pos_y(curs), get_pos_x(curs),
+            //              get_pos_y(curs), get_line_length(buff,
+            //                                               get_pos_x(curs)));
+            // delete_text(buff, get_pos_y(curs), get_pos_x(curs), get_pos_y(curs),
+            //             get_line_length(buff, get_pos_x(curs)));
+            // set_pos_x(curs, 0);
+            // set_pos_y(curs, get_pos_y(curs) + 1);
+            //
+            // insert_line(buff, tmp, get_pos_y(curs));
             break;
         case KEY_BACKSPACE:    // BACKSPACE
             if (get_pos_x(curs) > 0) {
