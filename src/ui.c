@@ -23,7 +23,25 @@ char *menu_choices[] = {
 };
 
 int number_menu_choices = sizeof(menu_choices) / sizeof(char *);
-void print_menu(WINDOW * menu_win, int highlight);
+
+void print_menu(WINDOW * menu_win, int highlight)
+{
+    int x, y, i;
+
+    x = 2;
+    y = 2;
+    box(menu_win, 0, 0);
+    for (i = 0; i < number_menu_choices; ++i) {
+        if (highlight == i + 1) {   /* High light the present choice */
+            wattron(menu_win, A_REVERSE);
+            mvwprintw(menu_win, y, x, "%s", menu_choices[i]);
+            wattroff(menu_win, A_REVERSE);
+        } else
+            mvwprintw(menu_win, y, x, "%s", menu_choices[i]);
+        ++y;
+    }
+    wrefresh(menu_win);
+}
 
 void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
 {
@@ -99,9 +117,7 @@ void exec_user_action(BUFFER * buff)
                 set_pos_x(curs, get_pos_x(curs) - 1);
                 delete_char(buff, get_pos_y(curs), get_pos_x(curs));
             }
-
             break;
-
         case 16:               //Ctrl+P: display the options menu
             clear();
             refresh();
@@ -141,4 +157,5 @@ void saving_menu()
 
 void settings_menu(SETTINGS * set)
 {
+
 }
