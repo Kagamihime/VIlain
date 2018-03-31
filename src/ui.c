@@ -27,6 +27,15 @@ void print_menu(WINDOW * menu_win, int highlight);
 
 void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
 {
+    for (int i = first_line; i < get_line_count(buff); i++) {
+        if (i >= get_line_length(buff, i)) {
+            move(i, 0);
+            clrtoeol();
+        } else {
+            mvwprintw(text_win, i, 0, get_line(buff, i));
+        }
+        clrtoeol();
+    }
 }
 
 void print_wrapped_text(BUFFER * buff, unsigned int first_line)
