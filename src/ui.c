@@ -101,6 +101,9 @@ void exec_user_action(BUFFER * buff)
             }
 
             break;
+        case 27:               //ESCAPE : exit the program
+            exit = 1;
+            break;
         default:
             insert_char(buff, ch, get_pos_y(curs), get_pos_x(curs));
             set_pos_x(curs, get_pos_x(curs) + 1);
