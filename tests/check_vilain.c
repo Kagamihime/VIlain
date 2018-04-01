@@ -80,12 +80,15 @@ END_TEST START_TEST(test_delete_character)
 
 END_TEST START_TEST(test_delete_line)
 {
-    ck_assert_int_eq(insert_text(buff, "hello\nworld\n!", 0, 0), 0);
+    ck_assert_int_eq(insert_text(buff, "hello\nworld\n!\nbye", 0, 0), 0);
+    ck_assert_int_eq(delete_line(buff, 0), 0);
+    ck_assert_int_eq(delete_line(buff, 1), 0);
     ck_assert_int_eq(delete_line(buff, 1), 0);
 
-    str = get_text(buff, 0, 0, 1, strlen("!") - 1);
+    ck_assert_int_eq(get_line_count(buff), 1);
+    str = get_line(buff, 0);
     ck_assert_ptr_ne(str, NULL);
-    ck_assert_str_eq(str, "hello\n!\n");
+    ck_assert_str_eq(str, "world\n");
 }
 
 END_TEST Suite *buffer_suite(void)
