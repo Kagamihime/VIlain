@@ -510,22 +510,18 @@ int delete_text(BUFFER * buff, int from_line, int from_col,
     if (from_line < 0 || from_line > to_line || to_line >= buff->line_count) {
         return -1;
     }
+    // Recalculate `to_col`
+    for (int i = from_line; i < to_line; i++) {
+        to_col += buff->lines[i]->length;
+    }
 
-    for (int i = to_line; i >= from_line; i--) {
-        int line_from_col = (i == from_line) ? from_col : 0;
-        int line_to_col = (i == to_line) ? to_col : buff->lines[i]->length - 1;
-
-        // Remove the line if it is a whole line
-        if (line_from_col == 0 && line_to_col == buff->lines[i]->length) {
-            if (delete_line(buff, i) == -1) {
-                return -1;
-            }
-        } else {
-            if (line_delete_segment(buff->lines[i], line_from_col, line_to_col)
-                == -1) {
-                return -1;
-            }
-        }
+    // Join the lines
+    if (join_lines(buff, from_line, to_line, 0) == -1) {
+        return -1;
+    }
+    // Delete the segment
+    if (line_delete_segment(buff->lines[from_line], from_col, to_col) == -1) {
+        return -1;
     }
 
     return 0;
