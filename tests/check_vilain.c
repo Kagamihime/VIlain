@@ -91,6 +91,21 @@ END_TEST START_TEST(test_delete_line)
     ck_assert_str_eq(str, "world\n");
 }
 
+END_TEST START_TEST(test_delete_text)
+{
+    ck_assert_int_eq(insert_text(buff, "hello world\n!\nor good bye", 0, 0), 0);
+    ck_assert_int_eq(delete_text(buff, 0, strlen("hello worl"), 2, 0), 0);
+    ck_assert_int_eq(delete_text(buff, 0, 0, 0, 1), 0);
+    ck_assert_int_eq(delete_text
+                     (buff, 0, strlen("llo worlr good b"), 0,
+                      strlen("llo worlr good by")), 0);
+
+    ck_assert_int_eq(get_line_count(buff), 1);
+    str = get_line(buff, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "llo worlr good b\n");
+}
+
 END_TEST Suite *buffer_suite(void)
 {
     TCase *tc_buffer;
@@ -104,6 +119,7 @@ END_TEST Suite *buffer_suite(void)
     tcase_add_test(tc_buffer, test_insert_text);
     tcase_add_test(tc_buffer, test_delete_character);
     tcase_add_test(tc_buffer, test_delete_line);
+    tcase_add_test(tc_buffer, test_delete_text);
 
     s = suite_create("Buffer");
     suite_add_tcase(s, tc_buffer);
