@@ -640,6 +640,8 @@ int join_lines(BUFFER * buff, int from_line, int to_line, int with_spaces)
 
     char *to_append = NULL;
 
+    int lines_to_delete = to_line - from_line;
+
     // Check if the lines are incorrect
     if (from_line < 0 || from_line > to_line || to_line >= buff->line_count) {
         return -1;
@@ -656,7 +658,7 @@ int join_lines(BUFFER * buff, int from_line, int to_line, int with_spaces)
     if ((str = (char *)calloc(str_length, sizeof(char))) == NULL) {
         return -1;
     }
-    // Append to the string the lines and truncate/delete them
+    // Append to the string the lines
     for (int i = from_line; i <= to_line; i++) {
         if ((to_append =
              line_get_segment(buff->lines[i], 0,
@@ -668,15 +670,12 @@ int join_lines(BUFFER * buff, int from_line, int to_line, int with_spaces)
         if (with_spaces && i < to_line) {
             strcat(str, " ");
         }
+    }
 
-        if (i == from_line) {
-            line_truncate(buff->lines[i]);
-        } else {
-            if (delete_line(buff, i) == -1) {
-                free(str);
-                return -1;
-            }
-        }
+    // Truncate/delete the lines
+    line_truncate(buff->lines[from_line]);
+    for (int i = 0; i < lines_to_delete; i++) {
+        delete_line(buff, from_line + 1);
     }
 
     // Insert the string in the first line
