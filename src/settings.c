@@ -33,6 +33,13 @@ void save(SETTINGS * sets, char *path)
 
 void load(SETTINGS * sets, char *path)
 {
+	char *line;
+	FILE* file;
+	file = fopen(path, "r");
+	while (fgets(line, LINE_MAX_LENGTH, file) != NULL)
+	{
+
+	}
 }
 
 int get_line_wrapping(SETTINGS * sets)
