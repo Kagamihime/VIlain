@@ -20,15 +20,15 @@ void save(SETTINGS * sets, char *path)
 {
 	FILE* file;
 	file = fopen(path, "w");
-	fprintf("line_wrapping: %d\n", get_line_wrapping());
-	fprintf("save_shortcut: %s\n", get_save_shortcut());
-	fprintf("load_shortcut: %s\n", get_load_shortcut());
-	fprintf("settings_shortcut: %s\n", get_settings_shortcut());
-	fprintf("copy_shortcut: %s\n", get_copy_shortcut());
-	fprintf("cut_shortcut: %s\n", get_cut_shortcut());
-	fprintf("paste_shortcut: %s\n", get_paste_shortcut());
-	fprintf("toggle_selection_shortcut: %s\n", get_toogle_selection_shortcut());
-	file.close()
+	fprintf(file, "line_wrapping: %d\n", get_line_wrapping(sets));
+	fprintf(file, "save_shortcut: %s\n", get_save_shortcut(sets));
+	fprintf(file, "load_shortcut: %s\n", get_load_shortcut(sets));
+	fprintf(file, "settings_shortcut: %s\n", get_settings_shortcut(sets));
+	fprintf(file, "copy_shortcut: %s\n", get_copy_shortcut(sets));
+	fprintf(file, "cut_shortcut: %s\n", get_cut_shortcut(sets));
+	fprintf(file, "paste_shortcut: %s\n", get_paste_shortcut(sets));
+	fprintf(file, "toggle_selection_shortcut: %s\n", get_toogle_selection_shortcut(sets));
+	fclose(file);
 }
 
 void load(SETTINGS * sets, char *path)
