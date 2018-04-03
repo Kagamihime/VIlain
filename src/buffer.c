@@ -222,9 +222,9 @@ static int line_delete_segment(struct LINE *line, int from_col, int to_col)
     if (from_col < 0 || from_col > to_col || to_col >= line->length) {
         return -1;
     }
-    // Shift all the characters after `to_col` (excluded) to the left, by an
+    // Shift all the characters after `from_col` to the left, by an
     // offset of `segment_length`
-    for (int i = to_col + 1; i <= line->length - segment_length; i++) {
+    for (int i = from_col; i <= line->length - segment_length + 1; i++) {
         line->str[i] = line->str[i + segment_length];
     }
 
