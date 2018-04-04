@@ -127,6 +127,18 @@ END_TEST START_TEST(test_override_line)
     ck_assert_str_eq(str, "This is completely different\n");
 }
 
+END_TEST START_TEST(test_override_text)
+{
+    ck_assert_int_eq(insert_text(buff, "helloERRORworld!", 0, 0), 0);
+    ck_assert_int_eq(override_text
+                     (buff, "\n", 0, strlen("hello"), 0, strlen("helloERRO")),
+                     0);
+
+    str = get_text(buff, 0, 0, 1, strlen("world"));
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "hello\nworld!\n");
+}
+
 END_TEST Suite *buffer_suite(void)
 {
     TCase *tc_buffer;
@@ -143,6 +155,7 @@ END_TEST Suite *buffer_suite(void)
     tcase_add_test(tc_buffer, test_delete_text);
     tcase_add_test(tc_buffer, test_override_char);
     tcase_add_test(tc_buffer, test_override_line);
+    tcase_add_test(tc_buffer, test_override_text);
 
     s = suite_create("Buffer");
     suite_add_tcase(s, tc_buffer);
