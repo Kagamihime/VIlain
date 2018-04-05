@@ -103,6 +103,33 @@ void print_wrapped_text(BUFFER * buff, unsigned int first_line)
 {
 }
 
+void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
+{
+    switch (ch) {
+    case KEY_UP:               //UP ARROW: move cursor up
+        if (get_pos_y(curs) > 0)
+            set_pos_y(curs, get_pos_y(curs) - 1);
+        if (get_pos_x(curs) > get_line_length(buff, get_pos_y(curs)) - 1)
+            set_pos_x(curs, get_line_length(buff, get_pos_y(curs)) - 1);
+        break;
+    case KEY_DOWN:             //DOWN ARROW: move cursor down
+        if (get_pos_y(curs) < get_line_count(buff) - 1)
+            set_pos_y(curs, get_pos_y(curs) + 1);
+        if (get_pos_x(curs) > get_line_length(buff, get_pos_y(curs)) - 1)
+            set_pos_x(curs, get_line_length(buff, get_pos_y(curs)) - 1);
+        break;
+    case KEY_RIGHT:            //RIGHT ARROW: move cursor right
+        if (get_pos_x(curs) < get_line_length(buff, get_pos_y(curs)) - 1)
+            set_pos_x(curs, get_pos_x(curs) + 1);
+        break;
+    case KEY_LEFT:             //LEFT ARROW: move cursor left
+        if (get_pos_x(curs) > 0)
+            set_pos_x(curs, get_pos_x(curs) - 1);
+        break;
+    }
+    print_status_bar(" ");
+}
+
 void exec_user_action(BUFFER * buff)
 {
     //Creation of the window and the cursor
@@ -113,7 +140,7 @@ void exec_user_action(BUFFER * buff)
     print_text(buff, 0, 0);
     set_pos_y(curs, get_line_count(buff) - 1);
     set_pos_x(curs, get_line_length(buff, get_line_count(buff) - 1));
-    wmove(text_win, get_pos_y(curs), get_pos_x(curs));
+    print_status_bar(" ");
 
     //Set up the parameters to listen to keyboard events and enter the loop
     keypad(text_win, TRUE);
@@ -126,23 +153,12 @@ void exec_user_action(BUFFER * buff)
     while (!exit) {
         ch = wgetch(text_win);
         switch (ch) {
-        case KEY_UP:           //UP ARROW: move cursor up
-            if (get_pos_y(curs) > 0)
-                set_pos_y(curs, get_pos_y(curs) - 1);
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+            move_cursor(buff, curs, ch);
             break;
-        case KEY_DOWN:         //DOWN ARROW: move cursor down
-            if (get_pos_y(curs) < TEXT_HEIGHT)
-                set_pos_y(curs, get_pos_y(curs) + 1);
-            break;
-        case KEY_RIGHT:        //RIGHT ARROW: move cursor right
-            if (get_pos_x(curs) < TEXT_WIDTH)
-                set_pos_x(curs, get_pos_x(curs) + 1);
-            break;
-        case KEY_LEFT:         //LEFT ARROW: move cursor left
-            if (get_pos_x(curs) > 0)
-                set_pos_x(curs, get_pos_x(curs) - 1);
-            break;
-
         case 10:               //ENTER: create a new line containing the end of the current line
             // tmp =
             //     get_text(buff, get_pos_y(curs), get_pos_x(curs),
@@ -188,6 +204,10 @@ void select_text(BUFFER * buff, CURSOR * curs)
 
 void print_status_bar(char *str)
 {
+    mvwprintw(text_win, TEXT_HEIGHT - 1, 0, "%d : %d       ", get_pos_y(curs),
+              get_pos_x(curs));
+    mvwprintw(text_win, TEXT_HEIGHT - 1, TEXT_WIDTH / 2, "%s       ", str);
+    wmove(text_win, get_pos_y(curs), get_pos_x(curs));
 }
 
 void loading_menu()
