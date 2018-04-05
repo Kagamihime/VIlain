@@ -105,6 +105,24 @@ void print_wrapped_text(BUFFER * buff, unsigned int first_line)
 
 void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
 {
+    switch (ch) {
+    case KEY_UP:               //UP ARROW: move cursor up
+        if (get_pos_y(curs) > 0)
+            set_pos_y(curs, get_pos_y(curs) - 1);
+        break;
+    case KEY_DOWN:             //DOWN ARROW: move cursor down
+        if (get_pos_y(curs) < get_line_count(buff) - 1)
+            set_pos_y(curs, get_pos_y(curs) + 1);
+        break;
+    case KEY_RIGHT:            //RIGHT ARROW: move cursor right
+        if (get_pos_x(curs) < get_line_length(buff, get_pos_y(curs)) - 1)
+            set_pos_x(curs, get_pos_x(curs) + 1);
+        break;
+    case KEY_LEFT:             //LEFT ARROW: move cursor left
+        if (get_pos_x(curs) > 0)
+            set_pos_x(curs, get_pos_x(curs) - 1);
+        break;
+    }
 }
 
 void exec_user_action(BUFFER * buff)
