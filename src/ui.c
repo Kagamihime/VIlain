@@ -127,6 +127,7 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
             set_pos_x(curs, get_pos_x(curs) - 1);
         break;
     }
+    print_status_bar(" ");
 }
 
 void exec_user_action(BUFFER * buff)
@@ -139,7 +140,7 @@ void exec_user_action(BUFFER * buff)
     print_text(buff, 0, 0);
     set_pos_y(curs, get_line_count(buff) - 1);
     set_pos_x(curs, get_line_length(buff, get_line_count(buff) - 1));
-    wmove(text_win, get_pos_y(curs), get_pos_x(curs));
+    print_status_bar(" ");
 
     //Set up the parameters to listen to keyboard events and enter the loop
     keypad(text_win, TRUE);
@@ -214,6 +215,10 @@ void select_text(BUFFER * buff, CURSOR * curs)
 
 void print_status_bar(char *str)
 {
+    mvwprintw(text_win, TEXT_HEIGHT - 1, 0, "%d : %d       ", get_pos_y(curs),
+              get_pos_x(curs));
+    mvwprintw(text_win, TEXT_HEIGHT - 1, TEXT_WIDTH / 2, "%s       ", str);
+    wmove(text_win, get_pos_y(curs), get_pos_x(curs));
 }
 
 void loading_menu()
