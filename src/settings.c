@@ -33,11 +33,46 @@ void save(SETTINGS * sets, char *path)
 
 void load(SETTINGS * sets, char *path)
 {
+    int i = 0;
+    int val;
+    char *val_string = "";
+    char *param = "";
     char *line = "";
     FILE *file;
     file = fopen(path, "r");
     while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
-
+        if (i == 0) {
+            sscanf(line, "%s %d", param, &val);
+            set_line_wrapping(sets, val);
+        }
+        if (i == 1) {
+            sscanf(line, "%s %s", param, val_string);
+            set_save_shortcut(sets, val_string);
+        }
+        if (i == 2) {
+            sscanf(line, "%s %s", param, val_string);
+            set_load_shortcut(sets, val_string);
+        }
+        if (i == 3) {
+            sscanf(line, "%s %s", param, val_string);
+            set_settings_shortcut(sets, val_string);
+        }
+        if (i == 4) {
+            sscanf(line, "%s %s", param, val_string);
+            set_copy_shortcut(sets, val_string);
+        }
+        if (i == 5) {
+            sscanf(line, "%s %s", param, val_string);
+            set_cut_shortcut(sets, val_string);
+        }
+        if (i == 6) {
+            sscanf(line, "%s %s", param, val_string);
+            set_paste_shortcut(sets, val_string);
+        }
+        if (i == 7) {
+            sscanf(line, "%s %s", param, val_string);
+            set_toogle_selection_shortcut(sets, val_string);
+        }
     }
     fclose(file);
 }
