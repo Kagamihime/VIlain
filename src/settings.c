@@ -27,12 +27,56 @@ void save(SETTINGS * sets, char *path)
     fprintf(file, "cut_shortcut: %s\n", get_cut_shortcut(sets));
     fprintf(file, "paste_shortcut: %s\n", get_paste_shortcut(sets));
     fprintf(file, "toggle_selection_shortcut: %s\n",
-            get_toogle_selection_shortcut(sets));
+        get_toogle_selection_shortcut(sets));
     fclose(file);
 }
 
 void load(SETTINGS * sets, char *path)
 {
+    int i = 0;
+    int val = 0;
+    char *val_string = "";
+    char *param = "";
+    char *line = "";
+    FILE *file;
+    file = fopen(path, "r");
+    while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
+        if (i == 0) {
+            sscanf(line, "%s %d", param, &val);
+            set_line_wrapping(sets, val);
+        }
+        if (i == 1) {
+            sscanf(line, "%s %s", param, val_string);
+            set_save_shortcut(sets, val_string);
+        }
+        if (i == 2) {
+            sscanf(line, "%s %s", param, val_string);
+            set_load_shortcut(sets, val_string);
+        }
+        if (i == 3) {
+            sscanf(line, "%s %s", param, val_string);
+            set_settings_shortcut(sets, val_string);
+        }
+        if (i == 4) {
+            sscanf(line, "%s %s", param, val_string);
+            set_copy_shortcut(sets, val_string);
+        }
+        if (i == 5) {
+            sscanf(line, "%s %s", param, val_string);
+            set_cut_shortcut(sets, val_string);
+        }
+        if (i == 6) {
+            sscanf(line, "%s %s", param, val_string);
+            set_paste_shortcut(sets, val_string);
+        }
+        if (i == 7) {
+            sscanf(line, "%s %s", param, val_string);
+            set_toogle_selection_shortcut(sets, val_string);
+        }
+        i++;
+    }
+    fclose(file);
+
     // TODO: implement this function
     // char *line = "";
     // FILE *file;
@@ -41,6 +85,7 @@ void load(SETTINGS * sets, char *path)
     //
     // }
     // fclose(file);
+
 }
 
 int get_line_wrapping(SETTINGS * sets)
