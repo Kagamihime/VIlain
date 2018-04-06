@@ -161,6 +161,28 @@ END_TEST START_TEST(test_split_line_at)
     ck_assert_str_eq(str, "hello\n world!\n");
 }
 
+END_TEST START_TEST(test_join_lines)
+{
+    ck_assert_int_eq(insert_text(buff, "hello\nworld!", 0, 0), 0);
+    ck_assert_int_eq(join_lines(buff, 0, 1, 0), 0);
+
+    ck_assert_int_eq(get_line_count(buff), 1);
+    str = get_line(buff, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "helloworld!\n");
+
+    free(str);
+    str = NULL;
+
+    ck_assert_int_eq(split_line_at(buff, 0, strlen("hello")), 0);
+    ck_assert_int_eq(join_lines(buff, 0, 1, 1), 0);
+
+    ck_assert_int_eq(get_line_count(buff), 1);
+    str = get_line(buff, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "hello world!\n");
+}
+
 END_TEST Suite *buffer_suite(void)
 {
     TCase *tc_buffer;
@@ -180,6 +202,7 @@ END_TEST Suite *buffer_suite(void)
     tcase_add_test(tc_buffer, test_override_text);
     tcase_add_test(tc_buffer, test_autosplit_line);
     tcase_add_test(tc_buffer, test_split_line_at);
+    tcase_add_test(tc_buffer, test_join_lines);
 
     s = suite_create("Buffer");
     suite_add_tcase(s, tc_buffer);
