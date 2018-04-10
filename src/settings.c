@@ -40,40 +40,42 @@ void load(SETTINGS * sets, char *path)
     char *line = malloc(sizeof(char *) * LINE_MAX_LENGTH);
     FILE *file;
     file = fopen(path, "r");
-    while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
-        if (i == 0) {
-            sscanf(line, "%s %d", param, &val);
-            set_line_wrapping(sets, val);
+    if (file != NULL) {
+        while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
+            if (i == 0) {
+                sscanf(line, "%s %d", param, &val);
+                set_line_wrapping(sets, val);
+            }
+            if (i == 1) {
+                sscanf(line, "%s %s", param, val_string);
+                set_save_shortcut(sets, val_string);
+            }
+            if (i == 2) {
+                sscanf(line, "%s %s", param, val_string);
+                set_load_shortcut(sets, val_string);
+            }
+            if (i == 3) {
+                sscanf(line, "%s %s", param, val_string);
+                set_settings_shortcut(sets, val_string);
+            }
+            if (i == 4) {
+                sscanf(line, "%s %s", param, val_string);
+                set_copy_shortcut(sets, val_string);
+            }
+            if (i == 5) {
+                sscanf(line, "%s %s", param, val_string);
+                set_cut_shortcut(sets, val_string);
+            }
+            if (i == 6) {
+                sscanf(line, "%s %s", param, val_string);
+                set_paste_shortcut(sets, val_string);
+            }
+            if (i == 7) {
+                sscanf(line, "%s %s", param, val_string);
+                set_toogle_selection_shortcut(sets, val_string);
+            }
+            i++;
         }
-        if (i == 1) {
-            sscanf(line, "%s %s", param, val_string);
-            set_save_shortcut(sets, val_string);
-        }
-        if (i == 2) {
-            sscanf(line, "%s %s", param, val_string);
-            set_load_shortcut(sets, val_string);
-        }
-        if (i == 3) {
-            sscanf(line, "%s %s", param, val_string);
-            set_settings_shortcut(sets, val_string);
-        }
-        if (i == 4) {
-            sscanf(line, "%s %s", param, val_string);
-            set_copy_shortcut(sets, val_string);
-        }
-        if (i == 5) {
-            sscanf(line, "%s %s", param, val_string);
-            set_cut_shortcut(sets, val_string);
-        }
-        if (i == 6) {
-            sscanf(line, "%s %s", param, val_string);
-            set_paste_shortcut(sets, val_string);
-        }
-        if (i == 7) {
-            sscanf(line, "%s %s", param, val_string);
-            set_toogle_selection_shortcut(sets, val_string);
-        }
-        i++;
     }
     free(val_string);
     free(param);
