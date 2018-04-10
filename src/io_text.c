@@ -1,6 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../include/io_text.h"
+#include "../include/buffer.h"
+#define FILE_MAX_LENGTH 8192
+#define LINE_MAX_LENGTH 512
+
 
 BUFFER *load_file(IO_TEXT * io_text, char *path)
 {
