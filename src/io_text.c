@@ -16,7 +16,7 @@ BUFFER *load_file(IO_TEXT * io_text, char *path)
     char *line = malloc(sizeof(char *) * LINE_MAX_LENGTH);
     FILE *file;
     file = fopen(path, "r");
-    while (fgets(line, FILE_MAX_LENGTH, file) != NULL) {
+    while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
         insert_line(res, line, i);
         i++;
     }
