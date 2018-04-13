@@ -5,10 +5,6 @@
 #define FILE_MAX_LENGTH 8192
 #define LINE_MAX_LENGTH 512
 
-struct IO_TEXT {
-    char **buffer_text;
-};
-
 BUFFER *load_file(IO_TEXT * io_text, char *path)
 {
     int i = 0;
