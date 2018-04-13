@@ -31,7 +31,7 @@ void save(SETTINGS * sets, char *path)
     fclose(file);
 }
 
-void load(SETTINGS * sets, char *path)
+int load(SETTINGS * sets, char *path)
 {
     int i = 0;
     int val;
