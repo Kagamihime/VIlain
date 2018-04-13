@@ -24,7 +24,18 @@ BUFFER *load_file(char *path)
     return res;
 }
 
-int save_buffer(IO_TEXT * io_text, char *path, BUFFER * buff)
+int save_buffer(char *path, BUFFER * buff)
 {
-    return -1;
+    FILE *file = NULL;
+    file = fopen(path, "w");
+    if (file == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < get_line_count(buff); i++) {
+        if (fprintf(file, "%s", get_line(buff, i)) < 0) {
+            return -1;
+        }
+    }
+    fclose(file);
+    return 0;
 }
