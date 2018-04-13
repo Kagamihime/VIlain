@@ -5,13 +5,16 @@
 #define FILE_MAX_LENGTH 8192
 #define LINE_MAX_LENGTH 512
 
-BUFFER *load_file(IO_TEXT * io_text, char *path)
+BUFFER *load_file(char *path)
 {
     int i = 0;
     BUFFER *res = new_buffer();
     char *line = malloc(sizeof(char *) * LINE_MAX_LENGTH);
-    FILE *file;
+    FILE *file = NULL;
     file = fopen(path, "r");
+    if (file == NULL) {
+        return NULL;
+    }
     while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
         insert_line(res, line, i);
         i++;
