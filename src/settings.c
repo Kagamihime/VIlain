@@ -42,37 +42,38 @@ void load(SETTINGS * sets, char *path)
     file = fopen(path, "r");
     if (file != NULL) {
         while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
-            if (i == 0) {
+            switch (i) {
                 sscanf(line, "%s %d", param, &val);
                 set_line_wrapping(sets, val);
-            }
-            if (i == 1) {
+                break;
+            case 1:
                 sscanf(line, "%s %s", param, val_string);
                 set_save_shortcut(sets, val_string);
-            }
-            if (i == 2) {
+                break;
+            case 2:
                 sscanf(line, "%s %s", param, val_string);
                 set_load_shortcut(sets, val_string);
-            }
-            if (i == 3) {
+                break;
+            case 3:
                 sscanf(line, "%s %s", param, val_string);
                 set_settings_shortcut(sets, val_string);
-            }
-            if (i == 4) {
+                break;
+            case 4:
                 sscanf(line, "%s %s", param, val_string);
                 set_copy_shortcut(sets, val_string);
-            }
-            if (i == 5) {
+                break;
+            case 5:
                 sscanf(line, "%s %s", param, val_string);
                 set_cut_shortcut(sets, val_string);
-            }
-            if (i == 6) {
+                break;
+            case 6:
                 sscanf(line, "%s %s", param, val_string);
                 set_paste_shortcut(sets, val_string);
-            }
-            if (i == 7) {
+                break;
+            case 7:
                 sscanf(line, "%s %s", param, val_string);
                 set_toogle_selection_shortcut(sets, val_string);
+                break;
             }
             i++;
         }
