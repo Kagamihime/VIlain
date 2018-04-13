@@ -82,6 +82,11 @@ int load(SETTINGS * sets, char *path)
     free(param);
     free(line);
     fclose(file);
+    if (i != 7) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 int get_line_wrapping(SETTINGS * sets)
