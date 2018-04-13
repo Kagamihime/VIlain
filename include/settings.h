@@ -4,7 +4,7 @@
 typedef struct SETTINGS SETTINGS;
 
 void save(SETTINGS * sets, char *path);
-void load(SETTINGS * sets, char *path);
+int load(SETTINGS * sets, char *path);
 int get_line_wrapping(SETTINGS * sets);
 void set_line_wrapping(SETTINGS * sets, int val);
 char *get_save_shortcut(SETTINGS * sets);
