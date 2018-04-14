@@ -2,8 +2,8 @@
 #include <string.h>
 #include "../include/buffer.h"
 
-#define LINE_SIZE 1000
-#define MAX_LINE 10000
+#define LINE_SIZE 81
+#define MAX_LINE 100
 
 static int split_lines(char *str, char ***lines, int *line_count)
 {
