@@ -183,6 +183,96 @@ END_TEST START_TEST(test_join_lines)
     ck_assert_str_eq(str, "hello world!\n");
 }
 
+END_TEST START_TEST(test_out_of_bounds_columns)
+{
+    ck_assert_int_eq(insert_line(buff, "hello world!", 0), 0);
+
+    ck_assert_int_eq(get_char(buff, 0, -1), 0);
+    ck_assert_int_eq(get_char(buff, 0, strlen("hello world!")), 0);
+
+    ck_assert_ptr_eq(get_text(buff, 0, -1, 0, strlen("hello world")), NULL);
+    ck_assert_ptr_eq(get_text(buff, 0, 0, 0, strlen("hello world!")), NULL);
+
+    ck_assert_int_eq(insert_char(buff, 'A', 0, -1), -1);
+    ck_assert_int_eq(insert_char(buff, 'A', 0, strlen("hello world!") + 1), -1);
+
+    ck_assert_int_eq(insert_text(buff, "text", 0, -1), -1);
+    ck_assert_int_eq(insert_text(buff, "text", 0, strlen("hello world!") + 1),
+                     -1);
+
+    ck_assert_int_eq(delete_char(buff, 0, -1), -1);
+    ck_assert_int_eq(delete_char(buff, 0, strlen("hello world!")), -1);
+
+    ck_assert_int_eq(delete_text(buff, 0, -1, 0, strlen("hello world")), -1);
+    ck_assert_int_eq(delete_text(buff, 0, 0, 0, strlen("hello world!")), -1);
+
+    ck_assert_int_eq(override_char(buff, 'A', 0, -1), -1);
+    ck_assert_int_eq(override_char(buff, 'A', 0, strlen("hello world!")), -1);
+
+    ck_assert_int_eq(override_text
+                     (buff, "text", 0, -1, 0, strlen("hello world")), -1);
+    ck_assert_int_eq(override_text
+                     (buff, "text", 0, 0, 0, strlen("hello world!")), -1);
+
+    ck_assert_int_eq(split_line_at(buff, 0, -1), -1);
+    ck_assert_int_eq(split_line_at(buff, 0, strlen("hello world!") + 1), -1);
+}
+
+END_TEST START_TEST(test_out_of_bounds_lines)
+{
+    ck_assert_int_eq(insert_line(buff, "hello world!", 0), 0);
+
+    ck_assert_int_eq(get_char(buff, -1, 0), 0);
+    ck_assert_int_eq(get_char(buff, 1, 0), 0);
+
+    ck_assert_ptr_eq(get_line(buff, -1), NULL);
+    ck_assert_ptr_eq(get_line(buff, 1), NULL);
+
+    ck_assert_ptr_eq(get_text(buff, -1, 0, 0, strlen("hello world")), NULL);
+    ck_assert_ptr_eq(get_text(buff, 0, 0, 1, strlen("hello world")), NULL);
+
+    ck_assert_int_eq(insert_char(buff, 'A', -1, 0), -1);
+    ck_assert_int_eq(insert_char(buff, 'A', 1, 0), -1);
+
+    ck_assert_int_eq(insert_line(buff, "line", -1), -1);
+    ck_assert_int_eq(insert_line(buff, "line", 2), -1);
+
+    ck_assert_int_eq(insert_text(buff, "text", -1, 0), -1);
+    ck_assert_int_eq(insert_text(buff, "text", 2, 0), -1);
+
+    ck_assert_int_eq(delete_char(buff, -1, 0), -1);
+    ck_assert_int_eq(delete_char(buff, 1, 0), -1);
+
+    ck_assert_int_eq(delete_line(buff, -1), -1);
+    ck_assert_int_eq(delete_line(buff, 1), -1);
+
+    ck_assert_int_eq(delete_text(buff, -1, 0, 0, strlen("hello world")), -1);
+    ck_assert_int_eq(delete_text(buff, 0, 0, 1, strlen("hello world")), -1);
+
+    ck_assert_int_eq(override_char(buff, 'A', -1, 0), -1);
+    ck_assert_int_eq(override_char(buff, 'A', 1, 0), -1);
+
+    ck_assert_int_eq(override_line(buff, "line", -1), -1);
+    ck_assert_int_eq(override_line(buff, "line", 1), -1);
+
+    ck_assert_int_eq(override_text
+                     (buff, "text", -1, 0, 0, strlen("hello world")), -1);
+    ck_assert_int_eq(override_text
+                     (buff, "text", 0, 0, 1, strlen("hello world")), -1);
+
+    ck_assert_int_eq(autosplit_line(buff, -1), -1);
+    ck_assert_int_eq(autosplit_line(buff, 1), -1);
+
+    ck_assert_int_eq(split_line_at(buff, -1, 0), -1);
+    ck_assert_int_eq(split_line_at(buff, 1, 0), -1);
+
+    ck_assert_int_eq(join_lines(buff, -1, 0, 0), -1);
+    ck_assert_int_eq(join_lines(buff, 0, 1, 0), -1);
+
+    ck_assert_int_eq(get_line_length(buff, -1), -1);
+    ck_assert_int_eq(get_line_length(buff, 1), -1);
+}
+
 END_TEST Suite *buffer_suite(void)
 {
     TCase *tc_buffer;
@@ -203,6 +293,8 @@ END_TEST Suite *buffer_suite(void)
     tcase_add_test(tc_buffer, test_autosplit_line);
     tcase_add_test(tc_buffer, test_split_line_at);
     tcase_add_test(tc_buffer, test_join_lines);
+    tcase_add_test(tc_buffer, test_out_of_bounds_columns);
+    tcase_add_test(tc_buffer, test_out_of_bounds_lines);
 
     s = suite_create("Buffer");
     suite_add_tcase(s, tc_buffer);
