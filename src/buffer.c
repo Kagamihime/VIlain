@@ -556,8 +556,8 @@ int override_text(BUFFER * buff, char *str, int from_line,
         return -1;
     }
 
-    return delete_text(buff, from_line, from_col, to_line, to_col)
-        || insert_text(buff, str, from_line, from_col);
+    return (delete_text(buff, from_line, from_col, to_line, to_col)
+            || insert_text(buff, str, from_line, from_col)) ? -1 : 0;
 }
 
 int autosplit_line(BUFFER * buff, int line)
