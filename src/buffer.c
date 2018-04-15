@@ -695,6 +695,11 @@ int get_line_count(BUFFER * buff)
 
 int get_line_length(BUFFER * buff, int line)
 {
+    // Check if `line` is out of bound
+    if (line < 0 || line >= buff->line_count) {
+        return -1;
+    }
+
     return buff->lines[line]->length;
 }
 
