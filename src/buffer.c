@@ -566,6 +566,10 @@ int autosplit_line(BUFFER * buff, int line)
     char **splitted_line = NULL;
     int splitted_line_count = 0;
 
+    // Check if `line` is out of bound
+    if (line < 0 || line >= buff->line_count + 1) {
+        return -1;
+    }
     // Check if the line is empty
     if (buff->lines[line]->length == 0) {
         return -1;
