@@ -129,7 +129,7 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
             set_pos_x(curs, get_pos_x(curs) - 1);
         break;
     }
-    print_status_bar(" ");
+    print_status_bar(buff, " ");
 }
 
 void exec_user_action(BUFFER * buff)
@@ -142,7 +142,7 @@ void exec_user_action(BUFFER * buff)
     print_text(buff, 0, 0);
     set_pos_y(curs, get_line_count(buff) - 1);
     set_pos_x(curs, get_line_length(buff, get_line_count(buff) - 1));
-    print_status_bar(" ");
+    print_status_bar(buff, " ");
 
     //Set up the parameters to listen to keyboard events and enter the loop
     keypad(text_win, TRUE);
@@ -194,7 +194,7 @@ void exec_user_action(BUFFER * buff)
             if (tmp != NULL) {
                 insert_text(buff, tmp, get_pos_y(curs), get_pos_x(curs));
             }
-            print_status_bar("");
+            print_status_bar(buff, "");
         case 27:               //ESCAPE : exit the program
             exit = 1;
             break;
@@ -272,12 +272,12 @@ void select_text(BUFFER * buff, CURSOR * curs)
             tmp = strdup(text);
             delete_text(buff, from_y, from_x, to_y, to_x);
             exit = 1;
-            print_status_bar("");
+            print_status_bar(buff, "");
             break;
         case 23:               //Ctrl+W : Copy
             tmp = strdup(text);
             exit = 1;
-            print_status_bar("");
+            print_status_bar(buff, "");
             break;
         case 20:
             exit = 1;
@@ -286,10 +286,11 @@ void select_text(BUFFER * buff, CURSOR * curs)
     }
 }
 
-void print_status_bar(char *str)
+void print_status_bar(BUFFER * buff, char *str)
 {
-    mvwprintw(text_win, TEXT_HEIGHT - 1, 0, "%d : %d       ", get_pos_y(curs),
-              get_pos_x(curs));
+    mvwprintw(text_win, TEXT_HEIGHT - 1, 0, "%d/%d : %d/%d       ",
+              get_pos_y(curs), get_line_count(buff), get_pos_x(curs),
+              get_line_length(buff, get_pos_y(curs)));
     mvwprintw(text_win, TEXT_HEIGHT - 1, TEXT_WIDTH / 2, "%s       ", str);
     wmove(text_win, get_pos_y(curs), get_pos_x(curs));
 }
