@@ -200,6 +200,23 @@ void exec_user_action(BUFFER * buff)
 
 void select_text(BUFFER * buff, CURSOR * curs)
 {
+    //Initialize
+    char *text;
+    int first_x = get_pos_x(curs);
+    int first_y = get_pos_y(curs);
+    int from_x, from_y, to_x, to_y;
+    int ch;
+    int exit = 0;
+
+    //Wait for the user to press a key
+    while (!exit) {
+        ch = wgetch(text_win);
+        switch (ch) {
+        case 20:
+            exit = 1;
+            break;
+        }
+    }
 }
 
 void print_status_bar(char *str)
