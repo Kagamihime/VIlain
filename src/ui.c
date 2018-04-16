@@ -147,7 +147,6 @@ void exec_user_action(BUFFER * buff)
     //Set up the parameters to listen to keyboard events and enter the loop
     keypad(text_win, TRUE);
     int ch;
-    char *tmp;
     noecho();
     int exit = 0;
 
@@ -185,6 +184,12 @@ void exec_user_action(BUFFER * buff)
             settings_menu(NULL);
             break;
             // TODO: SHORTCUTS
+
+        case 22:               //Ctrl+V: paste
+            if (tmp != NULL) {
+                insert_text(buff, tmp, get_pos_y(curs), get_pos_x(curs));
+            }
+            print_status_bar("");
         case 27:               //ESCAPE : exit the program
             exit = 1;
             break;
