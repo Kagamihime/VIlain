@@ -23,6 +23,7 @@ char *menu_choices[] = {
     "Exit",
 };
 
+char *tmp;
 int number_menu_choices = sizeof(menu_choices) / sizeof(char *);
 
 void print_menu(WINDOW * menu_win, int highlight)
@@ -257,6 +258,12 @@ void select_text(BUFFER * buff, CURSOR * curs)
                 mvwprintw(text_win, from_y, from_x, "%s", text);
                 wattroff(text_win, A_REVERSE);
             }
+        case 24:               //Ctrl+X : Cut
+            tmp = strdup(text);
+            delete_text(buff, from_y, from_x, to_y, to_x);
+            exit = 1;
+            print_status_bar("");
+            break;
         case 20:
             exit = 1;
             break;
