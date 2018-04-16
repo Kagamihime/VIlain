@@ -184,6 +184,11 @@ void exec_user_action(BUFFER * buff)
             settings_menu(NULL);
             break;
             // TODO: SHORTCUTS
+        case 20:               //Ctrl+T: text selection
+            curs_set(0);        //hide the cursor
+            select_text(buff, curs);
+            curs_set(1);        //show the cursor
+            break;
 
         case 22:               //Ctrl+V: paste
             if (tmp != NULL) {
