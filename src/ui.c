@@ -264,6 +264,11 @@ void select_text(BUFFER * buff, CURSOR * curs)
             exit = 1;
             print_status_bar("");
             break;
+        case 23:               //Ctrl+W : Copy
+            tmp = strdup(text);
+            exit = 1;
+            print_status_bar("");
+            break;
         case 20:
             exit = 1;
             break;
