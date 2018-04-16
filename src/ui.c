@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ncurses.h>
+#include <string.h>
 #include "../include/buffer.h"
 #include "../include/ui.h"
 #include "../include/settings.h"
@@ -196,6 +197,16 @@ void exec_user_action(BUFFER * buff)
         if (exit == 1)
             break;
     }
+}
+
+char *strdup(const char *str)
+{
+    int n = strlen(str) + 1;
+    char *dup = malloc(n);
+    if (dup) {
+        strcpy(dup, str);
+    }
+    return dup;
 }
 
 void select_text(BUFFER * buff, CURSOR * curs)
