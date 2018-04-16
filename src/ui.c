@@ -208,6 +208,13 @@ void select_text(BUFFER * buff, CURSOR * curs)
     int ch;
     int exit = 0;
 
+    //Highlight the char in the cursor
+
+    wattron(text_win, A_REVERSE);
+    mvwprintw(text_win, first_y, first_x, "%c",
+              get_char(buff, first_y, first_x));
+    wattroff(text_win, A_REVERSE);
+
     //Wait for the user to press a key
     while (!exit) {
         ch = wgetch(text_win);
