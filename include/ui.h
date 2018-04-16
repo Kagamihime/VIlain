@@ -11,7 +11,7 @@ void print_wrapped_text(BUFFER * buff, unsigned int first_line);
 void move_cursor(BUFFER * buff, CURSOR * curs, int ch);
 void exec_user_action(BUFFER * buff);
 void select_text(BUFFER * buff, CURSOR * curs);
-void print_status_bar(char *str);
+void print_status_bar(BUFFER * buff, char *str);
 void print_menu(WINDOW * menu_win, int highlight);
 void loading_menu();
 void saving_menu();
