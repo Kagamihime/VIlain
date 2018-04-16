@@ -189,12 +189,12 @@ void exec_user_action(BUFFER * buff)
             select_text(buff, curs);
             curs_set(1);        //show the cursor
             break;
-
         case 22:               //Ctrl+V: paste
             if (tmp != NULL) {
                 insert_text(buff, tmp, get_pos_y(curs), get_pos_x(curs));
             }
             print_status_bar(buff, "");
+            break;
         case 27:               //ESCAPE : exit the program
             exit = 1;
             break;
@@ -203,8 +203,10 @@ void exec_user_action(BUFFER * buff)
             set_pos_x(curs, get_pos_x(curs) + 1);
             break;
         }
+        //update window
         print_text(buff, 0, 0);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
+        print_status_bar(buff, " ");
         if (exit == 1)
             break;
     }
@@ -268,6 +270,7 @@ void select_text(BUFFER * buff, CURSOR * curs)
                 mvwprintw(text_win, from_y, from_x, "%s", text);
                 wattroff(text_win, A_REVERSE);
             }
+            break;
         case 24:               //Ctrl+X : Cut
             tmp = strdup(text);
             delete_text(buff, from_y, from_x, to_y, to_x);
