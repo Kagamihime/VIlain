@@ -13,6 +13,8 @@ BUFFER *load_file(char *path)
     FILE *file = NULL;
     file = fopen(path, "r");
     if (file == NULL) {
+        free(line);
+        fclose(file);
         return NULL;
     }
     while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
