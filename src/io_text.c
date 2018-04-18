@@ -31,10 +31,12 @@ int save_buffer(char *path, BUFFER * buff)
     FILE *file = NULL;
     file = fopen(path, "w");
     if (file == NULL) {
+        fclose(file);
         return -1;
     }
     for (int i = 0; i < get_line_count(buff); i++) {
         if (fprintf(file, "%s", get_line(buff, i)) < 0) {
+            fclose(file);
             return -1;
         }
     }
