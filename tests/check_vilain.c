@@ -273,6 +273,56 @@ END_TEST START_TEST(test_out_of_bounds_lines)
     ck_assert_int_eq(get_line_length(buff, 1), -1);
 }
 
+END_TEST START_TEST(test_lines_growth)
+{
+    ck_assert_int_eq(insert_line
+                     (buff,
+                      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      0), 0);
+
+    ck_assert_int_eq(insert_text(buff, "XYZ", 0, 0), 0);
+
+    str = get_line(buff, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str,
+                     "XYZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+
+    free(str);
+    str = NULL;
+
+    ck_assert_int_eq(override_line
+                     (buff,
+                      "XYZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      0), 0);
+
+    str = get_line(buff, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str,
+                     "XYZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+}
+
+END_TEST START_TEST(test_buffer_growth)
+{
+    for (int i = 0; i < 100; i++) {
+        ck_assert_int_eq(insert_line(buff, "Just a line", i), 0);
+    }
+
+    ck_assert_int_eq(insert_line(buff, "An additional line!", 100), 0);
+
+    ck_assert_int_eq(get_line_count(buff), 101);
+
+    str = get_line(buff, 99);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "Just a line\n");
+
+    free(str);
+    str = NULL;
+
+    str = get_line(buff, 100);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "An additional line!\n");
+}
+
 END_TEST Suite *buffer_suite(void)
 {
     TCase *tc_buffer;
@@ -295,6 +345,8 @@ END_TEST Suite *buffer_suite(void)
     tcase_add_test(tc_buffer, test_join_lines);
     tcase_add_test(tc_buffer, test_out_of_bounds_columns);
     tcase_add_test(tc_buffer, test_out_of_bounds_lines);
+    tcase_add_test(tc_buffer, test_lines_growth);
+    tcase_add_test(tc_buffer, test_buffer_growth);
 
     s = suite_create("Buffer");
     suite_add_tcase(s, tc_buffer);
