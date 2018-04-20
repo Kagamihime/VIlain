@@ -3,7 +3,7 @@
 #include "../include/buffer.h"
 
 #define LINE_SIZE 81
-#define MAX_LINE 100
+#define INITIAL_LINE_COUNT 100
 
 static int split_lines(char *str, char ***lines, int *line_count)
 {
@@ -291,11 +291,12 @@ BUFFER *new_buffer()
     // Allocate the lines
     buff->lines = NULL;
     if ((buff->lines =
-         (struct LINE **)calloc(MAX_LINE, sizeof(struct LINE *))) == NULL) {
+         (struct LINE **)calloc(INITIAL_LINE_COUNT,
+                                sizeof(struct LINE *))) == NULL) {
         free(buff);
         return NULL;
     }
-    for (int i = 0; i < MAX_LINE; i++) {
+    for (int i = 0; i < INITIAL_LINE_COUNT; i++) {
         if ((buff->lines[i] = new_line()) == NULL) {
             free(buff);
             return NULL;
@@ -303,7 +304,7 @@ BUFFER *new_buffer()
     }
 
     // Initialize the other fields
-    buff->capacity = MAX_LINE;
+    buff->capacity = INITIAL_LINE_COUNT;
     buff->line_count = 0;
 
     return buff;
