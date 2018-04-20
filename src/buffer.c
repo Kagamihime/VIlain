@@ -327,6 +327,24 @@ BUFFER *new_buffer()
     return buff;
 }
 
+static int grow_buffer(BUFFER * buff)
+{
+    if ((buff->lines =
+         (struct LINE **)realloc((void *)buff->lines,
+                                 (buff->capacity * 2) *
+                                 sizeof(struct LINE *))) == NULL) {
+        return -1;
+    }
+    // Set to NULL the new pointers
+    for (int i = buff->capacity; i < buff->capacity * 2; i++) {
+        buff->lines[i] = NULL;
+    }
+
+    buff->capacity *= 2;
+
+    return 0;
+}
+
 void free_buffer(BUFFER * buff)
 {
     if (buff != NULL) {
@@ -447,9 +465,11 @@ int insert_line(BUFFER * buff, char *str, int line)
     if (line < 0 || line >= buff->line_count + 1) {
         return -1;
     }
-    // Check that the buffer capacity is enough
-    if (buff->line_count + 1 > buff->capacity) {
-        return -1;
+    // Grow the buffer while its capacity is not enough
+    while (buff->line_count + 1 > buff->capacity) {
+        if (grow_buffer(buff) == -1) {
+            return -1;
+        }
     }
     // Shift all lines after `line` to the end of the buffer
     if (buff->line_count > 0) {
