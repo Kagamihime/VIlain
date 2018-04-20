@@ -89,6 +89,19 @@ static struct LINE *new_line()
     return line;
 }
 
+static int grow_line(struct LINE *line)
+{
+    if ((line->str =
+         (char *)realloc((void *)line->str,
+                         (line->capacity * 2) * sizeof(char))) == NULL) {
+        return -1;
+    }
+
+    line->capacity *= 2;
+
+    return 0;
+}
+
 static void free_line(struct LINE *line)
 {
     if (line != NULL) {
@@ -139,9 +152,11 @@ static int line_insert_char(struct LINE *line, unsigned char c, int col)
     if (col < 0 || col >= line->length + 1) {
         return -1;
     }
-    // Check that the line's capacity is enough
-    if (line->length + 2 > line->capacity) {
-        return -1;
+    // Grow the line while its capacity is not enough
+    while (line->length + 2 > line->capacity) {
+        if (grow_line(line) == -1) {
+            return -1;
+        }
     }
     // Shift all characters after `col` to the right
     if (line->length > 0) {
@@ -170,9 +185,11 @@ static int line_insert_segment(struct LINE *line, char *str, int col)
     if (col < 0 || col >= line->length + 1) {
         return -1;
     }
-    // Check that the line's capacity is enough
-    if (line->length + str_length + 1 > line->capacity) {
-        return -1;
+    // Grow the line while its capacity is not enough
+    while (line->length + str_length + 1 > line->capacity) {
+        if (grow_line(line) == -1) {
+            return -1;
+        }
     }
     // Shift all characters after `col` to the right
     if (line->length > 0) {
