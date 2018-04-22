@@ -2,26 +2,34 @@
 #include <stdio.h>
 #include "../include/io_text.h"
 #include "../include/buffer.h"
-#define FILE_MAX_LENGTH 8192
-#define LINE_MAX_LENGTH 512
 
 BUFFER *load_file(char *path)
 {
-    int i = 0;
+    int i = 1;
+    int j = 0;
+    int c;
     BUFFER *res = new_buffer();
-    char *line = malloc(sizeof(char *) * LINE_MAX_LENGTH);
+    insert_line(res, "", 0);
     FILE *file = NULL;
     file = fopen(path, "r");
     if (file == NULL) {
-        free(line);
         fclose(file);
         return NULL;
     }
-    while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
-        insert_line(res, line, i);
-        i++;
-    }
-    free(line);
+    do {
+        c = fgetc(file);
+        if (feof(file)) {
+            break;
+        }
+        if (c == '\n') {
+            insert_line(res, "", i);
+            j = 0;
+            i++;
+        } else {
+            insert_char(res, c, i, j);
+            j++;
+        }
+    } while (1);
     fclose(file);
     return res;
 }
