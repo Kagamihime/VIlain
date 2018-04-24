@@ -285,19 +285,6 @@ static int line_override_char(struct LINE *line, char c, int col)
     return 0;
 }
 
-static int line_override_segment(struct LINE *line, char *str,
-                                 int from_col, int to_col)
-{
-    // Check if the cols are incorrect or line is NULL
-    if (line == NULL || from_col < 0 || from_col > to_col
-        || to_col >= line->length) {
-        return -1;
-    }
-
-    return line_delete_segment(line, from_col, to_col)
-        || line_insert_segment(line, str, from_col);
-}
-
 struct BUFFER {
     struct LINE **lines;
 
