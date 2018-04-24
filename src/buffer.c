@@ -91,6 +91,10 @@ static struct LINE *new_line()
 
 static int grow_line(struct LINE *line)
 {
+    if (line == NULL) {
+        return -1;
+    }
+
     if ((line->str =
          (char *)realloc((void *)line->str,
                          (line->capacity * 2) * sizeof(char))) == NULL) {
@@ -117,8 +121,8 @@ static void free_line(struct LINE *line)
 
 static char line_get_char(struct LINE *line, int col)
 {
-    // Check if `col` is out of bound
-    if (col < 0 || col >= line->length) {
+    // Check if `col` is out of bound or line is NULL
+    if (line == NULL || col < 0 || col >= line->length) {
         return '\0';
     }
     // Return the requested character
@@ -129,8 +133,9 @@ static char *line_get_segment(struct LINE *line, int from_col, int to_col)
 {
     char *ret = NULL;
 
-    // Check if the cols are incorrect
-    if (from_col < 0 || from_col > to_col || to_col >= line->length) {
+    // Check if the cols are incorrect or line is NULL
+    if (line == NULL || from_col < 0 || from_col > to_col
+        || to_col >= line->length) {
         return NULL;
     }
     // Return NULL if the line is empty
@@ -148,8 +153,8 @@ static char *line_get_segment(struct LINE *line, int from_col, int to_col)
 // FIXME: Duplicated code
 static int line_insert_char(struct LINE *line, unsigned char c, int col)
 {
-    // Check if `col` is out of bound
-    if (col < 0 || col >= line->length + 1) {
+    // Check if `col` is out of bound or line is NULL
+    if (line == NULL || col < 0 || col >= line->length + 1) {
         return -1;
     }
     // Grow the line while its capacity is not enough
@@ -181,8 +186,8 @@ static int line_insert_segment(struct LINE *line, char *str, int col)
 {
     size_t str_length = strlen(str);
 
-    // Check if `col` is out of bound
-    if (col < 0 || col >= line->length + 1) {
+    // Check if `col` is out of bound or line is NULL
+    if (line == NULL || col < 0 || col >= line->length + 1) {
         return -1;
     }
     // Grow the line while its capacity is not enough
@@ -212,8 +217,8 @@ static int line_insert_segment(struct LINE *line, char *str, int col)
 // FIXME: Duplicated code
 static int line_delete_char(struct LINE *line, int col)
 {
-    // Check if `col` is out of bound
-    if (col < 0 || col >= line->length) {
+    // Check if `col` is out of bound or line is NULL
+    if (line == NULL || col < 0 || col >= line->length) {
         return -1;
     }
     // Shift all the characters after `col` to the left
@@ -235,8 +240,9 @@ static int line_delete_segment(struct LINE *line, int from_col, int to_col)
 {
     size_t segment_length = to_col - from_col + 1;
 
-    // Check if the cols are incorrect
-    if (from_col < 0 || from_col > to_col || to_col >= line->length) {
+    // Check if the cols are incorrect or line is NULL
+    if (line == NULL || from_col < 0 || from_col > to_col
+        || to_col >= line->length) {
         return -1;
     }
     // Shift all the characters after `from_col` to the left, by an
@@ -256,8 +262,8 @@ static int line_delete_segment(struct LINE *line, int from_col, int to_col)
 
 static void line_truncate(struct LINE *line)
 {
-    // Check if the line is already empty
-    if (line->str == NULL) {
+    // Check if the line is already empty or line is NULL
+    if (line == NULL || line->str == NULL) {
         return;
     }
     // Truncate the line
@@ -269,8 +275,8 @@ static void line_truncate(struct LINE *line)
 
 static int line_override_char(struct LINE *line, char c, int col)
 {
-    // Check if `col` is out of bound
-    if (col < 0 || col >= line->length) {
+    // Check if `col` is out of bound or line is NULL
+    if (line == NULL || col < 0 || col >= line->length) {
         return -1;
     }
     // Override the character at `col`
@@ -282,8 +288,9 @@ static int line_override_char(struct LINE *line, char c, int col)
 static int line_override_segment(struct LINE *line, char *str,
                                  int from_col, int to_col)
 {
-    // Check if the cols are incorrect
-    if (from_col < 0 || from_col > to_col || to_col >= line->length) {
+    // Check if the cols are incorrect or line is NULL
+    if (line == NULL || from_col < 0 || from_col > to_col
+        || to_col >= line->length) {
         return -1;
     }
 
@@ -329,6 +336,10 @@ BUFFER *new_buffer()
 
 static int grow_buffer(BUFFER * buff)
 {
+    if (buff == NULL) {
+        return -1;
+    }
+
     if ((buff->lines =
          (struct LINE **)realloc((void *)buff->lines,
                                  (buff->capacity * 2) *
@@ -362,8 +373,8 @@ void free_buffer(BUFFER * buff)
 
 char get_char(BUFFER * buff, int line, int col)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff if NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return '\0';
     }
 
@@ -374,8 +385,8 @@ char *get_line(BUFFER * buff, int line)
 {
     char *ret = NULL;
 
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return NULL;
     }
 
@@ -405,8 +416,9 @@ char *get_text(BUFFER * buff, int from_line, int from_col,
     char *text = NULL;
     int text_length = 0;
 
-    // Check if the lines are incorrect
-    if (from_line < 0 || from_line > to_line || to_line >= buff->line_count) {
+    // Check if the lines are incorrect or buff is NULL
+    if (buff == NULL || from_line < 0 || from_line > to_line
+        || to_line >= buff->line_count) {
         return NULL;
     }
     // Allocate the memory for the text
@@ -451,8 +463,8 @@ char *get_text(BUFFER * buff, int from_line, int from_col,
 
 int insert_char(BUFFER * buff, char c, int line, int col)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return -1;
     }
 
@@ -461,8 +473,8 @@ int insert_char(BUFFER * buff, char c, int line, int col)
 
 int insert_line(BUFFER * buff, char *str, int line)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count + 1) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count + 1) {
         return -1;
     }
     // Grow the buffer while its capacity is not enough
@@ -492,8 +504,8 @@ int insert_line(BUFFER * buff, char *str, int line)
 
 int insert_text(BUFFER * buff, char *str, int line, int col)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count + 1) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count + 1) {
         return -1;
     }
     // Insert the string at `line` and `col`
@@ -510,8 +522,8 @@ int insert_text(BUFFER * buff, char *str, int line, int col)
 
 int delete_char(BUFFER * buff, int line, int col)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return -1;
     }
 
@@ -520,8 +532,8 @@ int delete_char(BUFFER * buff, int line, int col)
 
 int delete_line(BUFFER * buff, int line)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return -1;
     }
     // Free the line at `line`
@@ -544,8 +556,9 @@ int delete_line(BUFFER * buff, int line)
 int delete_text(BUFFER * buff, int from_line, int from_col,
                 int to_line, int to_col)
 {
-    // Check if the lines are incorrect
-    if (from_line < 0 || from_line > to_line || to_line >= buff->line_count) {
+    // Check if the lines are incorrect or buff is NULL
+    if (buff == NULL || from_line < 0 || from_line > to_line
+        || to_line >= buff->line_count) {
         return -1;
     }
     // Recalculate `to_col`
@@ -567,8 +580,8 @@ int delete_text(BUFFER * buff, int from_line, int from_col,
 
 int override_char(BUFFER * buff, char c, int line, int col)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return -1;
     }
 
@@ -577,8 +590,8 @@ int override_char(BUFFER * buff, char c, int line, int col)
 
 int override_line(BUFFER * buff, char *str, int line)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return -1;
     }
 
@@ -589,8 +602,9 @@ int override_line(BUFFER * buff, char *str, int line)
 int override_text(BUFFER * buff, char *str, int from_line,
                   int from_col, int to_line, int to_col)
 {
-    // Check if the lines are incorrect
-    if (from_line < 0 || from_line > to_line || to_line >= buff->line_count) {
+    // Check if the lines are incorrect or buff is NULL
+    if (buff == NULL || from_line < 0 || from_line > to_line
+        || to_line >= buff->line_count) {
         return -1;
     }
 
@@ -604,8 +618,8 @@ int autosplit_line(BUFFER * buff, int line)
     char **splitted_line = NULL;
     int splitted_line_count = 0;
 
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count + 1) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count + 1) {
         return -1;
     }
     // Check if the line is empty
@@ -655,8 +669,8 @@ int autosplit_line(BUFFER * buff, int line)
 
 int split_line_at(BUFFER * buff, int line, int col)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return -1;
     }
     // Insert a line return at `line` and `col`
@@ -680,8 +694,9 @@ int join_lines(BUFFER * buff, int from_line, int to_line, int with_spaces)
 
     int lines_to_delete = to_line - from_line;
 
-    // Check if the lines are incorrect
-    if (from_line < 0 || from_line > to_line || to_line >= buff->line_count) {
+    // Check if the lines are incorrect or buff is NULL
+    if (buff == NULL || from_line < 0 || from_line > to_line
+        || to_line >= buff->line_count) {
         return -1;
     }
     // Allocate the temporary string that will hold the joined lines
@@ -728,13 +743,17 @@ int join_lines(BUFFER * buff, int from_line, int to_line, int with_spaces)
 
 int get_line_count(BUFFER * buff)
 {
+    if (buff == NULL) {
+        return -1;
+    }
+
     return buff->line_count;
 }
 
 int get_line_length(BUFFER * buff, int line)
 {
-    // Check if `line` is out of bound
-    if (line < 0 || line >= buff->line_count) {
+    // Check if `line` is out of bound or buff is NULL
+    if (buff == NULL || line < 0 || line >= buff->line_count) {
         return -1;
     }
 
@@ -744,6 +763,10 @@ int get_line_length(BUFFER * buff, int line)
 int get_buffer_length(BUFFER * buff)
 {
     int buff_length = 0;
+
+    if (buff == NULL) {
+        return -1;
+    }
 
     for (int i = 0; i < buff->line_count; i++) {
         buff_length += buff->lines[i]->length + 1;  // Count the line returns
