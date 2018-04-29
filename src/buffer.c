@@ -140,34 +140,6 @@ static char *line_get_segment(struct LINE *line, int from_col, int to_col)
     return ret;
 }
 
-// FIXME: Duplicated code
-static int line_insert_char(struct LINE *line, unsigned char c, int col)
-{
-    if (line == NULL || col < 0 || col >= line->length + 1) {
-        return -1;
-    }
-
-    while (line->length + 2 > line->capacity) {
-        if (grow_line(line) == -1) {
-            return -1;
-        }
-    }
-
-    if (line->length > 0) {
-        for (int i = line->length - 1; i >= col; i--) {
-            line->str[i + 1] = line->str[i];
-        }
-    }
-    line->str[line->length + 1] = '\0';
-
-    line->str[col] = c;
-
-    line->length++;
-
-    return 0;
-}
-
-// FIXME: Duplicated code
 static int line_insert_segment(struct LINE *line, char *str, int col)
 {
     size_t str_length = strlen(str);
@@ -194,6 +166,13 @@ static int line_insert_segment(struct LINE *line, char *str, int col)
     line->length += str_length;
 
     return 0;
+}
+
+static int line_insert_char(struct LINE *line, char c, int col)
+{
+    char str[2] = { c, '\0' };
+
+    return line_insert_segment(line, str, col);
 }
 
 // FIXME: Duplicated code
