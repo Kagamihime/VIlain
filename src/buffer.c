@@ -7,16 +7,13 @@
 
 static int split_lines(char *str, char ***lines, int *line_count)
 {
-    char *ptr = str;
+    char *current_line_ptr = str;
+    *line_count = 0;
 
-    // Check if the string is empty
     if (str == NULL) {
         return -1;
     }
-    // Place the pointer at the beginning of the string
-    ptr = str;
 
-    // Count the number of lines
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == '\n') {
             (*line_count)++;
@@ -26,33 +23,30 @@ static int split_lines(char *str, char ***lines, int *line_count)
     if (str[strlen(str) - 1] != '\n') {
         (*line_count)++;
     }
-    // Allocate the lines pointers
+
     if ((*lines = (char **)calloc(*line_count, sizeof(char *))) == NULL) {
         return -1;
     }
-    // Allocate and copy the line in `lines` for each line
+
     for (int i = 0; i < *line_count; i++) {
         int line_length = 0;
 
-        // Count the lines length
-        for (char *tmp_ptr = ptr; *tmp_ptr != '\n' && *tmp_ptr != '\0';
-             tmp_ptr++, line_length++) {
+        for (char *tmp_ptr = current_line_ptr;
+             *tmp_ptr != '\n' && *tmp_ptr != '\0'; tmp_ptr++, line_length++) {
         }
 
-        // Allocate the lines
         if (((*lines)[i] =
              (char *)calloc(line_length + 1, sizeof(char))) == NULL) {
             free(*lines);
             *lines = NULL;
             return -1;
         }
-        // Copy the line
-        strncpy((*lines)[i], ptr, line_length);
 
-        // Place the pointer at the beginning of the next line
-        ptr += line_length;
-        if (*ptr == '\n') {
-            ptr++;
+        strncpy((*lines)[i], current_line_ptr, line_length);
+
+        current_line_ptr += line_length;
+        if (*current_line_ptr == '\n') {
+            current_line_ptr++;
         }
     }
 
