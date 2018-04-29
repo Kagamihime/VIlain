@@ -175,24 +175,6 @@ static int line_insert_char(struct LINE *line, char c, int col)
     return line_insert_segment(line, str, col);
 }
 
-// FIXME: Duplicated code
-static int line_delete_char(struct LINE *line, int col)
-{
-    if (line == NULL || col < 0 || col >= line->length) {
-        return -1;
-    }
-
-    for (int i = col; i < line->length - 1; i++) {
-        line->str[i] = line->str[i + 1];
-    }
-    line->str[line->length - 1] = '\0';
-
-    line->length--;
-
-    return 0;
-}
-
-// FIXME: Duplicated code
 static int line_delete_segment(struct LINE *line, int from_col, int to_col)
 {
     size_t segment_length = to_col - from_col + 1;
@@ -210,6 +192,11 @@ static int line_delete_segment(struct LINE *line, int from_col, int to_col)
     line->length -= segment_length;
 
     return 0;
+}
+
+static int line_delete_char(struct LINE *line, int col)
+{
+    return line_delete_segment(line, col, col);
 }
 
 static void line_truncate(struct LINE *line)
