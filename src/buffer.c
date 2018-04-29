@@ -596,15 +596,11 @@ int autosplit_line(BUFFER * buff, int line)
     char **splitted_line = NULL;
     int splitted_line_count = 0;
 
-    // Check if `line` is out of bound or buff is NULL
-    if (buff == NULL || line < 0 || line >= buff->line_count + 1) {
+    if (buff == NULL || line < 0 || line >= buff->line_count + 1
+        || buff->lines[line]->length == 0) {
         return -1;
     }
-    // Check if the line is empty
-    if (buff->lines[line]->length == 0) {
-        return -1;
-    }
-    // Get and remove the content of the line
+
     if ((line_to_split =
          line_get_segment(buff->lines[line], 0,
                           buff->lines[line]->length - 1)) == NULL) {
@@ -612,15 +608,14 @@ int autosplit_line(BUFFER * buff, int line)
     }
     line_truncate(buff->lines[line]);
 
-    // Split the retrieved line
     if (split_lines(line_to_split, &splitted_line, &splitted_line_count) == -1) {
         return -1;
     }
-    // Insert the splitted line
+
     if (line_insert_segment(buff->lines[line], splitted_line[0], 0) == -1) {
         return -1;
     }
-    // Increment the line count if we are creating a new line at the end
+
     if (line == buff->line_count) {
         buff->line_count++;
     }
@@ -631,7 +626,6 @@ int autosplit_line(BUFFER * buff, int line)
         }
     }
 
-    // Free memory and exit normally
     for (int i = 0; i < splitted_line_count; i++) {
         if (splitted_line[i] != NULL) {
             free(splitted_line[i]);
