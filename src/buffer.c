@@ -127,20 +127,17 @@ static char *line_get_segment(struct LINE *line, int from_col, int to_col)
 {
     char *ret = NULL;
 
-    // Check if the cols are incorrect or line is NULL
-    if (line == NULL || from_col < 0 || from_col > to_col
+    if (line == NULL || line->length == 0 || from_col < 0 || from_col > to_col
         || to_col >= line->length) {
         return NULL;
     }
-    // Return NULL if the line is empty
-    if (line->length == 0) {
-        return NULL;
-    }
-    // Return the line segment in a new allocated string
+
     if ((ret = (char *)calloc(line->length + 2, sizeof(char))) == NULL) {
         return NULL;
     }
+
     strncpy(ret, line->str + from_col, to_col - from_col + 1);
+
     return ret;
 }
 
