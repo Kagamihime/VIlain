@@ -144,7 +144,7 @@ static int line_insert_segment(struct LINE *line, char *str, int col)
 {
     size_t str_length = strlen(str);
 
-    if (line == NULL || col < 0 || col >= line->length + 1) {
+    if (line == NULL || str == NULL || col < 0 || col >= line->length + 1) {
         return -1;
     }
 
@@ -403,7 +403,7 @@ int insert_char(BUFFER * buff, char c, int line, int col)
 
 int insert_line(BUFFER * buff, char *str, int line)
 {
-    if (buff == NULL || line < 0 || line >= buff->line_count + 1) {
+    if (buff == NULL || str == NULL || line < 0 || line >= buff->line_count + 1) {
         return -1;
     }
 
@@ -433,7 +433,7 @@ int insert_line(BUFFER * buff, char *str, int line)
 
 int insert_text(BUFFER * buff, char *str, int line, int col)
 {
-    if (buff == NULL || line < 0 || line >= buff->line_count + 1) {
+    if (buff == NULL || str == NULL || line < 0 || line >= buff->line_count + 1) {
         return -1;
     }
 
@@ -510,7 +510,7 @@ int override_char(BUFFER * buff, char c, int line, int col)
 
 int override_line(BUFFER * buff, char *str, int line)
 {
-    if (buff == NULL || line < 0 || line >= buff->line_count) {
+    if (buff == NULL || str == NULL || line < 0 || line >= buff->line_count) {
         return -1;
     }
 
@@ -521,7 +521,7 @@ int override_line(BUFFER * buff, char *str, int line)
 int override_text(BUFFER * buff, char *str, int from_line,
                   int from_col, int to_line, int to_col)
 {
-    if (buff == NULL || from_line < 0 || from_line > to_line
+    if (buff == NULL || str == NULL || from_line < 0 || from_line > to_line
         || to_line >= buff->line_count) {
         return -1;
     }
