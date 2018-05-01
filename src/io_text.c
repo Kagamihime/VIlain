@@ -1,7 +1,8 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include "../include/io_text.h"
+#include <stdlib.h>
+
 #include "../include/buffer.h"
+#include "../include/io_text.h"
 
 BUFFER *load_file(char *path)
 {
