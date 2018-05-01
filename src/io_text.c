@@ -55,11 +55,11 @@ BUFFER *load_file(char *path)
 int save_buffer(char *path, BUFFER * buff)
 {
     FILE *file = NULL;
-    file = fopen(path, "w");
-    if (file == NULL) {
-        fclose(file);
+
+    if ((file = fopen(path, "w")) == NULL) {
         return -1;
     }
+
     for (int i = 0; i < get_line_count(buff); i++) {
         char *str = NULL;
 
@@ -70,9 +70,13 @@ int save_buffer(char *path, BUFFER * buff)
 
         if (fprintf(file, "%s", str) < 0) {
             fclose(file);
+            free(str);
             return -1;
         }
+
+        free(str);
     }
+
     fclose(file);
     return 0;
 }
