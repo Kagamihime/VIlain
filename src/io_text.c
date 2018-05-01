@@ -6,24 +6,27 @@
 
 BUFFER *load_file(char *path)
 {
+    FILE *file = NULL;
+    BUFFER *res = NULL;
     int i = 1;
     int j = 0;
-    int c;
-    BUFFER *res = NULL;
+    int c = 0;
+
+    if ((file = fopen(path, "r")) == NULL) {
+        return NULL;
+    }
+
     if ((res = new_buffer()) == NULL) {
+        fclose(file);
         return NULL;
     }
+
     if (insert_line(res, "", 0) == -1) {
-        free_buffer(res);
-        return NULL;
-    }
-    FILE *file = NULL;
-    file = fopen(path, "r");
-    if (file == NULL) {
         free_buffer(res);
         fclose(file);
         return NULL;
     }
+
     while ((c = fgetc(file)) != EOF) {
         if (c == '\n') {
             if (insert_line(res, "", i) == -1) {
@@ -31,6 +34,7 @@ BUFFER *load_file(char *path)
                 fclose(file);
                 return NULL;
             }
+
             j = 0;
             i++;
         } else {
@@ -39,9 +43,11 @@ BUFFER *load_file(char *path)
                 fclose(file);
                 return NULL;
             }
+
             j++;
         }
     }
+
     fclose(file);
     return res;
 }
