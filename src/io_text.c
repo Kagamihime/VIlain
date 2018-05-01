@@ -16,11 +16,7 @@ BUFFER *load_file(char *path)
         fclose(file);
         return NULL;
     }
-    do {
-        c = fgetc(file);
-        if (feof(file)) {
-            break;
-        }
+    while ((c = fgetc(file)) != EOF) {
         if (c == '\n') {
             insert_line(res, "", i);
             j = 0;
@@ -29,7 +25,7 @@ BUFFER *load_file(char *path)
             insert_char(res, c, i, j);
             j++;
         }
-    } while (1);
+    }
     fclose(file);
     return res;
 }
