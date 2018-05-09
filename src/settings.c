@@ -20,13 +20,13 @@ void save(SETTINGS * sets, char *path)
     FILE *file;
     file = fopen(path, "w");
     fprintf(file, "line_wrapping: %d\n", get_line_wrapping(sets));
-    fprintf(file, "save_shortcut: %s\n", get_save_shortcut(sets));
-    fprintf(file, "load_shortcut: %s\n", get_load_shortcut(sets));
-    fprintf(file, "settings_shortcut: %s\n", get_settings_shortcut(sets));
-    fprintf(file, "copy_shortcut: %s\n", get_copy_shortcut(sets));
-    fprintf(file, "cut_shortcut: %s\n", get_cut_shortcut(sets));
-    fprintf(file, "paste_shortcut: %s\n", get_paste_shortcut(sets));
-    fprintf(file, "toggle_selection_shortcut: %s\n",
+    fprintf(file, "save_shortcut: %d\n", get_save_shortcut(sets));
+    fprintf(file, "load_shortcut: %d\n", get_load_shortcut(sets));
+    fprintf(file, "settings_shortcut: %d\n", get_settings_shortcut(sets));
+    fprintf(file, "copy_shortcut: %d\n", get_copy_shortcut(sets));
+    fprintf(file, "cut_shortcut: %d\n", get_cut_shortcut(sets));
+    fprintf(file, "paste_shortcut: %d\n", get_paste_shortcut(sets));
+    fprintf(file, "toggle_selection_shortcut: %d\n",
             get_toogle_selection_shortcut(sets));
     fclose(file);
 }
