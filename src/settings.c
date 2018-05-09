@@ -89,7 +89,7 @@ int load(SETTINGS * sets, char *path)
 
 char *to_string(int code)
 {
-    char res[10];
+    char *res;
     switch (code) {
     case 1:
         res = "Ctrl + A";
@@ -170,6 +170,7 @@ char *to_string(int code)
         res = "Ctrl + Z";
         break;
     }
+    return res;
 }
 
 int get_line_wrapping(SETTINGS * sets)
