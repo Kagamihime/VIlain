@@ -87,6 +87,91 @@ int load(SETTINGS * sets, char *path)
     }
 }
 
+char *to_string(int code)
+{
+    char res[10];
+    switch (code) {
+    case 1:
+        res = "Ctrl + A";
+        break;
+    case 2:
+        res = "Ctrl + B";
+        break;
+    case 3:
+        res = "Ctrl + C";
+        break;
+    case 4:
+        res = "Ctrl + D";
+        break;
+    case 5:
+        res = "Ctrl + E";
+        break;
+    case 6:
+        res = "Ctrl + F";
+        break;
+    case 7:
+        res = "Ctrl + G";
+        break;
+    case 8:
+        res = "Ctrl + H";
+        break;
+    case 9:
+        res = "Ctrl + I";
+        break;
+    case 10:
+        res = "Ctrl + J";
+        break;
+    case 11:
+        res = "Ctrl + K";
+        break;
+    case 12:
+        res = "Ctrl + L";
+        break;
+    case 13:
+        res = "Ctrl + M";
+        break;
+    case 14:
+        res = "Ctrl + N";
+        break;
+    case 15:
+        res = "Ctrl + O";
+        break;
+    case 16:
+        res = "Ctrl + P";
+        break;
+    case 17:
+        res = "Ctrl + Q";
+        break;
+    case 18:
+        res = "Ctrl + R";
+        break;
+    case 19:
+        res = "Ctrl + S";
+        break;
+    case 20:
+        res = "Ctrl + T";
+        break;
+    case 21:
+        res = "Ctrl + U";
+        break;
+    case 22:
+        res = "Ctrl + V";
+        break;
+    case 23:
+        res = "Ctrl + W";
+        break;
+    case 24:
+        res = "Ctrl + X";
+        break;
+    case 25:
+        res = "Ctrl + Y";
+        break;
+    case 26:
+        res = "Ctrl + Z";
+        break;
+    }
+}
+
 int get_line_wrapping(SETTINGS * sets)
 {
     return sets->line_wrapping;
