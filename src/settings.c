@@ -132,37 +132,37 @@ void set_line_wrapping(SETTINGS * sets, int val)
     sets->line_wrapping = val;
 }
 
-void set_save_shortcut(SETTINGS * sets, char *val)
+void set_save_shortcut(SETTINGS * sets, int val)
 {
     sets->save_shortcut = val;
 }
 
-void set_load_shortcut(SETTINGS * sets, char *val)
+void set_load_shortcut(SETTINGS * sets, int val)
 {
     sets->load_shortcut = val;
 }
 
-void set_settings_shortcut(SETTINGS * sets, char *val)
+void set_settings_shortcut(SETTINGS * sets, int val)
 {
     sets->settings_shortcut = val;
 }
 
-void set_copy_shortcut(SETTINGS * sets, char *val)
+void set_copy_shortcut(SETTINGS * sets, int val)
 {
     sets->copy_shortcut = val;
 }
 
-void set_cut_shortcut(SETTINGS * sets, char *val)
+void set_cut_shortcut(SETTINGS * sets, int val)
 {
     sets->cut_shortcut = val;
 }
 
-void set_paste_shortcut(SETTINGS * sets, char *val)
+void set_paste_shortcut(SETTINGS * sets, int val)
 {
     sets->paste_shortcut = val;
 }
 
-void set_toogle_selection_shortcut(SETTINGS * sets, char *val)
+void set_toogle_selection_shortcut(SETTINGS * sets, int val)
 {
     sets->toggle_selection_shortcut = val;
 }
