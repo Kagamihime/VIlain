@@ -92,37 +92,37 @@ int get_line_wrapping(SETTINGS * sets)
     return sets->line_wrapping;
 }
 
-char *get_save_shortcut(SETTINGS * sets)
+int get_save_shortcut(SETTINGS * sets)
 {
     return sets->save_shortcut;
 }
 
-char *get_load_shortcut(SETTINGS * sets)
+int get_load_shortcut(SETTINGS * sets)
 {
     return sets->load_shortcut;
 }
 
-char *get_settings_shortcut(SETTINGS * sets)
+int get_settings_shortcut(SETTINGS * sets)
 {
     return sets->settings_shortcut;
 }
 
-char *get_copy_shortcut(SETTINGS * sets)
+int get_copy_shortcut(SETTINGS * sets)
 {
     return sets->copy_shortcut;
 }
 
-char *get_cut_shortcut(SETTINGS * sets)
+int get_cut_shortcut(SETTINGS * sets)
 {
     return sets->cut_shortcut;
 }
 
-char *get_paste_shortcut(SETTINGS * sets)
+int get_paste_shortcut(SETTINGS * sets)
 {
     return sets->paste_shortcut;
 }
 
-char *get_toogle_selection_shortcut(SETTINGS * sets)
+int get_toogle_selection_shortcut(SETTINGS * sets)
 {
     return sets->toggle_selection_shortcut;
 }
