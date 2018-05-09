@@ -15,6 +15,17 @@ struct SETTINGS {
     int toggle_selection_shortcut;
 };
 
+SETTINGS *new_sets(){
+    // Allocate the SETTINGS struct
+    SETTINGS *sets = NULL;
+    if ((sets = (SETTINGS *) calloc(1, sizeof(SETTINGS))) == NULL) {
+        return NULL;
+    }
+    //Initialize
+    load(sets,"./etc/ui.cfg");
+    return sets;
+}
+
 void save(SETTINGS * sets, char *path)
 {
     FILE *file;
