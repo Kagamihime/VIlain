@@ -22,7 +22,7 @@ SETTINGS *new_sets()
     if ((sets = (SETTINGS *) calloc(1, sizeof(SETTINGS))) == NULL) {
         return NULL;
     }
-    //Initialize
+    //Initialize the parameters
     load(sets, "./etc/ui.cfg");
     return sets;
 }
