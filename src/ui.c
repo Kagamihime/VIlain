@@ -116,6 +116,11 @@ void shortcuts_menu(SETTINGS * sets)
         to_string(get_save_shortcut(sets)),
         to_string(get_load_shortcut(sets))
     };
+    int number_s = sizeof(shortcuts) / sizeof(char *);
+    int number_k = sizeof(keys) / sizeof(char *);
+    int highlight = 1;
+    int ch;
+    mvprintw(5, 19, "Choose the shortcut you want to edit and press ENTER.");
 
 }
 
