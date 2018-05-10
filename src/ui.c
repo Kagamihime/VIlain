@@ -426,6 +426,12 @@ void select_text(BUFFER * buff, CURSOR * curs)
             exit = 1;
             print_status_bar(buff, "");
         }
+        //Copy
+        else if (ch == get_copy_shortcut(sets)) {
+            tmp = strdup(text);
+            exit = 1;
+            print_status_bar(buff, "");
+        }
     }
 }
 
