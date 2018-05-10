@@ -89,6 +89,14 @@ int move_in_menu(WINDOW * menu_win, int highlight, char **menu_choices,
 
 void shortcuts_menu(SETTINGS * sets)
 {
+    //Initialize the two windows
+    int startx = (80 - SHORTCUTS_WIDTH) / 2;
+    int starty = (24 - SHORTCUTS_HEIGHT) / 2;
+    int startxx = startx + SHORTCUTS_WIDTH - 1;
+    WINDOW *shortcuts_win =
+        newwin(SHORTCUTS_HEIGHT, SHORTCUTS_WIDTH, starty, startx);
+    WINDOW *keys_win =
+        newwin(SHORTCUTS_HEIGHT, SHORTCUTS_WIDTH - 10, starty, startxx);
 
 }
 
