@@ -105,7 +105,6 @@ void settings_menu(SETTINGS * set)
     int starty = (24 - MENU_HEIGHT) / 2;
     menu_win = newwin(MENU_HEIGHT, MENU_WIDTH, starty, startx);
 
-
     //Print the menu
     keypad(menu_win, TRUE);
     refresh();
@@ -115,9 +114,10 @@ void settings_menu(SETTINGS * set)
     int choice =
         move_in_menu(menu_win, highlight, menu_choices, number_choices);
 
-        
-    mvprintw(23, 0, "You chose: %s\n", menu_choices[choice - 1]);
-    getch();
+    // Erase the menu
+    //DEBUG:
+    //mvprintw(23, 0, "You chose: %d %s\n", choice, menu_choices[choice - 1]);
+    //getch();
     clear();
     refresh();
 }
