@@ -128,6 +128,9 @@ void shortcuts_menu(SETTINGS * sets)
     print_menu(shortcuts_win, highlight, shortcuts, number_s);
     print_menu(keys_win, 0, keys, number_k);
 
+    //Wait for the user to make a choice in the menu
+    int choice = move_in_menu(shortcuts_win, highlight, shortcuts, number_s);
+
 }
 
 void settings_menu(SETTINGS * sets)
