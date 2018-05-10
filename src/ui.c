@@ -308,57 +308,8 @@ void exec_user_action(BUFFER * buff)
     // Wait for the user to press a key
     while (!exit) {
         ch = wgetch(text_win);
-        switch (ch) {
-        case KEY_UP:
-        case KEY_DOWN:
-        case KEY_LEFT:
-        case KEY_RIGHT:
-            move_cursor(buff, curs, ch);
-            break;
-        case 10:               //ENTER: create a new line containing the end of the current line
-            // tmp =
-            //     get_text(buff, get_pos_y(curs), get_pos_x(curs),
-            //              get_pos_y(curs), get_line_length(buff,
-            //                                               get_pos_x(curs)));
-            // delete_text(buff, get_pos_y(curs), get_pos_x(curs), get_pos_y(curs),
-            //             get_line_length(buff, get_pos_x(curs)));
-            // set_pos_x(curs, 0);
-            // set_pos_y(curs, get_pos_y(curs) + 1);
-            //
-            // insert_line(buff, tmp, get_pos_y(curs));
-            break;
-        case KEY_BACKSPACE:    // BACKSPACE
-            if (get_pos_x(curs) > 0) {
-                set_pos_x(curs, get_pos_x(curs) - 1);
-                delete_char(buff, get_pos_y(curs), get_pos_x(curs));
-            }
-            break;
-        case 16:               //Ctrl+P: display the options menu
-            clear();
-            refresh();
-            settings_menu(NULL);
-            break;
-            // TODO: SHORTCUTS
-        case 20:               //Ctrl+T: text selection
-            curs_set(0);        //hide the cursor
-            select_text(buff, curs);
-            curs_set(1);        //show the cursor
-            break;
-        case 22:               //Ctrl+V: paste
-            if (tmp != NULL) {
-                insert_text(buff, tmp, get_pos_y(curs), get_pos_x(curs));
-            }
-            print_status_bar(buff, "");
-            break;
-        case 27:               //ESCAPE : exit the program
-            exit = 1;
-            break;
-        default:
-            insert_char(buff, ch, get_pos_y(curs), get_pos_x(curs));
-            set_pos_x(curs, get_pos_x(curs) + 1);
-            break;
-        }
-        //update window
+
+        //Update window
         print_text(buff, 0, 0);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
         print_status_bar(buff, " ");
