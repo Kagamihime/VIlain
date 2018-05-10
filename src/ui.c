@@ -334,6 +334,12 @@ void exec_user_action(BUFFER * buff)
             settings_menu(sets);
             curs_set(1);        //show the cursor
         }
+        //Text selection
+        else if (ch == (get_toogle_selection_shortcut(sets))) {
+            curs_set(0);        //hide the cursor
+            select_text(buff, curs);
+            curs_set(1);        //show the cursor
+        }
         //Update window
         print_text(buff, 0, 0);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
