@@ -122,6 +122,12 @@ void shortcuts_menu(SETTINGS * sets)
     int ch;
     mvprintw(5, 19, "Choose the shortcut you want to edit and press ENTER.");
 
+    //Print the menu
+    keypad(shortcuts_win, TRUE);
+    refresh();
+    print_menu(shortcuts_win, highlight, shortcuts, number_s);
+    print_menu(keys_win, 0, keys, number_k);
+
 }
 
 void settings_menu(SETTINGS * sets)
