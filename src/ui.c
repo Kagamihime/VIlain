@@ -419,6 +419,13 @@ void select_text(BUFFER * buff, CURSOR * curs)
                 wattroff(text_win, A_REVERSE);
             }
         }
+        //Cut
+        else if (ch == get_cut_shortcut(sets)) {
+            tmp = strdup(text);
+            delete_text(buff, from_y, from_x, to_y, to_x);
+            exit = 1;
+            print_status_bar(buff, "");
+        }
     }
 }
 
