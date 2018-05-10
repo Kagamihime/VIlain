@@ -309,6 +309,11 @@ void exec_user_action(BUFFER * buff)
     while (!exit) {
         ch = wgetch(text_win);
 
+        //Moving the cursor
+        if (ch == KEY_UP || ch == KEY_DOWN || ch == KEY_LEFT || ch == KEY_RIGHT) {
+            move_cursor(buff, curs, ch);
+        }
+
         //Update window
         print_text(buff, 0, 0);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
