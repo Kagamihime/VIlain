@@ -131,6 +131,56 @@ void shortcuts_menu(SETTINGS * sets)
     //Wait for the user to make a choice in the menu
     int choice = move_in_menu(shortcuts_win, highlight, shortcuts, number_s);
 
+    //Erase eventual message on line 23
+    move(23, 0);
+    clrtoeol();
+
+    //Give instructions to user
+    move(5, 0);
+    clrtoeol();
+    mvprintw(5, 21, "Press the new shortcut by holding Ctrl + a letter.");
+
+    //Wait for the new shortcut and check if it is valide
+    if (choice != 8) {          //If not exit
+        ch = getch();
+        if (ch > 0 && ch < 27) {
+            if (!isCurrentShortcut(sets, ch)) {
+                switch (choice) {
+                case 1:
+                    set_toogle_selection_shortcut(sets, ch);
+                    break;
+                case 2:
+                    set_cut_shortcut(sets, ch);
+                    break;
+                case 3:
+                    set_copy_shortcut(sets, ch);
+                    break;
+                case 4:
+                    set_paste_shortcut(sets, ch);
+                    break;
+                case 5:
+                    set_settings_shortcut(sets, ch);
+                    break;
+                case 6:
+                    set_save_shortcut(sets, ch);
+                    break;
+                case 7:
+                    set_load_shortcut(sets, ch);
+                    break;
+                }
+                mvprintw(23, 0, "Shortcut saved.");
+            } else {
+                mvprintw(23, 0,
+                         "This shortcut is already used for another shortcut.");
+            }
+        } else {
+            mvprintw(23, 0, "This shortcut is not valid.");
+        }
+
+        //Change the shortcut and save it in ui.cfg
+        save(sets, "./etc/ui.cfg");
+    }
+
 }
 
 void settings_menu(SETTINGS * sets)
