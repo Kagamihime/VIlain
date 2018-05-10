@@ -288,9 +288,10 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
 
 void exec_user_action(BUFFER * buff)
 {
-    //Creation of the window and the cursor
+    //Create the window, the cursor and charge the settings
     text_win = newwin(TEXT_HEIGHT, TEXT_WIDTH, 0, 0);
     curs = new_curs();
+    SETTINGS *sets = new_sets();
 
     //Print the current buffer and  place the cursor at the end
     print_text(buff, 0, 0);
