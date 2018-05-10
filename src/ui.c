@@ -11,6 +11,8 @@
 #define TEXT_HEIGHT 30
 #define MENU_WIDTH 30
 #define MENU_HEIGHT 9
+#define SHORTCUTS_WIDTH 25
+#define SHORTCUTS_HEIGHT 12
 WINDOW *text_win;
 WINDOW *menu_win;
 WINDOW *shortcuts_win;
@@ -144,7 +146,7 @@ void shortcuts_menu(SETTINGS * sets)
     if (choice != 8) {          //If not exit
         ch = getch();
         if (ch > 0 && ch < 27) {
-            if (!isCurrentShortcut(sets, ch)) {
+            if (!is_current_shortcut(sets, ch)) {
                 switch (choice) {
                 case 1:
                     set_toogle_selection_shortcut(sets, ch);
@@ -291,6 +293,7 @@ void exec_user_action(BUFFER * buff)
     //Create the window, the cursor and charge the settings
     text_win = newwin(TEXT_HEIGHT, TEXT_WIDTH, 0, 0);
     curs = new_curs();
+    curs_set(1);
     SETTINGS *sets = new_sets();
 
     //Print the current buffer and  place the cursor at the end
