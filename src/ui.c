@@ -432,6 +432,10 @@ void select_text(BUFFER * buff, CURSOR * curs)
             exit = 1;
             print_status_bar(buff, "");
         }
+        //Text_selection = exit
+        else if (ch == get_toogle_selection_shortcut(sets)) {
+            exit = 1;
+        }
     }
 }
 
