@@ -87,7 +87,12 @@ int move_in_menu(WINDOW * menu_win, int highlight, char **menu_choices,
     }
 };
 
-void settings_menu(SETTINGS * set)
+void shortcuts_menu(SETTINGS * sets)
+{
+
+}
+
+void settings_menu(SETTINGS * sets)
 {
     // Initialize
     char *menu_choices[] = {
