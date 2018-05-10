@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
         exec_user_action(buff);
         endwin();
     }
-    
     //Launch VIlain with an existing file
     else if (argc == 2) {
         buff = load_file(argv[1]);
@@ -31,6 +30,8 @@ int main(int argc, char *argv[])
             exec_user_action(buff);
             endwin();
         }
+    } else {
+        printf("Error: expecting 0 or 1 arguments.");
     }
 
     return 0;
