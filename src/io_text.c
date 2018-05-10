@@ -8,7 +8,7 @@ BUFFER *load_file(char *path)
 {
     FILE *file = NULL;
     BUFFER *res = NULL;
-    int i = 1;
+    int i = 0;
     int j = 0;
     int c = 0;
 
@@ -29,7 +29,7 @@ BUFFER *load_file(char *path)
 
     while ((c = fgetc(file)) != EOF) {
         if (c == '\n') {
-            if (insert_line(res, "", i) == -1) {
+            if (insert_line(res, "", i + 1) == -1) {
                 free_buffer(res);
                 fclose(file);
                 return NULL;
