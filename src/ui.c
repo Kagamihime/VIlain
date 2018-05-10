@@ -105,35 +105,17 @@ void settings_menu(SETTINGS * set)
     int starty = (24 - MENU_HEIGHT) / 2;
     menu_win = newwin(MENU_HEIGHT, MENU_WIDTH, starty, startx);
 
+
     //Print the menu
     keypad(menu_win, TRUE);
     refresh();
-    print_menu(menu_win, highlight);
-    while (1) {
-        c = wgetch(menu_win);
-        switch (c) {
-        case KEY_UP:
-            if (highlight == 1) //if in first choice go to last choice
-                highlight = number_menu_choices;
-            else
-                --highlight;
-            break;
-        case KEY_DOWN:         //if in last choice go to first choice
-            if (highlight == number_menu_choices)
-                highlight = 1;
-            else
-                ++highlight;
-            break;
-        case 10:               //ENTER: confirm choice
-            choice = highlight;
-            break;
-        default:
-            break;
-        }
-        print_menu(menu_win, highlight);
-        if (choice != 0)        // User did a choice come out of the infinite loop
-            break;
-    }
+    print_menu(menu_win, highlight, menu_choices, number_choices);
+
+    //wait for the user to make a choice in the menu
+    int choice =
+        move_in_menu(menu_win, highlight, menu_choices, number_choices);
+
+        
     mvprintw(23, 0, "You chose: %s\n", menu_choices[choice - 1]);
     getch();
     clear();
