@@ -180,6 +180,13 @@ void shortcuts_menu(SETTINGS * sets)
         //Change the shortcut and save it in ui.cfg
         save(sets, "./etc/ui.cfg");
     }
+    //Refresh the menu or leave the function
+    if (choice != 8)
+        shortcuts_menu(sets);
+    else {
+        clear();
+        refresh();
+    }
 
 }
 
