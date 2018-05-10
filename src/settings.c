@@ -185,7 +185,7 @@ char *to_string(int code)
     return res;
 }
 
-int isCurrentShortcut(SETTINGS * sets, int code)
+int is_current_shortcut(SETTINGS * sets, int code)
 {
     if (sets->save_shortcut == code
         || sets->load_shortcut == code
