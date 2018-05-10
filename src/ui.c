@@ -393,7 +393,32 @@ void select_text(BUFFER * buff, CURSOR * curs)
     while (!exit) {
         ch = wgetch(text_win);
 
-        
+        //Move the cursor
+        if (ch == KEY_UP || ch == KEY_LEFT || ch == KEY_DOWN || ch == KEY_RIGHT) {
+            move_cursor(buff, curs, ch);
+            if (first_y < get_pos_y(curs)
+                || (first_y == get_pos_y(curs) && first_x < get_pos_x(curs))) {
+                from_x = first_x;
+                from_y = first_y;
+                to_x = get_pos_x(curs);
+                to_y = get_pos_y(curs);
+            } else {
+                from_x = get_pos_x(curs);
+                from_y = get_pos_y(curs);
+                to_x = first_x;
+                to_y = first_y;
+            }
+            text = get_text(buff, from_y, from_x, to_y, to_x);
+            //DEBUG: mvwprintw(text_win,10,0,"From %d:%d  to  %d:%d    ", from_y,from_x, to_y,to_x);
+            //DEBUG: mvwprintw(text_win,10,0,"%s     ", text);
+            if (text != NULL) {
+                print_text(buff, 0, 0);
+                //print in highlight the selected text
+                wattron(text_win, A_REVERSE);
+                mvwprintw(text_win, from_y, from_x, "%s", text);
+                wattroff(text_win, A_REVERSE);
+            }
+        }
     }
 }
 
