@@ -322,6 +322,10 @@ void exec_user_action(BUFFER * buff)
                 //TODO: concatener cette ligne avec celle d'avant
             }
         }
+        //ESCPAPE: exit the program
+        else if (ch == 27) {
+            exit = 1;
+        }
         //Update window
         print_text(buff, 0, 0);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
