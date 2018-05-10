@@ -13,6 +13,13 @@ int main(int argc, char *argv[])
     struct BUFFER *buff;
     buff = new_buffer();
     insert_line(buff, "", 0);
+    
+    //Launch VIlain with a new file
+    if (argc == 1) {
+        initscr();
+        exec_user_action(buff);
+        endwin();
+    }
 
     return 0;
 }
