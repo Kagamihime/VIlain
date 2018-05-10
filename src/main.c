@@ -7,7 +7,12 @@
 #include "../include/io_text.h"
 #include "../include/ui.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
+    //Initialize
+    struct BUFFER *buff;
+    buff = new_buffer();
+    insert_line(buff, "", 0);
+
     return 0;
 }
