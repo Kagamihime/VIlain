@@ -48,6 +48,12 @@ void print_menu(WINDOW * menu_win, int highlight, char **choices,
     wrefresh(menu_win);
 }
 
+int move_in_menu(WINDOW * menu_win, int highlight, char **menu_choices,
+                 int number_choices)
+{
+    return 0;
+};
+
 void settings_menu(SETTINGS * set)
 {
     int highlight = 1;
