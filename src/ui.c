@@ -337,7 +337,7 @@ void exec_user_action(BUFFER * buff)
         //Text selection
         else if (ch == (get_toogle_selection_shortcut(sets))) {
             curs_set(0);        //hide the cursor
-            select_text(buff, curs);
+            select_text(buff, curs, sets);
             curs_set(1);        //show the cursor
         }
         //Paste the text in tmp
@@ -372,7 +372,7 @@ char *strdup(const char *str)
     return dup;
 }
 
-void select_text(BUFFER * buff, CURSOR * curs)
+void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets)
 {
     //Initialize
     char *text;
