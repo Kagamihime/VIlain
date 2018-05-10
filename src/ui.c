@@ -97,6 +97,25 @@ void shortcuts_menu(SETTINGS * sets)
         newwin(SHORTCUTS_HEIGHT, SHORTCUTS_WIDTH, starty, startx);
     WINDOW *keys_win =
         newwin(SHORTCUTS_HEIGHT, SHORTCUTS_WIDTH - 10, starty, startxx);
+    char *shortcuts[] = {
+        "Text Selection",
+        "Cut",
+        "Copy",
+        "Paste",
+        "Options",
+        "Save file",
+        "Load file",
+        "Exit"
+    };
+    char *keys[] = {
+        to_string(get_toogle_selection_shortcut(sets)),
+        to_string(get_cut_shortcut(sets)),
+        to_string(get_copy_shortcut(sets)),
+        to_string(get_paste_shortcut(sets)),
+        to_string(get_settings_shortcut(sets)),
+        to_string(get_save_shortcut(sets)),
+        to_string(get_load_shortcut(sets))
+    };
 
 }
 
