@@ -120,6 +120,23 @@ void settings_menu(SETTINGS * set)
     //getch();
     clear();
     refresh();
+
+    // Execute the action corresponding to the choice
+    //DEBUG:
+    //mvprintw(23, 0, "You chose: %d %s\n", choice, menu_choices[choice - 1]);
+    switch (choice) {
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        shortcuts_menu(sets);
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    }
 }
 
 void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
