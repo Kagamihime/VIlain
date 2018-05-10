@@ -334,6 +334,13 @@ void exec_user_action(BUFFER * buff)
             settings_menu(sets);
             curs_set(1);        //show the cursor
         }
+        //Paste the text in tmp
+        else if (ch == (get_paste_shortcut(sets))) {
+            if (tmp != NULL) {
+                insert_text(buff, tmp, get_pos_y(curs), get_pos_x(curs));
+            }
+            print_status_bar(buff, "");
+        }
         //Text selection
         else if (ch == (get_toogle_selection_shortcut(sets))) {
             curs_set(0);        //hide the cursor
