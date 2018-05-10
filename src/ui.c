@@ -326,6 +326,14 @@ void exec_user_action(BUFFER * buff)
         else if (ch == 27) {
             exit = 1;
         }
+        //Display the settings menu
+        else if (ch == (get_settings_shortcut(sets))) {
+            clear();
+            refresh();
+            curs_set(0);        //hide the cursor
+            settings_menu(sets);
+            curs_set(1);        //show the cursor
+        }
         //Update window
         print_text(buff, 0, 0);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
