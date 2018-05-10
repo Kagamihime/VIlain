@@ -89,13 +89,23 @@ int move_in_menu(WINDOW * menu_win, int highlight, char **menu_choices,
 
 void settings_menu(SETTINGS * set)
 {
+    // Initialize
+    char *menu_choices[] = {
+        "Save file",
+        "Open file",
+        "See shortcuts",
+        "LineWrapping option",
+        "Exit",
+    };
+    int number_choices = sizeof(menu_choices) / sizeof(char *);
     int highlight = 1;
-    int choice = 0;
-    int c;
+
+    //TODO: change the values here
     int startx = (80 - MENU_WIDTH) / 2;
     int starty = (24 - MENU_HEIGHT) / 2;
-
     menu_win = newwin(MENU_HEIGHT, MENU_WIDTH, starty, startx);
+
+    //Print the menu
     keypad(menu_win, TRUE);
     refresh();
     print_menu(menu_win, highlight);
