@@ -13,12 +13,24 @@ int main(int argc, char *argv[])
     struct BUFFER *buff;
     buff = new_buffer();
     insert_line(buff, "", 0);
-    
+
     //Launch VIlain with a new file
     if (argc == 1) {
         initscr();
         exec_user_action(buff);
         endwin();
+    }
+    
+    //Launch VIlain with an existing file
+    else if (argc == 2) {
+        buff = load_file(argv[1]);
+        if (buff == NULL) {
+            printf("ERROR: the file %s does not exist.\n", argv[1]);
+        } else {
+            initscr();
+            exec_user_action(buff);
+            endwin();
+        }
     }
 
     return 0;
