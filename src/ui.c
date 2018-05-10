@@ -51,7 +51,40 @@ void print_menu(WINDOW * menu_win, int highlight, char **choices,
 int move_in_menu(WINDOW * menu_win, int highlight, char **menu_choices,
                  int number_choices)
 {
-    return 0;
+    //Initialize
+    int ch;
+    int choice = 0;
+
+    //Wait for the user to press a key
+    while (1) {
+        ch = wgetch(menu_win);
+        switch (ch) {
+        case KEY_UP:
+            if (highlight == 1) //if in first choice go to last choice
+                highlight = number_choices;
+            else
+                --highlight;    //else go to previous choice
+            break;
+        case KEY_DOWN:         //if in last choice go to first choice
+            if (highlight == number_choices)
+                highlight = 1;
+            else
+                ++highlight;    //else go to next choice
+            break;
+        case 10:               //ENTER: confirm choice
+            choice = highlight;
+            break;
+        default:
+            break;
+        }
+
+        //Re-print the menu and change the highlight
+        print_menu(menu_win, highlight, menu_choices, number_choices);
+
+        // Check if the user did a choice
+        if (choice != 0)
+            return choice;
+    }
 };
 
 void settings_menu(SETTINGS * set)
