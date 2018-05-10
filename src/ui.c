@@ -392,50 +392,8 @@ void select_text(BUFFER * buff, CURSOR * curs)
     //Wait for the user to press a key
     while (!exit) {
         ch = wgetch(text_win);
-        switch (ch) {
-        case KEY_UP:
-        case KEY_LEFT:
-        case KEY_DOWN:
-        case KEY_RIGHT:
-            move_cursor(buff, curs, ch);
-            if (first_y < get_pos_y(curs)
-                || (first_y == get_pos_y(curs) && first_x < get_pos_x(curs))) {
-                from_x = first_x;
-                from_y = first_y;
-                to_x = get_pos_x(curs);
-                to_y = get_pos_y(curs);
-            } else {
-                from_x = get_pos_x(curs);
-                from_y = get_pos_y(curs);
-                to_x = first_x;
-                to_y = first_y;
-            }
-            text = get_text(buff, from_y, from_x, to_y, to_x);
-            //DEBUG: mvwprintw(text_win,10,0,"From %d:%d  to  %d:%d    ", from_y,from_x, to_y,to_x);
-            //DEBUG: mvwprintw(text_win,10,0,"%s     ", text);
-            if (text != NULL) {
-                print_text(buff, 0, 0);
-                //print in highlight the selected text
-                wattron(text_win, A_REVERSE);
-                mvwprintw(text_win, from_y, from_x, "%s", text);
-                wattroff(text_win, A_REVERSE);
-            }
-            break;
-        case 24:               //Ctrl+X : Cut
-            tmp = strdup(text);
-            delete_text(buff, from_y, from_x, to_y, to_x);
-            exit = 1;
-            print_status_bar(buff, "");
-            break;
-        case 23:               //Ctrl+W : Copy
-            tmp = strdup(text);
-            exit = 1;
-            print_status_bar(buff, "");
-            break;
-        case 20:
-            exit = 1;
-            break;
-        }
+
+        
     }
 }
 
