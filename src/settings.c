@@ -185,6 +185,19 @@ char *to_string(int code)
     return res;
 }
 
+int isCurrentShortcut(SETTINGS * sets, int code)
+{
+    if (sets->save_shortcut == code
+        || sets->load_shortcut == code
+        || sets->settings_shortcut == code
+        || sets->copy_shortcut == code
+        || sets->cut_shortcut == code
+        || sets->paste_shortcut == code
+        || sets->toggle_selection_shortcut == code)
+        return 1;
+    return 0;
+}
+
 int get_line_wrapping(SETTINGS * sets)
 {
     return sets->line_wrapping;
