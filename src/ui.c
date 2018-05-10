@@ -26,20 +26,23 @@ char *menu_choices[] = {
 char *tmp;
 int number_menu_choices = sizeof(menu_choices) / sizeof(char *);
 
-void print_menu(WINDOW * menu_win, int highlight)
+void print_menu(WINDOW * menu_win, int highlight, char **choices,
+                int number_choices)
 {
+    //Initialize
     int x, y, i;
-
     x = 2;
     y = 2;
+
+    //Print the menu and highlight the current choice
     box(menu_win, 0, 0);
-    for (i = 0; i < number_menu_choices; ++i) {
+    for (i = 0; i < number_choices; ++i) {
         if (highlight == i + 1) {   /* High light the present choice */
             wattron(menu_win, A_REVERSE);
-            mvwprintw(menu_win, y, x, "%s", menu_choices[i]);
+            mvwprintw(menu_win, y, x, "%s", choices[i]);
             wattroff(menu_win, A_REVERSE);
         } else
-            mvwprintw(menu_win, y, x, "%s", menu_choices[i]);
+            mvwprintw(menu_win, y, x, "%s", choices[i]);
         ++y;
     }
     wrefresh(menu_win);
