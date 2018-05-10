@@ -334,6 +334,12 @@ void exec_user_action(BUFFER * buff)
             settings_menu(sets);
             curs_set(1);        //show the cursor
         }
+        //Text selection
+        else if (ch == (get_toogle_selection_shortcut(sets))) {
+            curs_set(0);        //hide the cursor
+            select_text(buff, curs);
+            curs_set(1);        //show the cursor
+        }
         //Paste the text in tmp
         else if (ch == (get_paste_shortcut(sets))) {
             if (tmp != NULL) {
@@ -341,12 +347,12 @@ void exec_user_action(BUFFER * buff)
             }
             print_status_bar(buff, "");
         }
-        //Text selection
-        else if (ch == (get_toogle_selection_shortcut(sets))) {
-            curs_set(0);        //hide the cursor
-            select_text(buff, curs);
-            curs_set(1);        //show the cursor
+        //Write in the buffer
+        else {
+            insert_char(buff, ch, get_pos_y(curs), get_pos_x(curs));
+            set_pos_x(curs, get_pos_x(curs) + 1);
         }
+
         //Update window
         print_text(buff, 0, 0);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
