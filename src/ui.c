@@ -313,7 +313,15 @@ void exec_user_action(BUFFER * buff)
         if (ch == KEY_UP || ch == KEY_DOWN || ch == KEY_LEFT || ch == KEY_RIGHT) {
             move_cursor(buff, curs, ch);
         }
-
+        //BACKSPACE
+        else if (ch == KEY_BACKSPACE) {
+            if (get_pos_x(curs) > 0) {
+                set_pos_x(curs, get_pos_x(curs) - 1);
+                delete_char(buff, get_pos_y(curs), get_pos_x(curs));
+            } else {
+                //TODO: concatener cette ligne avec celle d'avant
+            }
+        }
         //Update window
         print_text(buff, 0, 0);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
