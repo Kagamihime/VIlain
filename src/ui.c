@@ -246,13 +246,9 @@ void settings_menu(SETTINGS * sets)
 
 void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
 {
+    clear();
     for (int i = first_line; i < get_line_count(buff); i++) {
-        if (i >= get_line_length(buff, i)) {
-            move(i, 0);
-            clrtoeol();
-        } else {
-            mvwprintw(text_win, i, 0, get_line(buff, i));
-        }
+        mvwprintw(text_win, i, 0, get_line(buff, i));
         clrtoeol();
     }
 }
