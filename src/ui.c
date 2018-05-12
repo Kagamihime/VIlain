@@ -329,6 +329,15 @@ void exec_user_action(BUFFER * buff)
                 //TODO: concatener cette ligne avec celle d'avant
             }
         }
+        //ENTER
+        else if (ch == 10) {
+            if (get_pos_x(curs) < get_line_length(buff, get_pos_y(curs)))
+                split_line_at(buff, get_pos_y(curs), get_pos_x(curs));
+            else
+                insert_line(buff, "", get_pos_y(curs) + 1);
+            set_pos_x(curs, 0);
+            set_pos_y(curs, get_pos_y(curs) + 1);
+        }
         //ESCPAPE: exit the program
         else if (ch == 27) {
             exit = 1;
