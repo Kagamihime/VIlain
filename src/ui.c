@@ -325,8 +325,15 @@ void exec_user_action(BUFFER * buff)
             if (get_pos_x(curs) > 0) {
                 set_pos_x(curs, get_pos_x(curs) - 1);
                 delete_char(buff, get_pos_y(curs), get_pos_x(curs));
-            } else {
-                //TODO: concatener cette ligne avec celle d'avant
+            } else if (get_pos_y(curs) > 0) {
+                set_pos_x(curs, get_line_length(buff, get_pos_y(curs) - 1));
+                if (get_line_length(buff, get_pos_y(curs)) == 0)
+                    delete_line(buff, get_pos_y(curs));
+                else if (get_line_length(buff, get_pos_y(curs) - 1) == 0)
+                    delete_line(buff, get_pos_y(curs) - 1);
+                else
+                    join_lines(buff, get_pos_y(curs) - 1, get_pos_y(curs), 1);
+                set_pos_y(curs, get_pos_y(curs) - 1);
             }
         }
         //ENTER
