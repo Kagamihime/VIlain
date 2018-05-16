@@ -529,6 +529,12 @@ void loading_file()
     printw(path);
     wrefresh(load_win);
     refresh();
+
+    //Wait for the user to enter the path
+    while (!exit) {
+        int ch = getch();
+
+    }
 }
 
 void saving_menu()
