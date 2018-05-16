@@ -393,6 +393,14 @@ void exec_user_action(BUFFER * bu)
             clear();
             refresh();
         }
+        //Display the load menu
+        else if (ch == (get_load_shortcut(sets))) {
+            clear();
+            refresh();
+            loading_file(buff);
+            clear();
+            refresh();
+        }
         //Write in the buffer
         else {
             insert_char(buff, ch, get_pos_y(curs), get_pos_x(curs));
