@@ -569,6 +569,7 @@ void loading_file()
             }
         }
     }
+    free(path);
 }
 
 void saving_file(BUFFER * buff)
@@ -631,5 +632,5 @@ void saving_file(BUFFER * buff)
         }
         getch();
     }
-
+    free(path);
 }
