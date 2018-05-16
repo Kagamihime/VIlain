@@ -509,8 +509,15 @@ void append(char *s, char c)
     s[len + 1] = '\0';
 }
 
-void loading_menu()
+void loading_file()
 {
+    //Initialize
+    int height = 3;
+    int width = 60;
+    WINDOW *load_win = newwin(height, width, 7, 10);
+    char *path = malloc(60);
+    strcpy(path, "./files/");
+    int exit = 0;
 }
 
 void saving_menu()
