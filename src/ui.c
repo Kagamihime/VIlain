@@ -306,7 +306,7 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
     print_status_bar(buff, " ");
 }
 
-void exec_user_action(BUFFER * buff)
+void exec_user_action(BUFFER * bu)
 {
     //Create the window, the cursor and charge the settings
     text_win = newwin(TEXT_HEIGHT, TEXT_WIDTH, 0, 0);
@@ -315,6 +315,7 @@ void exec_user_action(BUFFER * buff)
     SETTINGS *sets = new_sets();
 
     //Print the current buffer and  place the cursor at the end
+    buff = bu;
     print_text(buff, 0, 0);
     set_pos_y(curs, get_line_count(buff) - 1);
     set_pos_x(curs, get_line_length(buff, get_line_count(buff) - 1));
@@ -383,6 +384,14 @@ void exec_user_action(BUFFER * buff)
                 insert_text(buff, tmp, get_pos_y(curs), get_pos_x(curs));
             }
             print_status_bar(buff, "");
+        }
+        //Display the save menu
+        else if (ch == (get_save_shortcut(sets))) {
+            clear();
+            refresh();
+            saving_file(buff);
+            clear();
+            refresh();
         }
         //Write in the buffer
         else {
