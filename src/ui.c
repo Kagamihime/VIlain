@@ -502,6 +502,13 @@ void print_status_bar(BUFFER * buff, char *str)
     wmove(text_win, get_pos_y(curs), get_pos_x(curs));
 }
 
+void append(char *s, char c)
+{
+    int len = strlen(s);
+    s[len] = c;
+    s[len + 1] = '\0';
+}
+
 void loading_menu()
 {
 }
