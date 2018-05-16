@@ -518,6 +518,17 @@ void loading_file()
     char *path = malloc(60);
     strcpy(path, "./files/");
     int exit = 0;
+
+    //Draw
+    box(load_win, 0, 0);
+    mvprintw(5, 11, "Enter file name:");
+    mvprintw(4, 11,
+             "Warning: Opening a file will erase your current changes if they have not been saved");
+    mvprintw(16, 11, "Press ESCAPE to leave.");
+    move(8, 11);
+    printw(path);
+    wrefresh(load_win);
+    refresh();
 }
 
 void saving_menu()
