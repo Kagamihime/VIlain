@@ -564,72 +564,72 @@ void loading_file()
             } else {
                 buff = load_file(path);
                 set_pos_y(curs, get_line_count(buff) - 1);
-                set_pos_x(curs, get_line_length(buff, get_line_count(buff) - 1));
+                set_pos_x(curs,
+                          get_line_length(buff, get_line_count(buff) - 1));
             }
         }
     }
 }
 
-void saving_menu()
+void saving_file(BUFFER * buff)
 {
-    void saving_file(BUFFER * buff)
-    {
-        //Initialize
-        int height = 3;
-        int width = 60;
-        WINDOW *save_win = newwin(height, width, 7, 10);
-        char *path = malloc(60);
-        strcpy(path, "./files/");
-        int exit = 0;
-        int len = 6;
+    //Initialize
+    int height = 3;
+    int width = 60;
+    WINDOW *save_win = newwin(height, width, 7, 10);
+    char *path = malloc(60);
+    strcpy(path, "./files/");
+    int exit = 0;
+    int len = 6;
 
-        //Draw
-        box(save_win, 0, 0);
-        mvprintw(5, 11, "Enter file name:");
-        mvprintw(16, 11, "Press ESCAPE to leave.");
-        move(8, 11);
-        printw(path);
-        wrefresh(save_win);
-        refresh();
+    //Draw
+    box(save_win, 0, 0);
+    mvprintw(5, 11, "Enter file name:");
+    mvprintw(16, 11, "Press ESCAPE to leave.");
+    move(8, 11);
+    printw(path);
+    wrefresh(save_win);
+    refresh();
 
-        //Wait for the user to enter the path
-        while (!exit) {
-            int ch = getch();
-            if (((ch > 45 && ch < 58)   //number or / or .
-                 || (ch == 95 || ch == 45)  //_ or -
-                 || (ch > 64 && ch < 91)    //maj
-                 || (ch > 96 && ch < 123))
-                && len < 55)        //min
-            {
-                append(path, ch);
-                printw("%c", ch);
-                len++;
-            } else if (ch == 10)    //ENTER
-            {
-                exit = 1;
-            } else if (ch == 127) { //DELETE
-                path[strlen(path) - 1] = '\0';
-                move(8, 11);
-                clrtoeol();
-                printw("%s", path);
-                len--;
-            } else if (ch == 27) {  //ESCAPE
-                exit = 2;
-            }
+    //Wait for the user to enter the path
+    while (!exit) {
+        int ch = getch();
+        if (((ch > 45 && ch < 58)   //number or / or .
+             || (ch == 95 || ch == 45)  //_ or -
+             || (ch > 64 && ch < 91)    //maj
+             || (ch > 96 && ch < 123))
+            && len < 55)        //min
+        {
+            append(path, ch);
+            printw("%c", ch);
+            len++;
+        } else if (ch == 10)    //ENTER
+        {
+            exit = 1;
+        } else if (ch == 127) { //DELETE
+            path[strlen(path) - 1] = '\0';
+            move(8, 11);
+            clrtoeol();
+            printw("%s", path);
+            len--;
+        } else if (ch == 27) {  //ESCAPE
+            exit = 2;
         }
+    }
 
-        //Save the file
-        if (exit == 1) {
-            int a = save_buffer(path, buff);
-            if (a == -1) {
-                move(15, 0);
-                clrtoeol();
-                mvprintw(15, 11, "Impossible to save this file.");
-            } else {
-                move(15, 0);
-                clrtoeol();
-                mvprintw(15, 11, "File Saved.");
-            }
-            getch();
+    //Save the file
+    if (exit == 1) {
+        int a = save_buffer(path, buff);
+        if (a == -1) {
+            move(15, 0);
+            clrtoeol();
+            mvprintw(15, 11, "Impossible to save this file.");
+        } else {
+            move(15, 0);
+            clrtoeol();
+            mvprintw(15, 11, "File Saved.");
         }
+        getch();
+    }
+
 }
