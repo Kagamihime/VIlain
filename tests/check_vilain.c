@@ -354,18 +354,193 @@ END_TEST Suite *buffer_suite(void)
     return s;
 }
 
+// IO_TEXT MODULE TESTS
+char *path = "buffer.save";
+START_TEST(test_save_empty_buffer)
+{
+    ck_assert_int_eq(insert_line(buff, "", 0), 0);
+
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+    remove(path);
+}
+
+END_TEST START_TEST(test_save_one_char_buffer)
+{
+    ck_assert_int_eq(insert_line(buff, "", 0), 0);
+    ck_assert_int_eq(insert_char(buff, 'a', 0, 0), 0);
+
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+    remove(path);
+}
+
+END_TEST START_TEST(test_save_one_line_buffer)
+{
+    ck_assert_int_eq(insert_line(buff, "hello", 0), 0);
+
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+    remove(path);
+}
+
+END_TEST START_TEST(test_save_buffer_with_long_line)
+{
+    ck_assert_int_eq(insert_line(buff,
+                                 "helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
+                                 0), 0);
+
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+    remove(path);
+}
+
+END_TEST START_TEST(test_save_multiple_lines)
+{
+    ck_assert_int_eq(insert_line(buff, "hello\n", 0), 0);
+    ck_assert_int_eq(insert_line(buff, "helloooooooooo   ooo\n", 1), 0);
+    ck_assert_int_eq(insert_line(buff, "hellooooooooooooo oooooooo\n", 2), 0);
+    ck_assert_int_eq(insert_line(buff, "wooorld", 3), 0);
+
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+    remove(path);
+}
+
+END_TEST START_TEST(test_save_buffer_two_times)
+{
+    ck_assert_int_eq(insert_line(buff, "hello", 0), 0);
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+
+    ck_assert_int_eq(insert_char(buff, 'a', 0, 0), 0);
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+
+    remove(path);
+}
+
+END_TEST START_TEST(test_load_empty_buffer)
+{
+    ck_assert_int_eq(insert_line(buff, "", 0), 0);
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+    ck_assert_ptr_ne(load_file(path), NULL);
+
+    BUFFER *buff2 = new_buffer();
+    buff2 = load_file(path);
+
+    str = get_line(buff2, 0);
+
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str, "\n");
+
+    free(str);
+    free_buffer(buff2);
+    remove(path);
+}
+
+END_TEST START_TEST(test_load_one_line_buffer)
+{
+    ck_assert_int_eq(insert_line(buff, "", 0), 0);
+    ck_assert_int_eq(insert_char(buff, 'a', 0, 0), 0);
+    ck_assert_int_eq(insert_char(buff, 'b', 0, 1), 0);
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+
+    ck_assert_ptr_ne(load_file(path), NULL);
+
+    BUFFER *buff2 = new_buffer();
+    buff2 = load_file(path);
+
+    char *str = get_line(buff2, 0);
+    ck_assert_str_eq(str, "ab\n");
+
+    free(str);
+    free_buffer(buff2);
+    remove(path);
+}
+
+END_TEST START_TEST(test_load_long_line_buffer)
+{
+    ck_assert_int_eq(insert_line
+                     (buff,
+                      "helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
+                      0), 0);
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+
+    BUFFER *buff2 = new_buffer();
+    buff2 = load_file(path);
+
+    str = get_line(buff2, 0);
+    ck_assert_ptr_ne(str, NULL);
+    ck_assert_str_eq(str,
+                     "helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo\n");
+
+    free(str);
+    free_buffer(buff2);
+    remove(path);
+}
+
+END_TEST START_TEST(test_load_multiple_lines_buffer)
+{
+    ck_assert_int_eq(insert_line(buff, "hello", 0), 0);
+    ck_assert_int_eq(insert_line(buff, "helloooooooooo   ooo", 1), 0);
+    ck_assert_int_eq(insert_line(buff, "hellooooooooooooo oooooooo", 2), 0);
+    ck_assert_int_eq(insert_line(buff, "wooorld", 3), 0);
+    ck_assert_int_eq(save_buffer(path, buff), 0);
+
+    BUFFER *buff2 = new_buffer();
+    buff2 = load_file(path);
+
+    str = get_line(buff2, 0);
+    ck_assert_str_eq(str, "hello\n");
+    str = get_line(buff2, 1);
+    ck_assert_str_eq(str, "helloooooooooo   ooo\n");
+    str = get_line(buff2, 2);
+    ck_assert_str_eq(str, "hellooooooooooooo oooooooo\n");
+    str = get_line(buff2, 3);
+    ck_assert_str_eq(str, "wooorld\n");
+
+    free(str);
+    free_buffer(buff2);
+    remove(path);
+}
+
+END_TEST Suite *io_text_suite(void)
+{
+    TCase *tc_io_text;
+    Suite *s;
+
+    tc_io_text = tcase_create("Core");
+    tcase_add_checked_fixture(tc_io_text, buffer_setup, buffer_teardown);
+    tcase_add_test(tc_io_text, test_save_empty_buffer);
+    tcase_add_test(tc_io_text, test_save_one_char_buffer);
+    tcase_add_test(tc_io_text, test_save_one_line_buffer);
+    tcase_add_test(tc_io_text, test_save_buffer_with_long_line);
+    tcase_add_test(tc_io_text, test_save_multiple_lines);
+    tcase_add_test(tc_io_text, test_save_buffer_two_times);
+    tcase_add_test(tc_io_text, test_load_empty_buffer);
+    tcase_add_test(tc_io_text, test_load_one_line_buffer);
+    tcase_add_test(tc_io_text, test_load_long_line_buffer);
+    tcase_add_test(tc_io_text, test_load_multiple_lines_buffer);
+
+    s = suite_create("Io_text");
+    suite_add_tcase(s, tc_io_text);
+
+    return s;
+}
+
 int main(void)
 {
     int failures;
-    Suite *s;
-    SRunner *sr;
+    Suite *s1;
+    Suite *s2;
+    SRunner *sr1;
+    SRunner *sr2;
 
-    s = buffer_suite();
-    sr = srunner_create(s);
+    s1 = buffer_suite();
+    s2 = io_text_suite();
+    sr1 = srunner_create(s1);
+    sr2 = srunner_create(s2);
 
-    srunner_run_all(sr, CK_NORMAL);
-    failures = srunner_ntests_failed(sr);
-    srunner_free(sr);
+    srunner_run_all(sr1, CK_NORMAL);
+    srunner_run_all(sr2, CK_NORMAL);
+    failures = srunner_ntests_failed(sr1);
+    failures = failures + srunner_ntests_failed(sr2);
+    srunner_free(sr1);
+    srunner_free(sr2);
 
     return (failures == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
