@@ -533,7 +533,24 @@ void loading_file()
     //Wait for the user to enter the path
     while (!exit) {
         int ch = getch();
-
+        if ((ch > 45 && ch < 58)    //number or / or .
+            || (ch == 95 || ch == 45)   //_ or -
+            || (ch > 64 && ch < 91) //maj
+            || (ch > 96 && ch < 123))   //min
+        {
+            append(path, ch);
+            printw("%c", ch);
+        } else if (ch == 10)    //ENTER
+        {
+            exit = 1;
+        } else if (ch == 127) { //DELETE
+            path[strlen(path) - 1] = '\0';
+            move(8, 11);
+            clrtoeol();
+            printw("%s", path);
+        } else if (ch == 27) {  //ESCAPE
+            exit = 2;
+        }
     }
 }
 
