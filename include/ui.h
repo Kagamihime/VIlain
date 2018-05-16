@@ -18,7 +18,7 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch);
 void exec_user_action(BUFFER * buff);
 void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets);
 void print_status_bar(BUFFER * buff, char *str);
-void loading_file();
-void saving_file(BUFFER * buff);
+void loading_file(char *path);
+void saving_file(BUFFER * buff, char *path);
 
 #endif
