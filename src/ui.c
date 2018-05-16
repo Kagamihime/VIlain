@@ -233,6 +233,12 @@ void settings_menu(SETTINGS * sets)
     //mvprintw(23, 0, "You chose: %d %s\n", choice, menu_choices[choice - 1]);
     switch (choice) {
     case 1:
+        clear();
+        refresh();
+        curs_set(1);
+        saving_file(buff);
+        clear();
+        refresh();
         break;
     case 2:
         break;
