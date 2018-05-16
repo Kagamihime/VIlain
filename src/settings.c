@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "../include/settings.h"
 #define FILE_MAX_LENGTH 256
 #define LINE_MAX_LENGTH 128
