@@ -206,6 +206,7 @@ void settings_menu(SETTINGS * sets)
     };
     int number_choices = sizeof(menu_choices) / sizeof(char *);
     int highlight = 1;
+    char *path = NULL;
 
     //TODO: change the values here
     int startx = (80 - MENU_WIDTH) / 2;
@@ -236,7 +237,9 @@ void settings_menu(SETTINGS * sets)
         clear();
         refresh();
         curs_set(1);
-        saving_file(buff);
+        if ((path = malloc(60 * sizeof(char))) != NULL) {
+            saving_file(buff, path);
+        }
         clear();
         refresh();
         break;
@@ -244,7 +247,9 @@ void settings_menu(SETTINGS * sets)
         clear();
         refresh();
         curs_set(1);
-        loading_file(buff);
+        if ((path = malloc(60 * sizeof(char))) != NULL) {
+            loading_file(path);
+        }
         clear();
         refresh();
         break;
@@ -256,6 +261,7 @@ void settings_menu(SETTINGS * sets)
     case 5:
         break;
     }
+    free(path);
 }
 
 void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
@@ -389,7 +395,10 @@ void exec_user_action(BUFFER * bu)
         else if (ch == (get_save_shortcut(sets))) {
             clear();
             refresh();
-            saving_file(buff);
+            char *path = NULL;
+            if ((path = malloc(60 * sizeof(char))) != NULL) {
+                saving_file(buff, path);
+            }
             clear();
             refresh();
         }
@@ -397,7 +406,10 @@ void exec_user_action(BUFFER * bu)
         else if (ch == (get_load_shortcut(sets))) {
             clear();
             refresh();
-            loading_file(buff);
+            char *path = NULL;
+            if ((path = malloc(60 * sizeof(char))) != NULL) {
+                loading_file(path);
+            }
             clear();
             refresh();
         }
@@ -509,13 +521,12 @@ void append(char *s, char c)
     s[len + 1] = '\0';
 }
 
-void loading_file()
+void loading_file(char *path)
 {
     //Initialize
     int height = 3;
     int width = 60;
     WINDOW *load_win = newwin(height, width, 7, 10);
-    char *path = malloc(60);
     strcpy(path, "./files/");
     int exit = 0;
 
@@ -572,13 +583,12 @@ void loading_file()
     free(path);
 }
 
-void saving_file(BUFFER * buff)
+void saving_file(BUFFER * buff, char *path)
 {
     //Initialize
     int height = 3;
     int width = 60;
     WINDOW *save_win = newwin(height, width, 7, 10);
-    char *path = malloc(60);
     strcpy(path, "./files/");
     int exit = 0;
     int len = 6;
