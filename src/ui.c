@@ -551,6 +551,22 @@ void loading_file()
         } else if (ch == 27) {  //ESCAPE
             exit = 2;
         }
+        //Load the file
+        if (exit == 1) {
+            BUFFER *buff_tmp = new_buffer();
+            insert_line(buff_tmp, "", 0);
+            buff_tmp = load_file(path);
+            if (buff_tmp == NULL) {
+                move(15, 0);
+                clrtoeol();
+                mvprintw(15, 11, "This file doesn't exist.");
+                getch();
+            } else {
+                buff = load_file(path);
+                set_pos_y(curs, get_line_count(buff) - 1);
+                set_pos_x(curs, get_line_length(buff, get_line_count(buff) - 1));
+            }
+        }
     }
 }
 
