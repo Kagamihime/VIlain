@@ -6,6 +6,7 @@
 #include "../include/ui.h"
 #include "../include/settings.h"
 #include "../include/cursor.h"
+#include "../include/io_text.h"
 
 #define TEXT_WIDTH 80
 #define TEXT_HEIGHT 30
@@ -13,6 +14,7 @@
 #define MENU_HEIGHT 9
 #define SHORTCUTS_WIDTH 25
 #define SHORTCUTS_HEIGHT 12
+BUFFER *buff;
 WINDOW *text_win;
 WINDOW *menu_win;
 WINDOW *shortcuts_win;
