@@ -8,6 +8,7 @@ int load(SETTINGS * sets, char *path);
 SETTINGS *new_sets();
 char *to_string(int code);
 int is_current_shortcut(SETTINGS * sets, int code);
+int valid_config(SETTINGS * sets, char *path);
 
 int get_line_wrapping(SETTINGS * sets);
 int get_save_shortcut(SETTINGS * sets);
