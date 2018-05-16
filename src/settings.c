@@ -199,6 +199,40 @@ int is_current_shortcut(SETTINGS * sets, int code)
     return 0;
 }
 
+// Check if the configuration file is valid, if it is not, rewrite the ui.cfg file correctly
+int valid_config(SETTINGS * sets, char *path)
+{
+    int res = 0;
+    char *test;
+    if (access(path, F_OK) == -1) {
+        res = 1;
+    }
+    for (int i = 1; i < 27; i++) {
+        test = to_string(i);
+        if (test[0] != '\0') {
+            res = 1;
+        }
+    }
+    if (load(sets, path) == 1) {
+        res = 1;
+    }
+    if (res == 1) {
+        remove(path);
+        FILE *file;
+        file = fopen(path, "w");
+        fprintf(file, "line_wrapping: 1\n");
+        fprintf(file, "save_shortcut: 18\n");
+        fprintf(file, "load_shortcut: 12\n");
+        fprintf(file, "settings_shortcut: 16\n");
+        fprintf(file, "copy_shortcut: 23\n");
+        fprintf(file, "cut_shortcut: 24\n");
+        fprintf(file, "paste_shortcut: 22\n");
+        fprintf(file, "toggle_selection_shortcut: 20\n");
+        fclose(file);
+    }
+    return res;
+}
+
 int get_line_wrapping(SETTINGS * sets)
 {
     return sets->line_wrapping;
