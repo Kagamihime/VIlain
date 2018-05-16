@@ -241,6 +241,12 @@ void settings_menu(SETTINGS * sets)
         refresh();
         break;
     case 2:
+        clear();
+        refresh();
+        curs_set(1);
+        loading_file(buff);
+        clear();
+        refresh();
         break;
     case 3:
         shortcuts_menu(sets);
