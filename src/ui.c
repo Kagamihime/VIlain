@@ -531,21 +531,21 @@ void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets)
             move_cursor(buff, curs, ch);
             if (first_y < get_pos_y(curs)
                 || (first_y == get_pos_y(curs) && first_x < get_pos_x(curs))) {
-                from_x = first_x;
-                from_y = first_y;
-                to_x = get_pos_x(curs);
-                to_y = get_pos_y(curs);
+                from_x = first_x + scrollx;
+                from_y = first_y + scrolly;
+                to_x = get_pos_x(curs) + scrollx;
+                to_y = get_pos_y(curs) + scrolly;
             } else {
-                from_x = get_pos_x(curs);
-                from_y = get_pos_y(curs);
-                to_x = first_x;
-                to_y = first_y;
+                from_x = get_pos_x(curs) + scrollx;
+                from_y = get_pos_y(curs) + scrolly;
+                to_x = first_x + scrollx;
+                to_y = first_y + scrolly;
             }
             text = get_text(buff, from_y, from_x, to_y, to_x);
             //DEBUG: mvwprintw(text_win,10,0,"From %d:%d  to  %d:%d    ", from_y,from_x, to_y,to_x);
             //DEBUG: mvwprintw(text_win,10,0,"%s     ", text);
             if (text != NULL) {
-                print_text(buff, 0, 0);
+                print_text(buff, scrolly, scrollx);
                 //print in highlight the selected text
                 wattron(text_win, A_REVERSE);
                 mvwprintw(text_win, from_y, from_x, "%s", text);
@@ -555,7 +555,8 @@ void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets)
         //Cut
         else if (ch == get_cut_shortcut(sets)) {
             tmp = strdup(text);
-            delete_text(buff, from_y, from_x, to_y, to_x);
+            delete_text(buff, from_y + scrolly, from_x + scrollx,
+                        to_y + scrolly, to_x + scrollx);
             exit = 1;
             print_status_bar(buff, "");
         }
