@@ -6,7 +6,7 @@
 #define LINE_MAX_LENGTH 128
 
 struct SETTINGS {
-    int line_wrapping;
+    int auto_fill_mode;
     int save_shortcut;
     int load_shortcut;
     int settings_shortcut;
@@ -32,7 +32,7 @@ void save(SETTINGS * sets, char *path)
 {
     FILE *file;
     file = fopen(path, "w");
-    fprintf(file, "line_wrapping: %d\n", get_line_wrapping(sets));
+    fprintf(file, "auto_fill_mode: %d\n", get_auto_fill_mode(sets));
     fprintf(file, "save_shortcut: %d\n", get_save_shortcut(sets));
     fprintf(file, "load_shortcut: %d\n", get_load_shortcut(sets));
     fprintf(file, "settings_shortcut: %d\n", get_settings_shortcut(sets));
@@ -55,8 +55,9 @@ int load(SETTINGS * sets, char *path)
     if (file != NULL) {
         while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
             switch (i) {
+            case 0:
                 sscanf(line, "%s %d", param, &val);
-                set_line_wrapping(sets, val);
+                set_auto_fill_mode(sets, val);
                 break;
             case 1:
                 sscanf(line, "%s %d", param, &val);
@@ -220,7 +221,7 @@ int valid_config(SETTINGS * sets, char *path)
         remove(path);
         FILE *file;
         file = fopen(path, "w");
-        fprintf(file, "line_wrapping: 1\n");
+        fprintf(file, "auto_fill_mode: 1\n");
         fprintf(file, "save_shortcut: 18\n");
         fprintf(file, "load_shortcut: 12\n");
         fprintf(file, "settings_shortcut: 16\n");
@@ -233,9 +234,9 @@ int valid_config(SETTINGS * sets, char *path)
     return res;
 }
 
-int get_line_wrapping(SETTINGS * sets)
+int get_auto_fill_mode(SETTINGS * sets)
 {
-    return sets->line_wrapping;
+    return sets->auto_fill_mode;
 }
 
 int get_save_shortcut(SETTINGS * sets)
@@ -273,9 +274,9 @@ int get_toogle_selection_shortcut(SETTINGS * sets)
     return sets->toggle_selection_shortcut;
 }
 
-void set_line_wrapping(SETTINGS * sets, int val)
+void set_auto_fill_mode(SETTINGS * sets, int val)
 {
-    sets->line_wrapping = val;
+    sets->auto_fill_mode = val;
 }
 
 void set_save_shortcut(SETTINGS * sets, int val)
