@@ -256,7 +256,7 @@ void settings_menu(SETTINGS * sets)
         "Save file",
         "Open file",
         "See shortcuts",
-        "LineWrapping option",
+        "Auto-fill mode",
         "Exit",
     };
     int number_choices = sizeof(menu_choices) / sizeof(char *);
@@ -266,7 +266,7 @@ void settings_menu(SETTINGS * sets)
     //TODO: change the values here
     int startx = (80 - MENU_WIDTH) / 2;
     int starty = (24 - MENU_HEIGHT) / 2;
-    menu_win = newwin(MENU_HEIGHT, MENU_WIDTH, starty, startx);
+    WINDOW *menu_win = newwin(MENU_HEIGHT, MENU_WIDTH, starty, startx);
 
     //Print the menu
     keypad(menu_win, TRUE);
@@ -312,6 +312,9 @@ void settings_menu(SETTINGS * sets)
         shortcuts_menu(sets);
         break;
     case 4:
+        clear();
+        refresh();
+        auto_fill_mode_menu(sets);
         break;
     case 5:
         break;
