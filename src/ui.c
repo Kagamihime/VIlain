@@ -388,7 +388,7 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
         }
         break;
     }
-    print_status_bar(buff, " ");
+    print_status_bar();
 }
 
 int scroll_win(int ch)
@@ -430,7 +430,7 @@ void exec_user_action(BUFFER * bu)
     else
         set_pos_y(curs, TEXT_HEIGHT - 2);
     set_pos_x(curs, get_line_length(buff, get_line_count(buff) + scrolly - 1));
-    print_status_bar(buff, " ");
+    print_status_bar();
 
     //Set up the parameters to listen to keyboard events and enter the loop
     keypad(text_win, TRUE);
@@ -518,7 +518,7 @@ void exec_user_action(BUFFER * bu)
                 insert_text(buff, tmp, get_pos_y(curs) + scrolly,
                             get_pos_x(curs) + scrollx);
             }
-            print_status_bar(buff, "");
+            print_status_bar();
         }
         //Display the save menu
         else if (ch == (get_save_shortcut(sets))) {
@@ -557,7 +557,7 @@ void exec_user_action(BUFFER * bu)
             cut_long_lines();
         print_text(buff, scrolly, scrollx);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
-        print_status_bar(buff, " ");
+        print_status_bar();
         if (exit == 1)
             break;
     }
@@ -626,13 +626,13 @@ void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets)
             delete_text(buff, from_y + scrolly, from_x + scrollx,
                         to_y + scrolly, to_x + scrollx);
             exit = 1;
-            print_status_bar(buff, "");
+            print_status_bar();
         }
         //Copy
         else if (ch == get_copy_shortcut(sets)) {
             tmp = strdup(text);
             exit = 1;
-            print_status_bar(buff, "");
+            print_status_bar();
         }
         //Text_selection = exit
         else if (ch == get_toogle_selection_shortcut(sets)) {
@@ -641,7 +641,7 @@ void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets)
     }
 }
 
-void print_status_bar(BUFFER * buff, char *str)
+void print_status_bar()
 {
     move(TEXT_HEIGHT - 1, 0);
     clrtoeol();
@@ -650,7 +650,6 @@ void print_status_bar(BUFFER * buff, char *str)
               "%d/%d : %d/%d       ", get_pos_y(curs) + scrolly + 1,
               get_line_count(buff), get_pos_x(curs) + scrollx + 1,
               get_line_length(buff, get_pos_y(curs) + scrolly) + 1);
-    mvwprintw(text_win, TEXT_HEIGHT - 1, TEXT_WIDTH / 2, "%s       ", str);
     wmove(text_win, get_pos_y(curs), get_pos_x(curs));
 }
 
