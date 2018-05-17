@@ -111,9 +111,6 @@ char *to_string(int code)
     case 2:
         res = "Ctrl + B";
         break;
-    case 3:
-        res = "Ctrl + C";
-        break;
     case 4:
         res = "Ctrl + D";
         break;
@@ -132,17 +129,11 @@ char *to_string(int code)
     case 9:
         res = "Ctrl + I";
         break;
-    case 10:
-        res = "Ctrl + J";
-        break;
     case 11:
         res = "Ctrl + K";
         break;
     case 12:
         res = "Ctrl + L";
-        break;
-    case 13:
-        res = "Ctrl + M";
         break;
     case 14:
         res = "Ctrl + N";
@@ -153,14 +144,8 @@ char *to_string(int code)
     case 16:
         res = "Ctrl + P";
         break;
-    case 17:
-        res = "Ctrl + Q";
-        break;
     case 18:
         res = "Ctrl + R";
-        break;
-    case 19:
-        res = "Ctrl + S";
         break;
     case 20:
         res = "Ctrl + T";
@@ -179,9 +164,6 @@ char *to_string(int code)
         break;
     case 25:
         res = "Ctrl + Y";
-        break;
-    case 26:
-        res = "Ctrl + Z";
         break;
     }
     return res;
