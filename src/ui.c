@@ -332,6 +332,28 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
     print_status_bar(buff, " ");
 }
 
+int scroll_win(int ch)
+{
+    if (ch == KEY_DOWN && get_pos_y(curs) == TEXT_HEIGHT - 2
+        && scrolly < get_line_count(buff) - TEXT_HEIGHT + 1) {
+        scrolly++;
+        return 1;
+    } else if (ch == KEY_UP && get_pos_y(curs) == 0 && scrolly > 0) {
+        scrolly--;
+        return 1;
+    } else if (ch == KEY_RIGHT && get_pos_x(curs) == TEXT_WIDTH - 1
+               && scrollx < get_line_length(buff,
+                                            get_pos_y(curs) + scrolly) -
+               TEXT_WIDTH + 1) {
+        scrollx++;
+        return 1;
+    } else if (ch == KEY_LEFT && get_pos_x(curs) == 0 && scrollx > 0) {
+        scrollx--;
+        return 1;
+    } else
+        return 0;
+}
+
 void exec_user_action(BUFFER * bu)
 {
     //Create the window, the cursor and charge the settings
