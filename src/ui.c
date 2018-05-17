@@ -285,29 +285,34 @@ void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
     }
 }
 
-void print_wrapped_text(BUFFER * buff, unsigned int first_line)
-{
-}
-
 void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
 {
     switch (ch) {
     case KEY_UP:               //UP ARROW: move cursor up
         if (get_pos_y(curs) > 0)
             set_pos_y(curs, get_pos_y(curs) - 1);
-        if (get_pos_x(curs) > get_line_length(buff, get_pos_y(curs)))
-            set_pos_x(curs, get_line_length(buff, get_pos_y(curs)));
+        if (get_pos_x(curs) >
+            get_line_length(buff, get_pos_y(curs) + scrolly) - scrollx)
+            set_pos_x(curs,
+                      get_line_length(buff,
+                                      get_pos_y(curs) + scrolly) - scrollx);
         break;
     case KEY_DOWN:             //DOWN ARROW: move cursor down
-        if (get_pos_y(curs) < get_line_count(buff) - 1)
+        if (get_pos_y(curs) < get_line_count(buff) - 1
+            && get_pos_y(curs) < TEXT_HEIGHT - 2)
             set_pos_y(curs, get_pos_y(curs) + 1);
-        if (get_pos_x(curs) > get_line_length(buff, get_pos_y(curs)))
-            set_pos_x(curs, get_line_length(buff, get_pos_y(curs)));
+        if (get_pos_x(curs) >
+            get_line_length(buff, get_pos_y(curs) + scrolly) - scrollx)
+            set_pos_x(curs,
+                      get_line_length(buff,
+                                      get_pos_y(curs) + scrolly) - scrollx);
         break;
     case KEY_RIGHT:            //RIGHT ARROW: move cursor right
-        if (get_pos_x(curs) < get_line_length(buff, get_pos_y(curs)))
+        if (get_pos_x(curs) <
+            get_line_length(buff, get_pos_y(curs) + scrolly) - scrollx)
             set_pos_x(curs, get_pos_x(curs) + 1);
-        else if (get_pos_y(curs) < get_line_count(buff) - 1) {
+        else if (get_pos_y(curs) < get_line_count(buff) - 1 && scrollx == 0
+                 && get_pos_y(curs) < TEXT_HEIGHT - 2) {
             set_pos_y(curs, get_pos_y(curs) + 1);
             set_pos_x(curs, 0);
         }
@@ -315,9 +320,12 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
     case KEY_LEFT:             //LEFT ARROW: move cursor left
         if (get_pos_x(curs) > 0)
             set_pos_x(curs, get_pos_x(curs) - 1);
-        else if (get_pos_y(curs) > 0) {
+        else if (get_pos_y(curs) > 0
+                 && get_line_length(buff,
+                                    get_pos_y(curs) + scrolly - 1) <
+                 TEXT_WIDTH - 1) {
             set_pos_y(curs, get_pos_y(curs) - 1);
-            set_pos_x(curs, get_line_length(buff, get_pos_y(curs)));
+            set_pos_x(curs, get_line_length(buff, get_pos_y(curs) + scrolly));
         }
         break;
     }
