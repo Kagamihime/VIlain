@@ -49,6 +49,14 @@ void print_menu(WINDOW * menu_win, int highlight, char **choices,
     wrefresh(menu_win);
 }
 
+void cut_long_lines()
+{
+    for (int i = 0; i < get_line_count(buff); i++) {
+        if (get_line_length(buff, i) > TEXT_WIDTH - 1)
+            split_line_at(buff, i, TEXT_WIDTH - 1);
+    }
+}
+
 int move_in_menu(WINDOW * menu_win, int highlight, char **menu_choices,
                  int number_choices)
 {
