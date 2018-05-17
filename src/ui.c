@@ -575,9 +575,13 @@ void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets)
 
 void print_status_bar(BUFFER * buff, char *str)
 {
-    mvwprintw(text_win, TEXT_HEIGHT - 1, 0, "%d/%d : %d/%d       ",
-              get_pos_y(curs), get_line_count(buff), get_pos_x(curs),
-              get_line_length(buff, get_pos_y(curs)));
+    move(TEXT_HEIGHT - 1, 0);
+    clrtoeol();
+    refresh();
+    mvwprintw(text_win, TEXT_HEIGHT - 1, TEXT_WIDTH - 16,
+              "%d/%d : %d/%d       ", get_pos_y(curs) + scrolly + 1,
+              get_line_count(buff), get_pos_x(curs) + scrollx + 1,
+              get_line_length(buff, get_pos_y(curs) + scrolly) + 1);
     mvwprintw(text_win, TEXT_HEIGHT - 1, TEXT_WIDTH / 2, "%s       ", str);
     wmove(text_win, get_pos_y(curs), get_pos_x(curs));
 }
