@@ -8,6 +8,8 @@ typedef struct SETTINGS SETTINGS;
 
 void print_menu(WINDOW * menu_win, int highlight, char **choices,
                 int number_choices);
+void cut_long_lines();
+void auto_fill_mode_menu(SETTINGS * sets);
 int move_in_menu(WINDOW * menu_win, int highlight, char **menu_choices,
                  int number_choices);
 void shortcuts_menu(SETTINGS * sets);
