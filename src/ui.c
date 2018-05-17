@@ -14,23 +14,18 @@
 #define MENU_HEIGHT 9
 #define SHORTCUTS_WIDTH 25
 #define SHORTCUTS_HEIGHT 12
+#define AFM_HEIGHT 6
+#define AFM_WIDTH 20
+
 BUFFER *buff;
 WINDOW *text_win;
-WINDOW *menu_win;
 WINDOW *shortcuts_win;
 CURSOR *curs;
-char *menu_choices[] = {
-    "Save file",
-    "Open file",
-    "Shortcuts options",
-    "LineWrapping option",
-    "Exit",
-};
 
 int scrollx;
 int scrolly;
+int auto_fill_mode;
 char *tmp;
-int number_menu_choices = sizeof(menu_choices) / sizeof(char *);
 
 void print_menu(WINDOW * menu_win, int highlight, char **choices,
                 int number_choices)
