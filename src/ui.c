@@ -364,13 +364,18 @@ void exec_user_action(BUFFER * bu)
 
     //Print the current buffer and  place the cursor at the end
     buff = bu;
-    print_text(buff, 0, 0);
-    set_pos_y(curs, get_line_count(buff) - 1);
-    set_pos_x(curs, get_line_length(buff, get_line_count(buff) - 1));
+    print_text(buff, scrolly, scrollx);
+    if (get_line_count(buff) < TEXT_HEIGHT - 2)
+        set_pos_y(curs, get_line_count(buff) - 1);
+    else
+        set_pos_y(curs, TEXT_HEIGHT - 2);
+    set_pos_x(curs, get_line_length(buff, get_line_count(buff) + scrolly - 1));
     print_status_bar(buff, " ");
 
     //Set up the parameters to listen to keyboard events and enter the loop
     keypad(text_win, TRUE);
+    scrolly = 0;
+    scrollx = 0;
     int ch;
     noecho();
     int exit = 0;
@@ -381,32 +386,47 @@ void exec_user_action(BUFFER * bu)
 
         //Moving the cursor
         if (ch == KEY_UP || ch == KEY_DOWN || ch == KEY_LEFT || ch == KEY_RIGHT) {
-            move_cursor(buff, curs, ch);
+            //Scroll
+            int sc = scroll_win(ch);
+
+            //move the cursor
+            if (!sc)
+                move_cursor(buff, curs, ch);
         }
         //BACKSPACE
         else if (ch == KEY_BACKSPACE) {
             if (get_pos_x(curs) > 0) {
                 set_pos_x(curs, get_pos_x(curs) - 1);
-                delete_char(buff, get_pos_y(curs), get_pos_x(curs));
-            } else if (get_pos_y(curs) > 0) {
-                set_pos_x(curs, get_line_length(buff, get_pos_y(curs) - 1));
-                if (get_line_length(buff, get_pos_y(curs)) == 0)
-                    delete_line(buff, get_pos_y(curs));
-                else if (get_line_length(buff, get_pos_y(curs) - 1) == 0)
-                    delete_line(buff, get_pos_y(curs) - 1);
+                delete_char(buff, get_pos_y(curs) + scrolly,
+                            get_pos_x(curs) + scrollx);
+            } else if (get_pos_y(curs) + scrolly > 0) {
+                set_pos_x(curs,
+                          get_line_length(buff, get_pos_y(curs) - 1 + scrolly));
+                if (get_line_length(buff, get_pos_y(curs) + scrolly) == 0)
+                    delete_line(buff, get_pos_y(curs) + scrolly);
+                else if (get_line_length(buff, get_pos_y(curs) + scrolly - 1) ==
+                         0)
+                    delete_line(buff, get_pos_y(curs) + scrolly - 1);
                 else
-                    join_lines(buff, get_pos_y(curs) - 1, get_pos_y(curs), 1);
+                    join_lines(buff, get_pos_y(curs) + scrolly - 1,
+                               get_pos_y(curs) + scrollx, 1);
                 set_pos_y(curs, get_pos_y(curs) - 1);
             }
         }
         //ENTER
         else if (ch == 10) {
-            if (get_pos_x(curs) < get_line_length(buff, get_pos_y(curs)))
-                split_line_at(buff, get_pos_y(curs), get_pos_x(curs));
+            if (get_pos_x(curs) <
+                get_line_length(buff, get_pos_y(curs) + scrolly))
+                split_line_at(buff, get_pos_y(curs) + scrolly,
+                              get_pos_x(curs) + scrollx);
             else
-                insert_line(buff, "", get_pos_y(curs) + 1);
+                insert_line(buff, "", get_pos_y(curs) + scrolly + 1);
             set_pos_x(curs, 0);
-            set_pos_y(curs, get_pos_y(curs) + 1);
+            if (get_pos_y(curs) < TEXT_HEIGHT - 2)
+                set_pos_y(curs, get_pos_y(curs) + 1);
+            else
+                scrolly++;
+            scrollx = 0;
         }
         //ESCPAPE: exit the program
         else if (ch == 27) {
@@ -429,7 +449,8 @@ void exec_user_action(BUFFER * bu)
         //Paste the text in tmp
         else if (ch == (get_paste_shortcut(sets))) {
             if (tmp != NULL) {
-                insert_text(buff, tmp, get_pos_y(curs), get_pos_x(curs));
+                insert_text(buff, tmp, get_pos_y(curs) + scrolly,
+                            get_pos_x(curs) + scrollx);
             }
             print_status_bar(buff, "");
         }
@@ -457,12 +478,16 @@ void exec_user_action(BUFFER * bu)
         }
         //Write in the buffer
         else {
-            insert_char(buff, ch, get_pos_y(curs), get_pos_x(curs));
-            set_pos_x(curs, get_pos_x(curs) + 1);
+            insert_char(buff, ch, get_pos_y(curs) + scrolly,
+                        get_pos_x(curs) + scrollx);
+            if (scrollx < 1 && get_pos_x(curs) < TEXT_WIDTH - 1)
+                set_pos_x(curs, get_pos_x(curs) + 1);
+            else
+                scrollx++;
         }
 
         //Update window
-        print_text(buff, 0, 0);
+        print_text(buff, scrolly, scrollx);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
         print_status_bar(buff, " ");
         if (exit == 1)
