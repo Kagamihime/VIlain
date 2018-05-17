@@ -208,10 +208,10 @@ int is_valid_config(SETTINGS * sets, char *path)
         remove(path);
         FILE *file;
         file = fopen(path, "w");
-        fprintf(file, "auto_fill_mode: 1\n");
-        fprintf(file, "save_shortcut: 18\n");
+        fprintf(file, "auto_fill_mode: 0\n");
+        fprintf(file, "save_shortcut: 4\n");
         fprintf(file, "load_shortcut: 12\n");
-        fprintf(file, "settings_shortcut: 16\n");
+        fprintf(file, "settings_shortcut: 15\n");
         fprintf(file, "copy_shortcut: 23\n");
         fprintf(file, "cut_shortcut: 24\n");
         fprintf(file, "paste_shortcut: 22\n");
