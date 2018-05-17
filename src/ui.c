@@ -26,6 +26,7 @@ char *menu_choices[] = {
     "LineWrapping option",
     "Exit",
 };
+
 int scrollx;
 int scrolly;
 char *tmp;
@@ -268,9 +269,19 @@ void settings_menu(SETTINGS * sets)
 void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
 {
     clear();
-    for (int i = first_line; i < get_line_count(buff); i++) {
-        mvwprintw(text_win, i, 0, get_line(buff, i));
-        clrtoeol();
+    if (get_line_count(buff) > TEXT_HEIGHT - 1) {
+        for (int i = 0; i < TEXT_HEIGHT - 1; i++) {
+            mvwprintw(text_win, i, 0,
+                      get_line(buff, i + first_line) + first_col);
+            clrtoeol();
+        }
+    } else {
+        int y = 0;
+        for (int i = first_line; i < get_line_count(buff); i++) {
+            mvwprintw(text_win, y, 0, get_line(buff, i));
+            y++;
+            clrtoeol();
+        }
     }
 }
 
