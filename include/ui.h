@@ -20,5 +20,6 @@ void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets);
 void print_status_bar(BUFFER * buff, char *str);
 void loading_file(char *path);
 void saving_file(BUFFER * buff, char *path);
+int scroll_win(int ch);
 
 #endif
