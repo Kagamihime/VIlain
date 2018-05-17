@@ -202,7 +202,10 @@ void shortcuts_menu(SETTINGS * sets)
     //Wait for the new shortcut and check if it is valide
     if (choice != 8) {          //If not exit
         ch = getch();
-        if (ch > 0 && ch < 27) {
+        if (ch > 0 && ch < 27
+            //Invalid : J S Q Z M C
+            && ch != 10 && ch != 19 && ch != 17 && ch != 26 && ch != 13
+            && ch != 3) {
             if (!is_current_shortcut(sets, ch)) {
                 switch (choice) {
                 case 1:
