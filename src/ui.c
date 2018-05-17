@@ -26,7 +26,8 @@ char *menu_choices[] = {
     "LineWrapping option",
     "Exit",
 };
-
+int scrollx;
+int scrolly;
 char *tmp;
 int number_menu_choices = sizeof(menu_choices) / sizeof(char *);
 
