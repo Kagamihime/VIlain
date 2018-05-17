@@ -57,6 +57,56 @@ void cut_long_lines()
     }
 }
 
+void auto_fill_mode_menu(SETTINGS * sets)
+{
+    // Initialize
+    char *afm_choices[] = {
+        "Yes",
+        "No",
+    };
+    int number_choices = sizeof(afm_choices) / sizeof(char *);
+    int highlight = 1;
+
+    //TODO: change the values here
+    int startx = (80 - AFM_WIDTH) / 2;
+    int starty = (24 - AFM_HEIGHT) / 2;
+    WINDOW *afm_win = newwin(AFM_HEIGHT, AFM_WIDTH, starty, startx);
+
+    //Prin menu and informations
+    keypad(afm_win, TRUE);
+    mvprintw(6, 23, "Enable auto-fill mode ?");
+    mvprintw(17, 8,
+             "When auto-fill mode is enabled the lines will be cut at the end of the window");
+    mvprintw(18, 8, "by automatically adding a line return.");
+    mvprintw(20, 8,
+             "WARNING: Enable auto-fill mode will cut the lines that are beyond the window");
+    mvprintw(21, 17, "limit in your current file.");
+    refresh();
+    print_menu(afm_win, highlight, afm_choices, number_choices);
+
+    //wait for the user to make a choice in the menu
+    int choice = move_in_menu(afm_win, highlight, afm_choices, number_choices);
+
+    // Erase the menu
+    clear();
+    refresh();
+
+    // Execute the action corresponding to the choice
+    switch (choice) {
+    case 1:
+        cut_long_lines();
+        auto_fill_mode = 1;
+        set_auto_fill_mode(sets, 1);
+        scrollx = 0;
+        break;
+    case 2:
+        auto_fill_mode = 0;
+        set_auto_fill_mode(sets, 0);
+        break;
+    }
+    save(sets, "./etc/ui.cfg");
+}
+
 int move_in_menu(WINDOW * menu_win, int highlight, char **menu_choices,
                  int number_choices)
 {
