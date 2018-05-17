@@ -417,6 +417,7 @@ void exec_user_action(BUFFER * bu)
     curs = new_curs();
     curs_set(1);
     SETTINGS *sets = new_sets();
+    auto_fill_mode = get_auto_fill_mode(sets);
 
     //Print the current buffer and  place the cursor at the end
     buff = bu;
@@ -451,21 +452,27 @@ void exec_user_action(BUFFER * bu)
         }
         //BACKSPACE
         else if (ch == KEY_BACKSPACE) {
+            //Erase prec char
             if (get_pos_x(curs) > 0) {
                 set_pos_x(curs, get_pos_x(curs) - 1);
                 delete_char(buff, get_pos_y(curs) + scrolly,
                             get_pos_x(curs) + scrollx);
-            } else if (get_pos_y(curs) + scrolly > 0) {
+            }
+            //erase prec line return
+            else if (get_pos_y(curs) + scrolly > 0) {
                 set_pos_x(curs,
                           get_line_length(buff, get_pos_y(curs) - 1 + scrolly));
+                //when current line is empty
                 if (get_line_length(buff, get_pos_y(curs) + scrolly) == 0)
                     delete_line(buff, get_pos_y(curs) + scrolly);
+                //when prec line is empty
                 else if (get_line_length(buff, get_pos_y(curs) + scrolly - 1) ==
                          0)
                     delete_line(buff, get_pos_y(curs) + scrolly - 1);
+                //when current line and prec line are not empty
                 else
                     join_lines(buff, get_pos_y(curs) + scrolly - 1,
-                               get_pos_y(curs) + scrollx, 1);
+                               get_pos_y(curs) + scrolly, 1);
                 set_pos_y(curs, get_pos_y(curs) - 1);
             }
         }
@@ -538,11 +545,13 @@ void exec_user_action(BUFFER * bu)
                         get_pos_x(curs) + scrollx);
             if (scrollx < 1 && get_pos_x(curs) < TEXT_WIDTH - 1)
                 set_pos_x(curs, get_pos_x(curs) + 1);
-            else
+            else if (!auto_fill_mode)
                 scrollx++;
         }
 
         //Update window
+        if (auto_fill_mode)
+            cut_long_lines();
         print_text(buff, scrolly, scrollx);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
         print_status_bar(buff, " ");
