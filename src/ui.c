@@ -389,18 +389,23 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
         if (get_pos_x(curs) > 0)
             set_pos_x(curs, get_pos_x(curs) - 1);
         else if (get_pos_y(curs) > 0)
-                //  && get_line_length(buff,
-                //                     get_pos_y(curs) + scrolly - 1) <
-                //  TEXT_WIDTH - 1)
-            {
-                set_pos_y(curs, get_pos_y(curs) - 1);
-                if(get_line_length(buff, get_pos_y(curs) + scrolly)>TEXT_WIDTH-1){
-                    if(auto_fill_mode==0)
-                        scrollx=get_line_length(buff, get_pos_y(curs) + scrolly)-TEXT_WIDTH+1;
-                    set_pos_x(curs,TEXT_WIDTH-2);
-                }else
-                    set_pos_x(curs, get_line_length(buff, get_pos_y(curs) + scrolly));
-            }
+            //  && get_line_length(buff,
+            //                     get_pos_y(curs) + scrolly - 1) <
+            //  TEXT_WIDTH - 1)
+        {
+            set_pos_y(curs, get_pos_y(curs) - 1);
+            if (get_line_length(buff, get_pos_y(curs) + scrolly) >
+                TEXT_WIDTH - 1) {
+                if (auto_fill_mode == 0)
+                    scrollx =
+                        get_line_length(buff,
+                                        get_pos_y(curs) + scrolly) -
+                        TEXT_WIDTH + 1;
+                set_pos_x(curs, TEXT_WIDTH - 2);
+            } else
+                set_pos_x(curs,
+                          get_line_length(buff, get_pos_y(curs) + scrolly));
+        }
         break;
     }
     print_status_bar();
@@ -435,7 +440,7 @@ void exec_user_action(BUFFER * bu)
     curs = new_curs();
     curs_set(1);
     SETTINGS *sets = new_sets();
-    is_valid_config(sets,"./etc/ui.cfg");
+    is_valid_config(sets, "./etc/ui.cfg");
     sets = new_sets();
     auto_fill_mode = get_auto_fill_mode(sets);
 
@@ -579,9 +584,9 @@ void exec_user_action(BUFFER * bu)
             else if (!auto_fill_mode)
                 scrollx++;
             else {
-                set_pos_x(curs,1);
-                if (get_pos_y(curs)<TEXT_HEIGHT-2)
-                    set_pos_y(curs,get_pos_y(curs)+1);
+                set_pos_x(curs, 1);
+                if (get_pos_y(curs) < TEXT_HEIGHT - 2)
+                    set_pos_y(curs, get_pos_y(curs) + 1);
                 else
                     scrolly++;
             }
