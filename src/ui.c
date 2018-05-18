@@ -388,13 +388,19 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
     case KEY_LEFT:             //LEFT ARROW: move cursor left
         if (get_pos_x(curs) > 0)
             set_pos_x(curs, get_pos_x(curs) - 1);
-        else if (get_pos_y(curs) > 0
-                 && get_line_length(buff,
-                                    get_pos_y(curs) + scrolly - 1) <
-                 TEXT_WIDTH - 1) {
-            set_pos_y(curs, get_pos_y(curs) - 1);
-            set_pos_x(curs, get_line_length(buff, get_pos_y(curs) + scrolly));
-        }
+        else if (get_pos_y(curs) > 0)
+                //  && get_line_length(buff,
+                //                     get_pos_y(curs) + scrolly - 1) <
+                //  TEXT_WIDTH - 1)
+            {
+                set_pos_y(curs, get_pos_y(curs) - 1);
+                if(get_line_length(buff, get_pos_y(curs) + scrolly)>TEXT_WIDTH-1){
+                    if(auto_fill_mode==0)
+                        scrollx=get_line_length(buff, get_pos_y(curs) + scrolly)-TEXT_WIDTH+1;
+                    set_pos_x(curs,TEXT_WIDTH-2);
+                }else
+                    set_pos_x(curs, get_line_length(buff, get_pos_y(curs) + scrolly));
+            }
         break;
     }
     print_status_bar();
