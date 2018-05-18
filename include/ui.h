@@ -19,7 +19,7 @@ void print_wrapped_text(BUFFER * buff, unsigned int first_line);
 void move_cursor(BUFFER * buff, CURSOR * curs, int ch);
 void exec_user_action(BUFFER * buff);
 void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets);
-void print_status_bar(BUFFER * buff, char *str);
+void print_status_bar();
 void loading_file(char *path);
 void saving_file(BUFFER * buff, char *path);
 int scroll_win(int ch);
