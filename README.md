@@ -14,6 +14,11 @@ In order to launch and build VIlain you need `libncurses`.
 
 # Compilation and execution
 
+First you need to create the `build` directory with :
+```
+mkdir build
+```
+
 To compile the project use the command:
 ```
 make
