@@ -576,6 +576,14 @@ void exec_user_action(BUFFER * bu)
                 set_pos_x(curs, get_pos_x(curs) + 1);
             else if (!auto_fill_mode)
                 scrollx++;
+            else {
+                set_pos_x(curs,1);
+                if (get_pos_y(curs)<TEXT_HEIGHT-2)
+                    set_pos_y(curs,get_pos_y(curs)+1);
+                else
+                    scrolly++;
+            }
+
         }
 
         //Update window
