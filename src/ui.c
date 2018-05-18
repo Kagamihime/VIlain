@@ -202,7 +202,10 @@ void shortcuts_menu(SETTINGS * sets)
     //Wait for the new shortcut and check if it is valide
     if (choice != 8) {          //If not exit
         ch = getch();
-        if (ch > 0 && ch < 27) {
+        if (ch > 0 && ch < 27
+            //Invalid : J S Q Z M C
+            && ch != 10 && ch != 19 && ch != 17 && ch != 26 && ch != 13
+            && ch != 3) {
             if (!is_current_shortcut(sets, ch)) {
                 switch (choice) {
                 case 1:
@@ -324,17 +327,26 @@ void settings_menu(SETTINGS * sets)
 
 void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
 {
-    clear();
+    char *to_print = NULL;
     if (get_line_count(buff) > TEXT_HEIGHT - 1) {
         for (int i = 0; i < TEXT_HEIGHT - 1; i++) {
-            mvwprintw(text_win, i, 0,
-                      get_line(buff, i + first_line) + first_col);
+            to_print = get_line(buff, i + first_line);
+            if (to_print != NULL)
+                to_print = get_line(buff, i + first_line) + first_col;
+            if (strlen(to_print) > TEXT_WIDTH - 1)
+                to_print[TEXT_WIDTH] = '\0';
+            mvwprintw(text_win, i, 0, to_print);
             clrtoeol();
         }
     } else {
         int y = 0;
         for (int i = first_line; i < get_line_count(buff); i++) {
-            mvwprintw(text_win, y, 0, get_line(buff, i));
+            to_print = get_line(buff, i);
+            if (to_print != NULL)
+                to_print = get_line(buff, i) + first_col;
+            if (strlen(to_print) > TEXT_WIDTH - 1)
+                to_print[TEXT_WIDTH] = '\0';
+            mvwprintw(text_win, y, 0, to_print);
             y++;
             clrtoeol();
         }
@@ -376,16 +388,27 @@ void move_cursor(BUFFER * buff, CURSOR * curs, int ch)
     case KEY_LEFT:             //LEFT ARROW: move cursor left
         if (get_pos_x(curs) > 0)
             set_pos_x(curs, get_pos_x(curs) - 1);
-        else if (get_pos_y(curs) > 0
-                 && get_line_length(buff,
-                                    get_pos_y(curs) + scrolly - 1) <
-                 TEXT_WIDTH - 1) {
+        else if (get_pos_y(curs) > 0)
+            //  && get_line_length(buff,
+            //                     get_pos_y(curs) + scrolly - 1) <
+            //  TEXT_WIDTH - 1)
+        {
             set_pos_y(curs, get_pos_y(curs) - 1);
-            set_pos_x(curs, get_line_length(buff, get_pos_y(curs) + scrolly));
+            if (get_line_length(buff, get_pos_y(curs) + scrolly) >
+                TEXT_WIDTH - 1) {
+                if (auto_fill_mode == 0)
+                    scrollx =
+                        get_line_length(buff,
+                                        get_pos_y(curs) + scrolly) -
+                        TEXT_WIDTH + 1;
+                set_pos_x(curs, TEXT_WIDTH - 2);
+            } else
+                set_pos_x(curs,
+                          get_line_length(buff, get_pos_y(curs) + scrolly));
         }
         break;
     }
-    print_status_bar(buff, " ");
+    print_status_bar();
 }
 
 int scroll_win(int ch)
@@ -417,6 +440,8 @@ void exec_user_action(BUFFER * bu)
     curs = new_curs();
     curs_set(1);
     SETTINGS *sets = new_sets();
+    is_valid_config(sets, "./etc/ui.cfg");
+    sets = new_sets();
     auto_fill_mode = get_auto_fill_mode(sets);
 
     //Print the current buffer and  place the cursor at the end
@@ -427,7 +452,7 @@ void exec_user_action(BUFFER * bu)
     else
         set_pos_y(curs, TEXT_HEIGHT - 2);
     set_pos_x(curs, get_line_length(buff, get_line_count(buff) + scrolly - 1));
-    print_status_bar(buff, " ");
+    print_status_bar();
 
     //Set up the parameters to listen to keyboard events and enter the loop
     keypad(text_win, TRUE);
@@ -453,7 +478,7 @@ void exec_user_action(BUFFER * bu)
         //BACKSPACE
         else if (ch == KEY_BACKSPACE) {
             //Erase prec char
-            if (get_pos_x(curs) > 0) {
+            if (get_pos_x(curs) + scrollx > 0) {
                 set_pos_x(curs, get_pos_x(curs) - 1);
                 delete_char(buff, get_pos_y(curs) + scrolly,
                             get_pos_x(curs) + scrollx);
@@ -463,25 +488,36 @@ void exec_user_action(BUFFER * bu)
                 set_pos_x(curs,
                           get_line_length(buff, get_pos_y(curs) - 1 + scrolly));
                 //when current line is empty
-                if (get_line_length(buff, get_pos_y(curs) + scrolly) == 0)
+                if (get_line_length(buff, get_pos_y(curs) + scrolly) == 0) {
                     delete_line(buff, get_pos_y(curs) + scrolly);
+                }
                 //when prec line is empty
                 else if (get_line_length(buff, get_pos_y(curs) + scrolly - 1) ==
-                         0)
+                         0) {
                     delete_line(buff, get_pos_y(curs) + scrolly - 1);
+                }
                 //when current line and prec line are not empty
-                else
+                else {
                     join_lines(buff, get_pos_y(curs) + scrolly - 1,
                                get_pos_y(curs) + scrolly, 1);
-                set_pos_y(curs, get_pos_y(curs) - 1);
+                }
+
+                //scroll
+                if (scrolly > 0 && get_pos_y(curs) + scrolly > TEXT_HEIGHT - 2)
+                    scrolly--;
+                else
+                    set_pos_y(curs, get_pos_y(curs) - 1);
             }
         }
         //ENTER
         else if (ch == 10) {
-            if (get_pos_x(curs) <
-                get_line_length(buff, get_pos_y(curs) + scrolly))
+            //if the cursor is not at the end of the line
+            if (get_pos_x(curs) + scrollx <
+                get_line_length(buff, get_pos_y(curs) + scrolly)) {
                 split_line_at(buff, get_pos_y(curs) + scrolly,
                               get_pos_x(curs) + scrollx);
+            }
+            //if the cursor is one the last visible line
             else
                 insert_line(buff, "", get_pos_y(curs) + scrolly + 1);
             set_pos_x(curs, 0);
@@ -515,7 +551,7 @@ void exec_user_action(BUFFER * bu)
                 insert_text(buff, tmp, get_pos_y(curs) + scrolly,
                             get_pos_x(curs) + scrollx);
             }
-            print_status_bar(buff, "");
+            print_status_bar();
         }
         //Display the save menu
         else if (ch == (get_save_shortcut(sets))) {
@@ -539,7 +575,7 @@ void exec_user_action(BUFFER * bu)
             clear();
             refresh();
         }
-        //Write in the buffer
+        //    Write in the buffer
         else {
             insert_char(buff, ch, get_pos_y(curs) + scrolly,
                         get_pos_x(curs) + scrollx);
@@ -547,6 +583,14 @@ void exec_user_action(BUFFER * bu)
                 set_pos_x(curs, get_pos_x(curs) + 1);
             else if (!auto_fill_mode)
                 scrollx++;
+            else {
+                set_pos_x(curs, 1);
+                if (get_pos_y(curs) < TEXT_HEIGHT - 2)
+                    set_pos_y(curs, get_pos_y(curs) + 1);
+                else
+                    scrolly++;
+            }
+
         }
 
         //Update window
@@ -554,7 +598,7 @@ void exec_user_action(BUFFER * bu)
             cut_long_lines();
         print_text(buff, scrolly, scrollx);
         wmove(text_win, get_pos_y(curs), get_pos_x(curs));
-        print_status_bar(buff, " ");
+        print_status_bar();
         if (exit == 1)
             break;
     }
@@ -623,13 +667,13 @@ void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets)
             delete_text(buff, from_y + scrolly, from_x + scrollx,
                         to_y + scrolly, to_x + scrollx);
             exit = 1;
-            print_status_bar(buff, "");
+            print_status_bar();
         }
         //Copy
         else if (ch == get_copy_shortcut(sets)) {
             tmp = strdup(text);
             exit = 1;
-            print_status_bar(buff, "");
+            print_status_bar();
         }
         //Text_selection = exit
         else if (ch == get_toogle_selection_shortcut(sets)) {
@@ -638,7 +682,7 @@ void select_text(BUFFER * buff, CURSOR * curs, SETTINGS * sets)
     }
 }
 
-void print_status_bar(BUFFER * buff, char *str)
+void print_status_bar()
 {
     move(TEXT_HEIGHT - 1, 0);
     clrtoeol();
@@ -647,7 +691,6 @@ void print_status_bar(BUFFER * buff, char *str)
               "%d/%d : %d/%d       ", get_pos_y(curs) + scrolly + 1,
               get_line_count(buff), get_pos_x(curs) + scrollx + 1,
               get_line_length(buff, get_pos_y(curs) + scrolly) + 1);
-    mvwprintw(text_win, TEXT_HEIGHT - 1, TEXT_WIDTH / 2, "%s       ", str);
     wmove(text_win, get_pos_y(curs), get_pos_x(curs));
 }
 
