@@ -192,16 +192,38 @@ int is_current_shortcut(SETTINGS * sets, int code)
 int is_valid_config(SETTINGS * sets, char *path)
 {
     int res = 1;
+
     if (access(path, F_OK) == -1) {
         res = 0;
     }
 
-    if (load(sets, path) == 1) {
+    FILE *file;
+
+    if ((file = fopen(path, "r")) == NULL) {
         res = 0;
     }
+
+    char *line = malloc(sizeof(char *) * LINE_MAX_LENGTH);
+    char *param = malloc(sizeof(char *) * LINE_MAX_LENGTH);
+    int val;
+
+    while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
+        sscanf(line, "%s %d", param, &val);
+        if (val <= 0 || val > 25 || val == 3 || val == 10
+            || val == 13 || val == 17 || val == 19) {
+            res = 0;
+        }
+    }
+    fclose(file);
+    free(line);
+    free(param);
+
+    if (load(sets, path) == -1) {
+        res = 0;
+    }
+
     if (res == 0) {
         remove(path);
-        FILE *file;
         file = fopen(path, "w");
         fprintf(file, "auto_fill_mode: 0\n");
         fprintf(file, "save_shortcut: 4\n");
