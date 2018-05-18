@@ -3,7 +3,7 @@
 
 typedef struct SETTINGS SETTINGS;
 
-void save(SETTINGS * sets, char *path);
+int save(SETTINGS * sets, char *path);
 int load(SETTINGS * sets, char *path);
 SETTINGS *new_sets();
 char *to_string(int code);
