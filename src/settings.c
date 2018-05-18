@@ -28,20 +28,25 @@ SETTINGS *new_sets()
     return sets;
 }
 
-void save(SETTINGS * sets, char *path)
+int save(SETTINGS * sets, char *path)
 {
-    FILE *file;
-    file = fopen(path, "w");
-    fprintf(file, "auto_fill_mode: %d\n", get_auto_fill_mode(sets));
-    fprintf(file, "save_shortcut: %d\n", get_save_shortcut(sets));
-    fprintf(file, "load_shortcut: %d\n", get_load_shortcut(sets));
-    fprintf(file, "settings_shortcut: %d\n", get_settings_shortcut(sets));
-    fprintf(file, "copy_shortcut: %d\n", get_copy_shortcut(sets));
-    fprintf(file, "cut_shortcut: %d\n", get_cut_shortcut(sets));
-    fprintf(file, "paste_shortcut: %d\n", get_paste_shortcut(sets));
-    fprintf(file, "toggle_selection_shortcut: %d\n",
-            get_toogle_selection_shortcut(sets));
-    fclose(file);
+    FILE *file = NULL;
+
+    if ((file = fopen(path, "w")) == NULL) {
+        return -1;
+    } else {
+        fprintf(file, "auto_fill_mode: %d\n", get_auto_fill_mode(sets));
+        fprintf(file, "save_shortcut: %d\n", get_save_shortcut(sets));
+        fprintf(file, "load_shortcut: %d\n", get_load_shortcut(sets));
+        fprintf(file, "settings_shortcut: %d\n", get_settings_shortcut(sets));
+        fprintf(file, "copy_shortcut: %d\n", get_copy_shortcut(sets));
+        fprintf(file, "cut_shortcut: %d\n", get_cut_shortcut(sets));
+        fprintf(file, "paste_shortcut: %d\n", get_paste_shortcut(sets));
+        fprintf(file, "toggle_selection_shortcut: %d\n",
+                get_toogle_selection_shortcut(sets));
+        fclose(file);
+        return 0;
+    }
 }
 
 int load(SETTINGS * sets, char *path)
