@@ -188,6 +188,7 @@ int is_current_shortcut(SETTINGS * sets, int code)
 }
 
 // Check if the configuration file is valid, if it is not, rewrite the ui.cfg file correctly
+// Check if the configuration file is valid, if it is not, rewrite the ui.cfg file correctly
 int is_valid_config(SETTINGS * sets, char *path)
 {
     int res = 1;
