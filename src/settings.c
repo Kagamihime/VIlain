@@ -99,8 +99,8 @@ int load(SETTINGS * sets, char *path)
     free(param);
     free(line);
     fclose(file);
-    if (i != 7) {
-        return 1;
+    if (i != 8) {
+        return -1;
     } else {
         return 0;
     }
@@ -192,16 +192,10 @@ int is_current_shortcut(SETTINGS * sets, int code)
 int is_valid_config(SETTINGS * sets, char *path)
 {
     int res = 1;
-    char *test;
     if (access(path, F_OK) == -1) {
         res = 0;
     }
-    for (int i = 1; i < 27; i++) {
-        test = to_string(i);
-        if (test[0] != '\0') {
-            res = 0;
-        }
-    }
+
     if (load(sets, path) == 1) {
         res = 0;
     }
