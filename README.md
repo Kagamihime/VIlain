@@ -78,4 +78,4 @@ We did not write a development log because we used the issues that are made for 
 - The first UML before starting the implementation.
 - Parts of the module `settings.c`.
 - The module `io_text` and its header.
-- The tests for the modules `io_text.c` and `settings.c` (Hopefully)
+- The tests for the modules `io_text.c` and `settings.c`
