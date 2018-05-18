@@ -33,6 +33,9 @@ cd tests
 make test
 ```
 
+In the program, press Ctrl + O to open the options menu.
+
+
 # Why GitHub instead of GitLab?
 We want to use Travis CI to test our project at every Pull Request to be sure
 that they are working before merging them.
