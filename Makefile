@@ -3,7 +3,7 @@ CFLAGS = -Wall -std=c11
 COMPILE = $(CC) $(CFLAGS) -c
 
 vilain: ./build/main.o ./build/cursor.o ./build/buffer.o ./build/io_text.o ./build/ui.o ./build/settings.o
-	$(CC) $^  -o ./build/$@ -lncurses
+	$(CC) $^  -o ./build/$@ -lncurses -lpthread
 
 build/buffer.o: ./src/buffer.c ./include/buffer.h
 	$(COMPILE)	$< -o $@
