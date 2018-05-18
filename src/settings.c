@@ -192,7 +192,7 @@ int is_current_shortcut(SETTINGS * sets, int code)
 int is_valid_config(SETTINGS * sets, char *path)
 {
     int res = 1;
-
+    int i = 0;
     if (access(path, F_OK) == -1) {
         res = 0;
     }
@@ -209,9 +209,16 @@ int is_valid_config(SETTINGS * sets, char *path)
 
     while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
         sscanf(line, "%s %d", param, &val);
-        if (val <= 0 || val > 25 || val == 3 || val == 10
-            || val == 13 || val == 17 || val == 19) {
+        if (i == 0) {
+            if (val != 1 && val != 0) {
+                res = 0;
+                break;
+            }
+            i++;
+        } else if (val <= 0 || val > 25 || val == 3 || val == 10
+                   || val == 13 || val == 17 || val == 19) {
             res = 0;
+            break;
         }
     }
     fclose(file);
