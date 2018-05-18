@@ -355,7 +355,7 @@ END_TEST Suite *buffer_suite(void)
 }
 
 // IO_TEXT MODULE TESTS
-char *path = "buffer.save";
+char *path = "file.save";
 START_TEST(test_save_empty_buffer)
 {
     ck_assert_int_eq(insert_line(buff, "", 0), 0);
@@ -522,25 +522,141 @@ END_TEST Suite *io_text_suite(void)
     return s;
 }
 
+// SETTINGS MODULE TESTS
+START_TEST(test_save_sets)
+{
+    SETTINGS *sets = (SETTINGS *) malloc(sizeof(int) * 8);
+    set_auto_fill_mode(sets, 1);
+    set_save_shortcut(sets, 18);
+    set_load_shortcut(sets, 12);
+    set_settings_shortcut(sets, 16);
+    set_copy_shortcut(sets, 23);
+    set_cut_shortcut(sets, 24);
+    set_paste_shortcut(sets, 22);
+    set_toogle_selection_shortcut(sets, 20);
+
+    ck_assert_int_eq(save(sets, path), 0);
+    free(sets);
+    remove(path);
+}
+
+END_TEST START_TEST(test_load_sets)
+{
+    SETTINGS *sets = (SETTINGS *) malloc(sizeof(int) * 8);
+    set_auto_fill_mode(sets, 1);
+    set_save_shortcut(sets, 18);
+    set_load_shortcut(sets, 12);
+    set_settings_shortcut(sets, 16);
+    set_copy_shortcut(sets, 23);
+    set_cut_shortcut(sets, 24);
+    set_paste_shortcut(sets, 22);
+    set_toogle_selection_shortcut(sets, 20);
+
+    ck_assert_int_eq(save(sets, path), 0);
+
+    SETTINGS *sets2 = (SETTINGS *) malloc(sizeof(int) * 8);
+    ck_assert_int_eq(load(sets2, path), 0);
+
+    ck_assert_int_eq(get_auto_fill_mode(sets2), 1);
+    ck_assert_int_eq(get_save_shortcut(sets2), 18);
+    ck_assert_int_eq(get_load_shortcut(sets2), 12);
+    ck_assert_int_eq(get_settings_shortcut(sets2), 16);
+    ck_assert_int_eq(get_copy_shortcut(sets2), 23);
+    ck_assert_int_eq(get_cut_shortcut(sets2), 24);
+    ck_assert_int_eq(get_paste_shortcut(sets2), 22);
+    ck_assert_int_eq(get_toogle_selection_shortcut(sets2), 20);
+    free(sets);
+    free(sets2);
+    remove(path);
+
+}
+
+END_TEST START_TEST(test_to_string)
+{
+    ck_assert_str_eq(to_string(1), "Ctrl + A");
+    ck_assert_str_eq(to_string(2), "Ctrl + B");
+    ck_assert_str_eq(to_string(4), "Ctrl + D");
+    ck_assert_str_eq(to_string(5), "Ctrl + E");
+    ck_assert_str_eq(to_string(6), "Ctrl + F");
+    ck_assert_str_eq(to_string(7), "Ctrl + G");
+    ck_assert_str_eq(to_string(8), "Ctrl + H");
+    ck_assert_str_eq(to_string(9), "Ctrl + I");
+    ck_assert_str_eq(to_string(11), "Ctrl + K");
+    ck_assert_str_eq(to_string(12), "Ctrl + L");
+    ck_assert_str_eq(to_string(14), "Ctrl + N");
+    ck_assert_str_eq(to_string(15), "Ctrl + O");
+    ck_assert_str_eq(to_string(16), "Ctrl + P");
+    ck_assert_str_eq(to_string(18), "Ctrl + R");
+    ck_assert_str_eq(to_string(20), "Ctrl + T");
+    ck_assert_str_eq(to_string(21), "Ctrl + U");
+    ck_assert_str_eq(to_string(22), "Ctrl + V");
+    ck_assert_str_eq(to_string(23), "Ctrl + W");
+    ck_assert_str_eq(to_string(24), "Ctrl + X");
+    ck_assert_str_eq(to_string(25), "Ctrl + Y");
+}
+
+END_TEST START_TEST(test_good_config_file)
+{
+    SETTINGS *sets = (SETTINGS *) malloc(sizeof(int) * 8);
+    set_auto_fill_mode(sets, 1);
+    set_save_shortcut(sets, 18);
+    set_load_shortcut(sets, 12);
+    set_settings_shortcut(sets, 16);
+    set_copy_shortcut(sets, 23);
+    set_cut_shortcut(sets, 24);
+    set_paste_shortcut(sets, 22);
+    set_toogle_selection_shortcut(sets, 20);
+
+    ck_assert_int_eq(save(sets, path), 0);
+
+    ck_assert_int_eq(is_valid_config(sets, path), 1);
+    remove(path);
+    free(sets);
+}
+
+END_TEST Suite *settings_suite(void)
+{
+    TCase *tc_settings;
+    Suite *s;
+
+    tc_settings = tcase_create("Core");
+    tcase_add_test(tc_settings, test_save_sets);
+    tcase_add_test(tc_settings, test_load_sets);
+    tcase_add_test(tc_settings, test_to_string);
+    tcase_add_test(tc_settings, test_good_config_file);
+
+    s = suite_create("Settings");
+    suite_add_tcase(s, tc_settings);
+
+    return s;
+}
+
 int main(void)
 {
     int failures;
     Suite *s1;
     Suite *s2;
+    Suite *s3;
     SRunner *sr1;
     SRunner *sr2;
+    SRunner *sr3;
 
     s1 = buffer_suite();
     s2 = io_text_suite();
+    s3 = settings_suite();
     sr1 = srunner_create(s1);
     sr2 = srunner_create(s2);
+    sr3 = srunner_create(s3);
 
     srunner_run_all(sr1, CK_NORMAL);
     srunner_run_all(sr2, CK_NORMAL);
+    srunner_run_all(sr3, CK_NORMAL);
     failures = srunner_ntests_failed(sr1);
     failures = failures + srunner_ntests_failed(sr2);
+    failures = failures + srunner_ntests_failed(sr3);
     srunner_free(sr1);
     srunner_free(sr2);
+    srunner_free(sr3);
 
     return (failures == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
