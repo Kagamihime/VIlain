@@ -435,6 +435,8 @@ void exec_user_action(BUFFER * bu)
     curs = new_curs();
     curs_set(1);
     SETTINGS *sets = new_sets();
+    is_valid_config(sets,"./etc/ui.cfg");
+    sets = new_sets();
     auto_fill_mode = get_auto_fill_mode(sets);
 
     //Print the current buffer and  place the cursor at the end
