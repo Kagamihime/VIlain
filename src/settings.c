@@ -16,6 +16,21 @@ struct SETTINGS {
     int toggle_selection_shortcut;
 };
 
+void new_file_cfg()
+{
+    FILE *file = NULL;
+    file = fopen("./etc/ui.cfg", "w");
+    fprintf(file, "auto_fill_mode: 0\n");
+    fprintf(file, "save_shortcut: 4\n");
+    fprintf(file, "load_shortcut: 12\n");
+    fprintf(file, "settings_shortcut: 15\n");
+    fprintf(file, "copy_shortcut: 23\n");
+    fprintf(file, "cut_shortcut: 24\n");
+    fprintf(file, "paste_shortcut: 22\n");
+    fprintf(file, "toggle_selection_shortcut: 20\n");
+    fclose(file);
+}
+
 SETTINGS *new_sets()
 {
     // Allocate the SETTINGS struct
@@ -24,6 +39,8 @@ SETTINGS *new_sets()
         return NULL;
     }
     //Initialize the parameters
+    if (access("./etc/ui.cfg", F_OK) == -1)
+        new_file_cfg();
     load(sets, "./etc/ui.cfg");
     return sets;
 }
@@ -95,10 +112,10 @@ int load(SETTINGS * sets, char *path)
             }
             i++;
         }
+        fclose(file);
     }
     free(param);
     free(line);
-    fclose(file);
     if (i != 8) {
         return -1;
     } else {
@@ -201,46 +218,37 @@ int is_valid_config(SETTINGS * sets, char *path)
 
     if ((file = fopen(path, "r")) == NULL) {
         res = 0;
-    }
+    } else {
+        char *line = malloc(sizeof(char *) * LINE_MAX_LENGTH);
+        char *param = malloc(sizeof(char *) * LINE_MAX_LENGTH);
+        int val;
 
-    char *line = malloc(sizeof(char *) * LINE_MAX_LENGTH);
-    char *param = malloc(sizeof(char *) * LINE_MAX_LENGTH);
-    int val;
-
-    while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
-        sscanf(line, "%s %d", param, &val);
-        if (i == 0) {
-            if (val != 1 && val != 0) {
+        while (fgets(line, LINE_MAX_LENGTH, file) != NULL) {
+            sscanf(line, "%s %d", param, &val);
+            if (i == 0) {
+                if (val != 1 && val != 0) {
+                    res = 0;
+                    break;
+                }
+                i++;
+            } else if (val <= 0 || val > 25 || val == 3 || val == 10
+                       || val == 13 || val == 17 || val == 19) {
                 res = 0;
                 break;
             }
-            i++;
-        } else if (val <= 0 || val > 25 || val == 3 || val == 10
-                   || val == 13 || val == 17 || val == 19) {
-            res = 0;
-            break;
         }
-    }
-    fclose(file);
-    free(line);
-    free(param);
+        fclose(file);
+        free(line);
+        free(param);
 
-    if (load(sets, path) == -1) {
-        res = 0;
+        if (load(sets, path) == -1) {
+            res = 0;
+        }
     }
 
     if (res == 0) {
         remove(path);
-        file = fopen(path, "w");
-        fprintf(file, "auto_fill_mode: 0\n");
-        fprintf(file, "save_shortcut: 4\n");
-        fprintf(file, "load_shortcut: 12\n");
-        fprintf(file, "settings_shortcut: 15\n");
-        fprintf(file, "copy_shortcut: 23\n");
-        fprintf(file, "cut_shortcut: 24\n");
-        fprintf(file, "paste_shortcut: 22\n");
-        fprintf(file, "toggle_selection_shortcut: 20\n");
-        fclose(file);
+        new_file_cfg();
     }
     return res;
 }
