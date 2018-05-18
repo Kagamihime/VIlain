@@ -327,17 +327,26 @@ void settings_menu(SETTINGS * sets)
 
 void print_text(BUFFER * buff, unsigned int first_line, unsigned int first_col)
 {
-    clear();
+    char *to_print = NULL;
     if (get_line_count(buff) > TEXT_HEIGHT - 1) {
         for (int i = 0; i < TEXT_HEIGHT - 1; i++) {
-            mvwprintw(text_win, i, 0,
-                      get_line(buff, i + first_line) + first_col);
+            to_print = get_line(buff, i + first_line);
+            if (to_print != NULL)
+                to_print = get_line(buff, i + first_line) + first_col;
+            if (strlen(to_print) > TEXT_WIDTH - 1)
+                to_print[TEXT_WIDTH] = '\0';
+            mvwprintw(text_win, i, 0, to_print);
             clrtoeol();
         }
     } else {
         int y = 0;
         for (int i = first_line; i < get_line_count(buff); i++) {
-            mvwprintw(text_win, y, 0, get_line(buff, i));
+            to_print = get_line(buff, i);
+            if (to_print != NULL)
+                to_print = get_line(buff, i) + first_col;
+            if (strlen(to_print) > TEXT_WIDTH - 1)
+                to_print[TEXT_WIDTH] = '\0';
+            mvwprintw(text_win, y, 0, to_print);
             y++;
             clrtoeol();
         }
@@ -456,7 +465,7 @@ void exec_user_action(BUFFER * bu)
         //BACKSPACE
         else if (ch == KEY_BACKSPACE) {
             //Erase prec char
-            if (get_pos_x(curs) > 0) {
+            if (get_pos_x(curs) + scrollx > 0) {
                 set_pos_x(curs, get_pos_x(curs) - 1);
                 delete_char(buff, get_pos_y(curs) + scrolly,
                             get_pos_x(curs) + scrollx);
@@ -466,25 +475,36 @@ void exec_user_action(BUFFER * bu)
                 set_pos_x(curs,
                           get_line_length(buff, get_pos_y(curs) - 1 + scrolly));
                 //when current line is empty
-                if (get_line_length(buff, get_pos_y(curs) + scrolly) == 0)
+                if (get_line_length(buff, get_pos_y(curs) + scrolly) == 0) {
                     delete_line(buff, get_pos_y(curs) + scrolly);
+                }
                 //when prec line is empty
                 else if (get_line_length(buff, get_pos_y(curs) + scrolly - 1) ==
-                         0)
+                         0) {
                     delete_line(buff, get_pos_y(curs) + scrolly - 1);
+                }
                 //when current line and prec line are not empty
-                else
+                else {
                     join_lines(buff, get_pos_y(curs) + scrolly - 1,
                                get_pos_y(curs) + scrolly, 1);
-                set_pos_y(curs, get_pos_y(curs) - 1);
+                }
+
+                //scroll
+                if (scrolly > 0 && get_pos_y(curs) + scrolly > TEXT_HEIGHT - 2)
+                    scrolly--;
+                else
+                    set_pos_y(curs, get_pos_y(curs) - 1);
             }
         }
         //ENTER
         else if (ch == 10) {
-            if (get_pos_x(curs) <
-                get_line_length(buff, get_pos_y(curs) + scrolly))
+            //if the cursor is not at the end of the line
+            if (get_pos_x(curs) + scrollx <
+                get_line_length(buff, get_pos_y(curs) + scrolly)) {
                 split_line_at(buff, get_pos_y(curs) + scrolly,
                               get_pos_x(curs) + scrollx);
+            }
+            //if the cursor is one the last visible line
             else
                 insert_line(buff, "", get_pos_y(curs) + scrolly + 1);
             set_pos_x(curs, 0);
@@ -542,7 +562,7 @@ void exec_user_action(BUFFER * bu)
             clear();
             refresh();
         }
-        //Write in the buffer
+        //    Write in the buffer
         else {
             insert_char(buff, ch, get_pos_y(curs) + scrolly,
                         get_pos_x(curs) + scrollx);
